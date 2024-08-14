@@ -1,17 +1,16 @@
 /* lexical grammar */
 %lex
 
-%{
-	var line_number = 1; // Track line numbers
-%}
-
 %%
 
-/* [^\S\r\n]+ skip whitespace but not newline */
+//[^\n]+ //skip whitespace but not newline
 
-\s+													/* skip whitespace */
+// ErrorManager.addShiftLine()
+								
+[ \t\v\f\r\n]+										/* skip whitespace */
+\n													{ return false }
 "#"[^\n]*											/* skip comments */
-\n													{ line_number++; return 'NEWLINE' }
+
 
 \([\n\r\s]*\<(?:[^)\\]|\\[\s\S])*\>[\n\r\s]*\)		return 'JNX'
 
@@ -23,6 +22,9 @@
 "عدم"												return 'NULL'
 "دع"												return 'DEF'
 "ئعلن"												return 'DECL'
+"دالة"												return 'DALA'
+"بنية"												return 'STRUCT'
+"تعداد"												return 'ENUM'
 "=="												return 'EQ'
 "لا="												return 'NEQ'
 "<="												return 'LTE'
@@ -32,6 +34,7 @@
 "وو "												return 'AND'
 "ئو "												return 'OR'
 "+"													return '+'
+"->"												return 'RETURNS'
 "-"													return '-'
 "×"													return '×'
 "÷"													return '÷'
@@ -48,6 +51,7 @@
 "..."												return 'SPREAD'
 "."													return '.'
 "="													return '='
+"؟"													return '؟'
 "ئرجع "												return 'RETURN'
 "هدا"												return 'SELF'
 "يمدد "												return 'SUPER'
@@ -81,287 +85,85 @@
 %{
     const fs = require('fs');
     const path = require('path');
-	//const _parser = require('./jparser');
-	const globalSymb = { name: 'العام', type: 'العام', members: {} };
-	var importPath;
-	var result;
-	var mustImp = ["كائن", "منطق", "نص", "مصفوفة"]; // automatic imports
-	
+	const SymbolScopes = require('./SymbolScopes');
+	const ErrorManager = require('./ErrorManager');
+	const ImportManager = require('./ImportManager');
+	const Symbol = require('./Symbol');
 	
 	function createParser (yy) {
 		const parser = new Parser();
-		// read .env file
-		const mainFilePath = process.argv[2];
-		const projectPath = path.dirname(mainFilePath);
-		const envpath = path.join(projectPath, "/.سياق");
-		var scope = {
-			'سياق': {name: 'سياق', type: 'سياق', members: {} },
-			'العام': globalSymb
-		};
-		if (!yy) { // no yy, means new parser without context
-			var env = "";
-			try {
-				env = fs.readFileSync(envpath, 'utf8');
-			} catch (e) {}
-			try {
-				env = JSON.parse('{' + env.replaceAll('\n', ',') + '}');
-			} catch (e) {
-				throw new Error('علا .سياق ئن يكون بصيغة: "متغير": "قيمة"');
+		
+		// .env file's path
+		var mainFilePath = path.resolve(process.argv[2]);
+
+		// given path can be a file named مدخل.جني
+		// or a folder in which case we add file مدخل.جني
+		if (!mainFilePath.endsWith('مدخل.جني')) {
+			if (mainFilePath.endsWith('.جني')) {
+				console.error('قم بتحديد ملف بئسم مدخل.جني');
+				process.exit();
 			}
-			for (var key in env) {
-				if (env[key] == "") { 
-					// empty context vars are considered nulls
-					env[key] = null;
-				}
-				scope["سياق"].members[key] = {name: key, type: "نص", members: {}}
-			}
+			mainFilePath = path.join(mainFilePath, 'مدخل.جني');
 		}
+		
+		const projectPath = path.dirname(mainFilePath);
+		//const envpath = path.join(projectPath, "/.سياق");
+		
+		// Either pass symbolScopes object (for inline parsing)
+		// Or make a new one
+		const symbolScopes = yy ? yy.symbolScopes : new SymbolScopes(); //envpath);
+		
+		// I use yy to pass variables to the newly created parser
 		parser.yy = {
-			scopeStack: yy ? yy.scopeStack : [scope], // symbol table
+			symbolScopes: symbolScopes, // symbol table
 			selfStack: yy ? yy.selfStack : [], // holder stack for current SELF object symbol
-			functionStack: yy ? yy.functionStack : [], // holder stack for current function
-			mysuper: '', // super holder if current function inherits
-			myshortcut: '', // shortcut holder if current function shortcuts another
-			isawait: false, // if current function contains await, TODO: unused, remove it
-			env: JSON.stringify(env) // environment variables (سياق)
+			funcStack: yy ? yy.funcStack: [] // holder stack for current function symbol		
 		}
 		
 		parser.originalParse = parser.parse;
 		parser.parse = function (input, ctx) {
+			// here we add global imports to the input source code
 			// do not add global imports on inlineparses
-			input = (ctx.inlineParse ? '' : globalImport(ctx.filePath)) + input;
-			return parser.originalParse(input, ctx);
+			var fileName = path.basename(ctx.filePath, '.جني');
+			input = ( ctx.inlineParse ? '' : SymbolScopes.autoImportText(fileName) ) + input;
+			try {
+				var result = parser.originalParse(input, ctx);
+				return result;
+			} catch (e) {
+				// exception while parsing, lets show errors
+				console.log(e);
+				ErrorManager.printAll();
+			}
 		}
 		
 		return parser;
 	}
-%}
-
-%{
+	
 	// override default error handler
-    parser.parseError = function (str, hash) {
-		let errorMessage = "خطئ نحوي سطر: " + hash?.loc?.first_line;
-		errorMessage += "\nلم يتوقع: '" + hash.text + "'";
-		errorMessage += "\n" + str;
-        throw new Error(errorMessage);
-    }
-%}
-
-%{
-	// symbol table logic
-	
-	function enterScope(yy) {
-		yy.scopeStack.push({});
+	parser.parseError = function (str, hash) {
+		ErrorManager.error(
+			"لم يتوقع: '" + hash.text + "'" + '\n' + str
+		);
+		ErrorManager.printAll();
 	}
-	
-	function exitScope(yy) {
-		yy.scopeStack.pop();
-	}
-	
-	function declareSymbol(yy, ctx, name, type, members = {}, isClass = false) {
-		var currentScope = yy.scopeStack[yy.scopeStack.length-1];
-		if (currentScope[name]) {
-			throw new Error("ال" + type + " '" + name + "' معررف مسبقا.");
-		}
-		// isClass is false by default
-		// a function becomes class when having: has, super, extends, shortcut?
-		if (name != type) {
-			// this is a variable of type
-			var smb = checkSymbol(yy, type, ctx);
-			members = smb.members;
-		}
-		currentScope[name] = { name: name, type: type, members: members, isClass: isClass };
-		return currentScope[name];
-	}
-	
-	function checkSymbol(yy, name, ctx) {
-		if (['مجهول', 'فارغ', 'كائن', 'منوع', 'عدم'].includes(name)) {
-			return { type: name, name: name }
-		}
-		for (var i=yy.scopeStack.length-1; i >=0; i--) {
-			if (yy.scopeStack[i][name]) {
-				return yy.scopeStack[i][name];
-			}
-		}
-		console.log(ctx);
-		throw new Error("سطر: " + ctx?.first_line + "\n" + "الئسم '" + name + "' غير معروف.");
-	}
-	
-	function declareMember(yy, object, member, ctx) {
-		let name = object.name || object;		
-		let symb = checkSymbol(yy, name, ctx);
-		if (symb.members[member]) {
-			throw new Error("الئسم '" + member + "' معررف مسبقا في الكائن " + name + "'.");
-		}
-		checkSymbol(yy, member.type, ctx);
-		symb.members[member.name] = { name: member.name, type: member.type, members: (member.members || {}) };
-		return symb.members[member.name];
-	}
-	
-	function checkMember(yy, object, member, ctx) {
-		let name = object.name || object;
-		var symb;
-		if (object.type && object.type == 'كائن') {
-			symb = object; // when its an object literal, we don't check type symbol, we only check variable members
-		} else {
-			symb = checkSymbol(yy, name, ctx); // check symbol of base object
-		}
-		if (symb.type && ['مجهول', 'منوع'].includes(symb.type)) {
-			// غض الطرف عن النوعين مجهول ومنوع
-			return {type: symb.type, name: member};
-		}
-		if (!symb.members[member]) {
-			if (name == 'العام') {
-				throw new Error("سطر: " + ctx?.first_line + "\n" + "الئسم '" + member + "' غير معروف.");
-			} else {
-				throw new Error("سطر: " + ctx?.first_line + "\n" + "الئسم '" + member + "' غير معروف في الكائن " + name + " <" + symb.type + ">.");
-			}
-		}
-		return symb.members[member];
-	}
-%}
-
-
-%{
-	// imports logic
-	
-	// unused function TO REMOVE
-	function checkImportFile(s) {
-		var splited = s.split('/');
-		var lastPart = splited[splited.length-1];
-		if (!lastPart.includes('.')) {
-			// no extension add default
-			return s + '/' + lastPart + '.جني';
-		}
-		return s;
-	}
-	
-	function importExists(s, context) {
-		// find a file like ./name.js
-		// or like /name/name.js
-		//var myFileImport = myImport.replace('.', '/') + '.js';
-		var splitted = s.split('.');
-		var name = splitted[splitted.length-1]; // last part is file name
-		var myImport = s.replace('.', '/');
-		
-		//imports are relative to project path not current file
-		//var fileBase = path.dirname(context.filePath);
-		var fileBase = context.projectPath;
-		
-		var filePath1 = path.join(fileBase, myImport + '.جني');
-		var filePath2 = path.join(fileBase, myImport, name + '.جني');
-
-		try {
-			fs.statSync(filePath1);
-			return {
-				exists: true,
-				path: filePath1,
-				relativePath: '.' + filePath1.replace(context.projectPath, '')
-				//relativePath: './' + myImport + '.جني'
-			}
-		} catch (err) {}
-		try {		
-			fs.statSync(filePath2);
-			return {
-				exists: true,
-				path: filePath2,
-				relativePath: '.' + filePath2.replace(context.projectPath, '')
-				//relativePath: './' + path.join(myImport, name + '.جني')
-			}
-		} catch (err) {}
-		return {
-			exists: false
-		}
-	}
-	
-	function processImport(yy, meta, context, importString, importSpecifier) {
-		var fileBase = path.dirname(context.filePath);
-		var importPath = path.join(context.projectPath, importString);
-		var scope = readAndParseFile(importPath, context);
-		if (!scope) {
-			process.exit();
-		}
-		if (importSpecifier.find == "all") {
-			var mysymb = declareSymbol(yy, null, importSpecifier.add, importSpecifier.add);
-			for (const key in scope) {
-				var symb = scope[key];
-				declareMember(yy, mysymb, symb, meta);
-			}
-		} else {
-			importSpecifier.find.forEach((find) => {
-				var symb = scope[find];
-				if (!symb) {
-					throw new Error ("الئسم " + find + " غير معروف في الوحدة '" + importString + "'")
-				}
-				declareSymbol(yy, null, symb.name, symb.type, symb.members, symb.isClass);
-			});	
-		}
-	}
-
-    // Function to read and parse imported file
-    function readAndParseFile(filePath, context) {
-		filePath = path.resolve(filePath);
-		let fileContent;
-		try {
-			fileContent = fs.readFileSync(filePath, 'utf8');
-		} catch (e) {
-			let projectBasePath = path.dirname(context.projectPath);
-			throw new Error("تعدر ئيراد الوحدة: " + filePath);
-		}
-		fileContent = fileContent; // + globalImport(filePath);
-		try {
-			const createParser = require('./jparser');
-			_parser = createParser();
-			const symTable = _parser.parse(fileContent, {
-				filePath: filePath,
-				projectPath: path.resolve(context.projectPath),
-				outPath: context.outPath
-			});
-			return symTable;
-			//console.log(symTable);
-			//symbolTable = { ...symbolTable, ...symTable }
-			//await fs.promises.writeFile(outFilePath, result, { flag: 'w+' });
-		} catch (e) {
-			let projectBasePath = path.dirname(context.projectPath);
-			console.error("ملف: " + filePath.replace(projectBasePath, ''));
-			console.error(e);
-			return null;
-		}
-    }
 	
 	function inlineParse(s, context, yy) {
 		if (!s.endsWith('؛')) {
 			s += '؛';
 		}
 		const createParser = require('./jparser');
-		_parser = createParser(yy);
-		const result = _parser.parse(s, {
-			inlineParse: true,
-			projectPath: path.resolve(context.projectPath),
-			outPath: context.outPath
-		});
-		return result;
-	}
-	
-	function isUrlImport(s) {
-		//return s.startsWith('//');
-		return s.startsWith('"') || s.startsWith("'");
-	}
-	
-	function isRelativeImport(s) {
-		return s.startsWith('.');
-	}
-	
-	function isAbsoluteImport(s) {
-		return !s.startsWith('/') && !s.startsWith('//') && !s.startsWith('.')
-	}
-	
-	function globalImport(filePath) {
-		let filname = path.basename(filePath, '.جني');
-		if (!mustImp.includes(filname) && filname != 'بدائي') {
-			return "ئورد " + mustImp.join('، ') + " من ئساسية.بدائي؛";
-		} else {
-			return "";
+		const _parser = createParser(yy);
+		try {
+			const scope = _parser.parse(s, {
+				inlineParse: true,
+				filePath: context.filePath,
+				projectPath: path.resolve(context.projectPath),
+				outPath: context.outPath
+			});
+			return scope;
+		} catch (e) {
+			console.log(e);
+			ErrorManager.printAll();
 		}
 	}
 %}
@@ -369,7 +171,7 @@
 %{
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
 		.replaceAll(":", '":"').replaceAll(',', '","');
@@ -417,11 +219,6 @@
 
 %{
 	// Utils
-	function startup() {
-		return "globalThis.العام=globalThis;";
-		//return "Object.defineProperty(globalThis)"
-	}
-	
     function toEnDigit(s) {
 		return s.replace(/[\u0660-\u0669]/g,
             function(a) { return a.charCodeAt(0) & 0xf }
@@ -438,10 +235,23 @@
 %left SPREAD
 %left '+' '-'
 %left '×' '÷'
-%left EQ NEQ LT LTE GT GTE
-%left AND OR
+%nonassoc EQ NEQ LT LTE GT GTE
+%left OR
+%left AND
 %left IN
 %right '='
+%right NOT
+%right AWAIT
+%right IF
+
+%left SPREAD
+%left '+' '-'
+%left '×' '÷'
+%left EQ NEQ LT LTE GT GTE
+%left AND
+%left OR
+%right '='
+%right IN
 %right NOT
 %right AWAIT
 %right IF
@@ -450,31 +260,54 @@
 
 ////
 program
-    : statement_list EOF {
-		var globalvars = "";
-		if ($1.includes('مدخل')) { // TODO: improve madkhal checking
-			globalvars = "globalThis['سياق'] = " + yy.env;
-		}
-		result = globalvars + $1.filter(Boolean).join(';');
+    : declstatement_list EOF {
+		ErrorManager.setContext(@1, context.filePath);
+		var result = $1.filter(Boolean).join(';');
 		if (context.inlineParse) {
 			return result;
 		}
 		let fileName = context.filePath.replace(context.projectPath, '.').replace('.جني', '.js');
+		fileName = fileName.replace(__dirname, '.');
 		fileName = fileName.replaceAll('/', '.').replace('..', '/');
+		
+		// make sure not to repeat last two names: ئساسية.ئساسية.جني becomes ئساسية.جني
+		var nameArr = fileName.split('.');
+		var lastName = nameArr[nameArr.length - 2];
+		var lastLastName = nameArr[nameArr.length - 3];
+		if (lastLastName) {
+			if (lastName == lastLastName.replace('/', '')) {
+				fileName = fileName.replace(lastName + '.', '');
+			}
+		}
+		
 		let outFilePath = path.join(context.outPath, fileName);
+		
 		fs.writeFile(outFilePath, result, { flag: 'w+' }, (err) => {
 			if (err) {
-				console.log('فشل حفض الملف: ' + outFilePath);
+				throw new Error('فشل حفض الملف: ' + outFilePath);
 			}
-		});
+		});	
 		// get global scope
-		var glob = yy.scopeStack.pop();
-		// remove env from it
-		delete glob["سياق"];
+		var glob = yy.symbolScopes.exit();
 		return glob; // return global scope
     }
 	| EOF /* empty */
     ;
+////
+
+
+////
+declstatement_list
+	: declstatement { $$ = [$1]; }
+	| declstatement_list declstatement { $1.push($2); $$ = $1; }
+	;
+declstatement
+	: import_statement semic_or_nl { $$ = $1; }
+	| function_def { $$ = $1; }
+	| var_def semic_or_nl { $$ = $1; }
+	| struct_def { $$ = $1; }
+	| expression semic_or_nl { $$ = $1.value; }
+	;
 ////
 
 
@@ -484,9 +317,7 @@ statement_list
     | statement_list statement { $1.push($2); $$ = $1; }
     ;
 statement
-    : import_statement semic_or_nl { $$ = $1; }
-	| function_def { $$ = $1; }
-	| super_call semic_or_nl { $$ = $1; }
+    : super_call semic_or_nl { $$ = $1; }
 	| shortcuts_call semic_or_nl { $$ = ''; }
 	| has_statement semic_or_nl { $$ = $1; }
 	| var_declaration semic_or_nl { $$ = $1; }
@@ -495,6 +326,7 @@ statement
 	| while_statement { $$ = $1; }
     | for_in_statement { $$ = $1; }
 	| if_statement { $$ = $1; }
+	| assignment semic_or_nl { $$ = $1.value; }
 	| expression semic_or_nl { $$ = $1.value; }
     | error { $$ = ''; }
     ;
@@ -508,23 +340,40 @@ semic_or_nl
 
 ////
 import_statement
-    : IMPORT import_specifier FROM import_path {
+	: IMPORT import_specifier FROM import_path {
+		ErrorManager.setContext(@1, context.filePath);
+		ImportManager.setContext(context);
 		
-		//var myImport = $4.replace(/\"/g, '').replace(/\'/g, '');
-		if (isUrlImport($4)) {
-			var imp = $4.replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
-			// path should start with '//' 
-			// then consider specifier as مجهول and add symbol
-			if (!imp.startsWith('//')) {
-				throw new Error("ئيراد عنونت لا يبدئ ب //");
+		var importSpecifier = $2;	
+		var scope = ImportManager.addImport($4, context.filePath);
+		
+		if (importSpecifier.find == 'all') {
+			var mySymb;
+			if (!scope) { // string import
+				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
+			} else {
+				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
+				scope.copyToSymbol(mySymb);
 			}
-			if ($2.find == 'all') {
-				declareSymbol(yy, @1, $2.add, 'مجهول');
-			}else {
-				$2.add.forEach((add) => {
-					declareSymbol(yy, @1, add, 'مجهول');
+		} else {
+			if (!scope) { // string import
+				importSpecifier.add.forEach((add) => {
+					yy.symbolScopes.declareSymbol(add, 'مجهول');
+				});
+			} else {
+				importSpecifier.find.forEach((find) => {
+					var symb = scope.getSymbolByName(find);
+					if (!symb) {
+						ErrorManager.error("الئسم " + find + " غير معروف في الوحدة '" + $4 + "'");
+					}
+					// TODO REVIEW symb.name = sym.add
+					yy.symbolScopes.addSymbol(symb);
 				});
 			}
+		}
+		
+		if (!scope) { // this is a string import
+			var imp = $4.replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
 			if (imp == '//') {
 				// nonfunctional import just for the parser
 				$$ = "";
@@ -532,24 +381,7 @@ import_statement
 				$$ = 'import ' + $2.value + ' from "' + imp + '";'; 
 			}
 		} else {
-			// import is not a string
-			var myFileImport = importExists($4, context);
-
-			if (myFileImport.exists) {
-				// local import, build path and parse file
-				processImport(yy, @2, context, myFileImport.relativePath, $2);
-			} else {
-				// unfound locally, download from library
-				// and continue just like local
-				// addDownloadFromLibrary();
-				myFileImport = importExists('مكون.' + $4, context);
-				if (myFileImport.exists) {
-					processImport(yy, @2, context, myFileImport.relativePath, $2);
-				} else {
-					throw new Error("تعدر ئيجاد الوحدة '" +  $4 + "'")
-				}
-			}
-			var imp = myFileImport.relativePath.replaceAll('/', '.').replace('.جني', '.js').replace('..', './');
+			var imp = './' + $4 + '.js';
 			var exp = $2.value;
 			if (exp.includes('* as ')) {
 				exp = '{' + exp.replace('* as ', '') + '}';
@@ -557,24 +389,38 @@ import_statement
 			$$ = 'import ' + $2.value + ' from "' + imp + '";export ' + exp;
 		}
 	}
-/*
-    | IMPORT import_path {
-		importPath = path.join(context.projectPath, $2.replace(/\"/g, ''));
-		importPath = path.resolve(importPath);
-		var scope = readAndParseFile(importPath, context)
-		$$ = 'import ' + $2; 
+	| IMPORT import_list {
+		ErrorManager.setContext(@1, context.filePath);
+		ImportManager.setContext(context);
+		var importNames = $2.split(', ');
+		var result = '';
+		importNames.forEach (impName => {
+			var scope = ImportManager.addImport(impName, context.filePath);
+			var symb = scope.getSymbolByName(impName);
+			if (!symb) {
+				ErrorManager.error("الئسم " + impName + " غير معروف في الوحدة '" + impName + "'");
+			}
+			// TODO REVIEW symb.name = sym.add
+			yy.symbolScopes.addSymbol(symb);
+			var imp = './' + impName + '.js';
+			var exp = impName;
+			var sep = result == '' ? '' : ';';
+			result += sep + 'import {' + impName + '} from "' + imp + '";export {' + exp + '}';
+		});
+		$$ = result;
 	}
-*/
-    ;
+	;
 import_specifier
     : import_list {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
 			find: $1.split(', '),
 			add: $1.split(', '),
 			value: '{' + $1 + '}'
 		}			
 	}
-    | IDENTIFIER AS IDENTIFIER { 
+    | IDENTIFIER AS IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
 			find: [$1],
 			add: [$3],
@@ -590,7 +436,8 @@ import_specifier
 		}
 	}
 */
-    | ALL AS IDENTIFIER { 
+    | ALL AS IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
 			find: "all",
 			add: $3,
@@ -600,7 +447,7 @@ import_specifier
     ;
 import_list
     : IDENTIFIER { $$ = $1; }
-    | import_list '،' IDENTIFIER { 
+    | import_list '،' IDENTIFIER {
 		$$ = $1 + ', ' + $3
 	}
     ;
@@ -615,72 +462,221 @@ import_path
 
 
 ////
+var_def
+	: DECL IDENTIFIER '.' IDENTIFIER AS type_decl {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($2);
+		var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
+		mySymb.addMember(mySymb2);
+		$$ = $2 + '.' + $4 + ' = null';
+	}
+	| DECL IDENTIFIER '.' IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($2);
+		var mySymb2 = yy.symbolScopes.createSymbol($4, 'منوع', $6.symb.isArray);
+		mySymb.addMember(mySymb2);
+		$$ = $2 + '.' + $4 + ' = ' + $6.value;
+	}
+	| DECL IDENTIFIER '.' IDENTIFIER AS type_decl '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($2);
+		var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
+		if (! $8.symb.canBeAssignedTo(mySymb2) ) {
+			// type mismatch
+			ErrorManager.error("محاولة ئسناد " + $8.symb.toString() + " ئلا " + mySymb2.toTypeString());
+		}
+		mySymb.addMember(mySymb2);
+		$$ = $2 + '.' + $4 + ' = ' + $8.value;
+	}
+	;
+////
+
+
+////
+struct_def
+	: DECL struct_decl struct_body {
+		var funcSymb = yy.funcStack.pop(); // exit struct scope
+		yy.symbolScopes.exit();
+		$$ = 'export const ' + $2 + ' = {}'; // no output
+	}
+	;
+struct_decl
+	: STRUCT IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.declareSymbol($2, null, false, false);
+		mySymb.isStruct = true; // bad but legacy
+		yy.funcStack.push(mySymb);
+		yy.symbolScopes.enter();
+		$$ = $2;
+	}
+	;
+struct_body
+	: ':' has_list END {
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1]; // current struct symbol
+		var symbols = $2; // $2 has_list is an array of symbols
+		symbols.forEach((symb) => {
+			funcSymb.addMember(symb);
+		});
+	}
+	;
+////
+
+
+//// support disactivated for now
+enum_def
+	: DECL enum_decl enum_body {
+		var funcSymb = yy.funcStack.pop(); // exit enum scope
+		yy.symbolScopes.exit();
+		$$ = ''; // no output
+	}
+	;
+enum_decl
+	: ENUM IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.declareSymbol($2, null, false, false);
+		mySymb.isEnum = true; // bad but legacy
+		yy.funcStack.push(mySymb);
+		yy.symbolScopes.enter();
+	}
+	;
+enum_body
+	: ':' enum_list END {
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1]; // current enum symbol
+		var enums = $2; // $2 enum_list is an array of {symb, value}
+		enums.forEach((enu) => {
+			funcSymb.addMember(enu.symb);
+		});
+	}
+	;
+enum_list
+	: enum_elem {
+		$$ = [$1]
+	}
+	| enum_list '،' enum_elem {
+		$1.push($3);
+		if ($3.value == null) {
+			$3.value = $1.length
+		}
+		$$ = $1;
+	}
+	;
+enum_elem
+	: IDENTIFIER {
+		$$ = {
+			symb: yy.symbolScopes.createSymbol($1, 'عدد'),
+			value: null
+		}
+	}
+	| IDENTIFIER '=' expression {
+		$$ = {
+			symb: yy.symbolScopes.createSymbol($1, $3.symb.getTypeName()),
+			value: $3.value
+		}
+	}
+	;
+////
+
+
+////
 function_def
 	: function_decl function_ret body_block {
-		var selfSymb = yy.selfStack.pop();
-		var funcSymb = yy.functionStack.pop();
+		ErrorManager.setContext(@1, context.filePath);
 		
-		if ($3.includes('this.')) {
+		var function_decl = $1;
+		var function_ret = $2;
+		var body_block = $3;
+		
+		var selfSymb = yy.selfStack.pop();
+		var funcSymb = yy.funcStack.pop();
+		
+		if (body_block.includes('this.')) {
 			// we used this keyword, so self is a class
 			selfSymb.isClass = true;
+			selfSymb.typeSymbol = selfSymb;
 		}
 		
 		var extendStr = '';
-		if (yy.mysuper != '') { // this class inherits
-			extendStr = ' extends ' + yy.mysuper,
-            yy.mysuper = '';
-        }
-		
-		if (!selfSymb.isClass && (funcSymb.type != $2.type)) {
-			throw new Error("سطر: " + @1.first_line + "\n" + "نوع الئرجاع غير متوافق في الوضيفة '" + funcSymb.name + " <" + funcSymb.type + ">'");
+		if (funcSymb.hasParent()) {
+			extendStr = ' extends ' + funcSymb.mySuper;
 		}
 		
-		if ($1.funcname == 'مدخل') { // self exec main function
-			$$ = '(function ' + $1.funcname + $1.params + $3 + ')()'; 
-		} else if (yy.myshortcut != '') { // this is a shortcut
-			$$ = $1.exportStr + 'const ' + $1.funcname + '=' + yy.myshortcut + ';'
-				+ $1.funcname + '.prototype || (' + $1.funcname + '.prototype = {});'
-				+ $3.slice(1,-1); // remove first and last { }
-			yy.myshortcut = '';
+		if (!selfSymb.isClass && !function_ret.symb.canBeAssignedTo(funcSymb)) {
+			ErrorManager.error("نوع الئرجاع غير متوافق مع الوضيفة '" + funcSymb.toString() + "'");
+		}
+		
+		if (function_decl.funcname == 'مدخل') { // self exec main function
+			$$ = '(function ' + function_decl.funcname + function_decl.params + body_block + ')()'; 
+		} else if (funcSymb.isShortcut()) { // this is a shortcut
+			$$ = function_decl.exportStr + 'const ' + function_decl.funcname + '=' + funcSymb.myShortcut + ';'
+				+ function_decl.funcname + '.prototype || (' + function_decl.funcname + '.prototype = {});'
+				+ body_block.slice(1,-1); // remove first and last { }
 		} else if (selfSymb.isClass) { // this is a class
 			// we should not have a return
-			if ($2.type) {
-				throw new Error("سطر: " + @1.first_line + "\n" + "لا يجب تحديد نوع ئرجاع لصنف.");
+			if (funcSymb.typeIsNot(funcSymb.name)) {
+				ErrorManager.error("لا يجب تحديد نوع ئرجاع لصنف <" + funcSymb.getTypeName() + ">");
 			}
-			$$ = $1.exportStr + 'class ' + $1.funcname + extendStr + '{constructor' + $1.params + $3 + '}';
+			$$ = function_decl.exportStr + 'class ' + function_decl.funcname + extendStr + '{constructor' + function_decl.params + body_block + '}';
 		} else { // this is a function
-			var asyncStr = funcSymb.isawait ? 'async ' : '';
-			$$ = $1.exportStr + asyncStr + 'function ' + $1.funcname + $1.params + $3;
+			var asyncStr = funcSymb.isAwait ? 'async ' : '';
+			$$ = function_decl.exportStr + asyncStr + 'function ' + function_decl.funcname + function_decl.params + body_block;
 		}
 	}
 	| subfunc_decl function_ret body_block {
-		var funcSymb = yy.functionStack.pop();
-		if (funcSymb.type != $2.type) {
-			throw new Error("سطر: " + @1.first_line + "\n" + "نوع الئرجاع غير متوافق في الوضيفة '" + funcSymb.name + " <" + funcSymb.type + ">'");
+		ErrorManager.setContext(@1, context.filePath);
+		
+		var function_decl = $1;
+		var function_ret = $2;
+		var body_block = $3;
+		
+		var funcSymb = yy.funcStack.pop();
+		
+		/* unecessary check, to remove
+		if (!funcSymb.sameTypeAs(function_ret.symb)) {
+			ErrorManager.error("نوع الئرجاع " + function_ret.symb.toString() + " غير متوافق مع الوضيفة " + funcSymb.toString());
 		}
-		if (yy.myshortcut != '') {
-			var result = $1.objname + '.prototype.' + $1.funcname + '=' + $1.objname + '.prototype.' + yy.myshortcut + ';';
-			result += $1.objname + '.' + $1.funcname + '=' + $1.objname + '.' + yy.myshortcut + ';';
+		*/
+		
+		// dealing with setters and getters (DISABLED FOR NOW)
+		/*
+		var setterCode = '';
+		var getterCode = '';
+		if (function_decl.funcname.startsWith('رد')) {
+			// getter function
+			getterCode = `Object.defineProperty(${function_decl.objname}.prototype,'${function_decl.funcname}',{get: function() {return this.${function_decl.funcname}();},configurable:true});`;
+		}
+		if (function_decl.funcname.startsWith('خد')) {
+			// setter function
+			setterCode = `Object.defineProperty(${function_decl.objname}.prototype,'${function_decl.funcname}',{set: function (value) {this.${function_decl.funcname}(value);},configurable:true});`;
+		}
+		*/
+		
+		if (funcSymb.isShortcut()) {
+			var result = function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.prototype.' + funcSymb.myShortcut + ';';
+			result += function_decl.objname + '.' + function_decl.funcname + '=' + function_decl.objname + '.' + funcSymb.myShortcut + ';';
 			$$ = result;
-			yy.myshortcut = '';
 		} else {
-			var asyncStr = funcSymb.isawait ? 'async ' : '';
-			$$ = $1.objname + '.prototype.' + $1.funcname + '=' + $1.objname + '.' + $1.funcname + '=' + asyncStr + 'function' + $1.value + $3;
+			var asyncStr = funcSymb.isAwait ? 'async ' : '';
+			$$ = function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.' + function_decl.funcname + '=' + asyncStr + 'function' + function_decl.value + body_block;
 		}
 	}
 	;
 	
 function_ret
-	: '=>' type_decl {
+	: AS type_decl {
+		ErrorManager.setContext(@1, context.filePath);
 		// $2 = { type, subtype }
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($2.type);
+		funcSymb.isArray = $2.isArray;
 		$$ = {
-			type: $2.type,
-			subtype: $2.subtype
+			symb: funcSymb//.typeSymbol
 		}
 	}
 	| /* empty */ {
 		$$ = {
-			type: null
+			symb: Symbol.SYSTEMTYPES['فارغ']
 		}
 	}
 	;
@@ -689,17 +685,20 @@ function_decl
 		$$ = {
 			funcname: $1.funcname,
 			exportStr: $1.isExport ? 'export ' : '',
-			params: $2,
-			value: $1.value + $2 // TODO unused
+			params: $2
 		}
 	}
 	;
 function_decl_name
 	: DECL IDENTIFIER {
-		var mySymb = declareSymbol(yy, @1, $2, $2);
+		ErrorManager.setContext(@1, context.filePath);
+		ErrorManager.setFunc($2);
+		var mySymb = yy.symbolScopes.declareSymbol($2, 'فارغ');
+		
 		yy.selfStack.push(mySymb);
-		yy.functionStack.push(mySymb);
-		enterScope(yy);
+		yy.funcStack.push(mySymb);
+		yy.symbolScopes.enter();	
+		
 		$$ = {
 			funcname: $2,
 			isExport: !$2.startsWith('_'),
@@ -723,11 +722,14 @@ subfunc_decl
 	;
 subfunc_decl_name
 	: DECL IDENTIFIER '.' IDENTIFIER {
-		var mySymb = checkSymbol(yy, $2, @1);
+		ErrorManager.setContext(@1, context.filePath);
+		ErrorManager.setFunc($2 + '.' + $4);
+		var mySymb = yy.symbolScopes.getSymbByName($2);
 		yy.selfStack.push(mySymb);
-		enterScope(yy);
-		var mySymb2 = declareMember(yy, mySymb, { name: $4, type: 'عدم' });
-		yy.functionStack.push(mySymb2);
+		yy.symbolScopes.enter();
+		var mySymb2 = yy.symbolScopes.createSymbol($4, 'فارغ');
+		mySymb.addMember(mySymb2);
+		yy.funcStack.push(mySymb2);
 		$$ = {
 			funcname: $4,
 			objname: $2
@@ -736,35 +738,90 @@ subfunc_decl_name
 	}
 	;
 param_list
-    : /* empty */ { $$ = ''; }
-    | IDENTIFIER {
-		declareSymbol(yy, @1, $1, 'منوع');
-		$$ = $1; 
+	: /* empty */ { $$ = ''; }
+	| param {
+		ErrorManager.setContext(@1, context.filePath);
+		$$ = $1;
 	}
-	| IDENTIFIER type_decl {
-		declareSymbol(yy, @1, $2.type, $1);
+	| param_list '،' param {
+		ErrorManager.setContext(@1, context.filePath);
+		$$ = $1 + ',' + $3;
+	}
+	;
+param
+	: param_def {
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.args.push({
+			symb: $1.symb,
+			init: $1.init
+		});
+		$$ = $1.value;
+	}
+	| DALA IDENTIFIER is_param_opt dala_params function_ret  {
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		var symb = yy.symbolScopes.declareSymbol($2, 'دالة');
+		funcSymb.args.push({
+			symb: symb,
+			init: $3
+		});
 		$$ = $2;
 	}
-    | param_list '،' IDENTIFIER  {
-		declareSymbol(yy, @1, $3, 'منوع');
-		$$ = $1 + ',' + $3; 
+	| STRUCT IDENTIFIER is_param_opt '{' has_list '}' {
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		var symb = yy.symbolScopes.declareSymbol($2, null, false, false);
+		symb.isStruct = true; // bad but legacy
+		funcSymb.args.push({
+			symb: symb,
+			init: $3
+		});
+		// $5 has_list is an array of symbols
+		var symbols = $5;
+		symbols.forEach((s) => {
+			symb.addMember(s);
+		});
+		$$ = $2;
 	}
-	| param_list '،' IDENTIFIER type_decl {
-		declareSymbol(yy, @1, $4.type, $3);
-		$$ = $1 + ',' + $4;
+	;
+is_param_opt
+	: {
+		/* empty */
+		$$ = false;
 	}
-    ;
+	| '؟' {
+		$$ = true;
+	}
+	;
+dala_params
+	: '(' dala_param_types ')' {
+		$$ = "";
+	}
+	;
+dala_param_types
+	: /* empty */ {
+		$$ = "";
+	}
+	| type_decl {
+		yy.symbolScopes.getSymbByName($1.type);
+		$$ = "";
+	}
+	| dala_param_types '،' type_decl {
+		yy.symbolScopes.getSymbByName($3.type);
+		$$ = "";
+	}
+	;
 ////
 
 
 ////
 body_block
 	: ':' statement_list END {
-		exitScope(yy);
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exit();
 		$$ = '{' + $2.filter(Boolean).join(';') + '}';
 	}
 	| ':' /* empty */ END {
-		exitScope(yy);
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exit();
 		$$ = '{}';
 	}
 	;
@@ -774,21 +831,24 @@ body_block
 ////
 super_call
     : SUPER IDENTIFIER '(' arg_list ')' {
-		var superSymb = checkSymbol(yy, $2, @2);
-        yy.mysuper = $2;
-		// copy super members to self members
+		ErrorManager.setContext(@1, context.filePath);
+		var superSymb = yy.symbolScopes.getSymbByName($2);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		for (var key in superSymb.members) {
-			selfSymb.members[key] = superSymb.members[key]
-		}
+		selfSymb.mySuper = $2;
+		
+		// check args
+		var paramValues = superSymb.checkArgs($4);
+
+		// copy super members to self members
+		// superSymb.copyMembersTo(selfSymb);
+		selfSymb.superSymbol = superSymb;
 		selfSymb.isClass = true;
-		//$$ = 'Reflect.construct(' + $2 + ', [' + $4 + '], new.target || ' + selfSymb.name + ')';
-		//$$ = 'super(' + $4 + ')';
-        //$$ = $2 + '.call(this' + ($4 ? ', ' + $4 : '') + ')';
+		selfSymb.typeSymbol = selfSymb; // change type to itself
+
 		// if this class already shortcuts, then don't call super()
-		if (yy.myshortcut != '') {
+		if (selfSymb.isShortcut()) {
 			$$ = '';
-		}else {
+		} else {
 			$$ = 'super(' + $4 + ')';
 		}
     }
@@ -798,126 +858,240 @@ super_call
 
 ////
 shortcuts_call
-	: SHORTCUTS shortcuts_specifier {
+	: SHORTCUTS IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		yy.myshortcut = $2.identifier;
-		if (selfSymb.name == funcSymb.name) { // we are in an object
-			var superSymb = checkSymbol(yy, $2.identifier, @2);
-			selfSymb.myshortcut = $2.identifier;
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.myShortcut = $2;
+		if (selfSymb.name == funcSymb.name) { // we are in a class
+			selfSymb.myShortcut = $2;
+			var superSymb = yy.symbolScopes.getSymbByName($2);
 			// TODO: for now we grant that when a func shortcuts then its a class
 			selfSymb.isClass = true;
+			selfSymb.typeSymbol = selfSymb; // change type to itself
+			// if already have members, this means we used a has or extends before shortcuts > error
+			if (selfSymb.members.length) {
+				ErrorManager.error('يجب ئن تكون صيغة يختصر كئول سطر في المجموعة');
+			}
 			// copy origi members to self members if we are in a class
-			for (var key in superSymb.members) {
-				selfSymb.members[key] = superSymb.members[key]
-			}
+			superSymb.copyMembersTo(selfSymb);
 		} else { // we are in a subfunction
-			// if there is no AS TYPE then error
-			if (!$2.astype) {
-				throw new Error("سطر: " + @1.first_line + "\n" + "يلزم تحديد نوع الئختصار في الوضيفة '" + funcSymb.name + "' ");
-			}
-			var superSymb;
-			if (!selfSymb.myshortcut) {
+			if (!selfSymb.isShortcut()) {
 				// parent not shortcuting
-				superSymb = checkMember(yy, selfSymb, $2.identifier, @1);
+				selfSymb.checkMember($2);
 			} else {
 				// parent have a shortcut
-				superSymb = checkMember(yy, selfSymb.myshortcut, $2, @1);
+				var superSymb = yy.symbolScopes.getSymbByName(selfSymb.myShortcut);
+				superSymb.checkMember($2);
 			}
-			// function type is the one specified in AS TYPE
-			funcSymb.type = $2.astype;
-		}
-	}
-	;
-shortcuts_specifier
-	: IDENTIFIER {
-		$$ = {
-			identifier: $1
-		}
-	}
-	| IDENTIFIER AS IDENTIFIER {
-		$$ = {
-			identifier: $1,
-			astype: $3
 		}
 	}
 	;
 ////
+
 
 
 ////
 has_statement
 	: HAS has_list {
+		ErrorManager.setContext(@1, context.filePath);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		selfSymb.isClass = true;
-		var names = $2.split(',');
-		var result = '';
+		selfSymb.isClass = true; // has keyword makes this a class
+		selfSymb.typeSymbol = selfSymb; // change type to itself
+		
 		var thisStr = 'this';
-		if (yy.myshortcut != '') {
+		if (selfSymb.isShortcut()) {
 			thisStr = selfSymb.name + '.prototype';
 		}
-		names.forEach((param) => {
-			param = param.split(' ');
-			var name = param[1] || param[0];
-			var type = param.length > 1 ? param[0] : 'منوع';
-			declareMember(yy, selfSymb, {name: name, type: type}, @1);
-			// declare setters & getters
-			var setter = 'خد' + name;
-			var getter = 'رد' + name;
-			//declareMember(yy, selfSymb, {name: setter, type: 'مجهول'}, @1);
-			//declareMember(yy, selfSymb, {name: getter, type: 'مجهول'}, @1);
-			result += `Object.defineProperty(${selfSymb.name}.prototype, '${name}', {get: function() {return this.${getter}()}, set: function(value) {this.${setter}(value)} });`;
-			result += `${thisStr}.${setter} = function (value) { this._${name} = value; };`;
-			result += `${thisStr}.${getter} = function () { return this._${name}; };`;
+		var result = ''; // will contain setter, getter output for the property
+		
+		// $2 has_list is an array of symbols
+		var symbols = $2;
+		symbols.forEach((symb) => {
+			selfSymb.addMember(symb);
+			if (symb.isShortcut()) {
+				// declare setters & getters
+				var name = symb.myShortcut;
+				var getterCode = `return this.${name}`;
+				var setterCode = `this.${name} = value;`;
+				result += `Object.defineProperty(${selfSymb.name}.prototype, '${symb.name}', {get: function() {${getterCode}}, set: function(value) {${setterCode}} });`;
+			}
 		});
 		$$ = result;
 	}
 	;
 has_list
-    : /* empty */ { $$ = ''; }
-	| IDENTIFIER IDENTIFIER {
-		$$ = $1 + ' ' + $2;
+	: /* empty */ { 
+		$$ = []; 
 	}
-	| IDENTIFIER {
-		//declareSymbol(yy, @1, $1, 'مجهول');
-		$$ = $1; 
+	| has_list_elements {
+		$$ = $1;
 	}
-	| has_list '،' IDENTIFIER IDENTIFIER {
-		$$ = $1 + ',' + $3 + ' ' + $4;
+	;
+has_list_elements
+	: has_list_element {
+		$$ = [$1];
 	}
-    | has_list '،' IDENTIFIER  {
-		//declareSymbol(yy, @1, $3, 'مجهول');
-		$$ = $1 + ',' + $3; 
+	| has_list_elements '،' has_list_element {
+		$1.push($3);
+		$$ = $1;
 	}
-    ;
+	;
+has_list_element
+	: param_decl {
+		$$ = $1.symb
+	}
+	| param_decl SHORTCUTS IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		var selfSymb = yy.selfStack[yy.selfStack.length-1];
+		if (!selfSymb.isShortcut()) {
+			// parent not shortcuting
+			selfSymb.checkMember($3);
+		} else {
+			// parent have a shortcut
+			var superSymb = yy.symbolScopes.getSymbByName(selfSymb.myShortcut);
+			superSymb.checkMember($3);
+		}
+		$1.symb.myShortcut = $3;
+		$$ = $1.symb;
+	}
+	;
+
+	
+////
+param_def
+	: param_decl {
+		$$ = {
+			symb: $1.symb,
+			value: $1.value,
+			init: $1.init
+		}
+	}
+	| param_decl param_init {
+		var paramSymb = $1.symb;
+		var initSymb = $2.symb;
+		if (!initSymb.canBeAssignedTo(paramSymb)) {
+			ErrorManager.error("محاولة ئسناد " + initSymb.toString() + " ئلا " + paramSymb.toTypeString());
+		}
+		$$ = {
+			symb: paramSymb,
+			value: $1.value + '=' + $2.value,
+			init: true
+		}
+	}
+	;
+param_decl
+	: IDENTIFIER is_param_opt {
+		ErrorManager.setContext(@1, context.filePath);
+		$$ = {
+			symb: yy.symbolScopes.declareSymbol($1, 'منوع'),
+			value: $1,
+			init: $2
+		}
+	}
+	| IDENTIFIER IDENTIFIER is_param_opt {
+		ErrorManager.setContext(@1, context.filePath);
+		$$ = {
+			symb: yy.symbolScopes.declareSymbol($2, $1),
+			value: $2,
+			init: $3
+		}
+	}
+	| IDENTIFIER '[' ']' IDENTIFIER is_param_opt {
+		ErrorManager.setContext(@1, context.filePath);
+		$$ = {
+			symb: yy.symbolScopes.declareSymbol($4, $1, true /*isArray*/),
+			value: $4,
+			init: $5
+		}
+	}
+	| ENUM IDENTIFIER is_param_opt '[' identifier_list ']' {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.declareSymbol($2, 'نوعتعداد');
+		symb.isEnum = true; // bad but legacy
+		symb.allowed = $5;
+		$$ = {
+			symb: symb,
+			value: $2,
+			init: $3
+		}
+	}
+	;
+param_init
+	: '=' expression {
+		$$ = $2;
+	}
+	;
+identifier_list
+	: IDENTIFIER {
+		$$ = [$1]
+	}
+	| identifier_list '،' IDENTIFIER {
+		$1.push($3);
+		$$ = $1
+	}
+	;
 ////
 
 
 ////
 var_declaration
     : DEF IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
 		// دع ب
-		declareSymbol(yy, @1, $2, 'منوع');
+		yy.symbolScopes.declareSymbol($2, 'منوع');
         $$ = 'let ' + $2; 
     }
     | DEF IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
 		// دع ب = 4
-		declareSymbol(yy, @1, $2, $4.type);
+		var mySymb = yy.symbolScopes.declareSymbol($2, 'منوع', $4.symb.isArray);
+		if ($4.symb.typeIs('نوعبنية')) {
+			// mySymb is generic add struct memebers to it
+			mySymb.members = $4.symb.members;
+		}
         $$ = 'let ' + $2 + ' = ' + $4.value;
     }
-	| DEF IDENTIFIER IDENTIFIER {
-		// دع عدد ب
-		declareSymbol(yy, @1, $3, $2);
-		$$ = 'let ' + $3;
+	| IDENTIFIER IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		// عدد ب
+		yy.symbolScopes.declareSymbol($2, $1);
+		$$ = 'let ' + $2;
 	}
-	| DEF IDENTIFIER IDENTIFIER '=' expression {
-		// دع عدد ب = 4
-		if ($2 != $4.type) {
+	| IDENTIFIER '[' ']' IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		// عدد[] ب
+		yy.symbolScopes.declareSymbol($4, $1, true);
+		$$ = 'let ' + $4;
+	}
+	| IDENTIFIER IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		// عدد ب = 4
+		var mySymb = yy.symbolScopes.declareSymbol($2, $1);
+		if (!$4.symb.canBeAssignedTo(mySymb)) {
 			// type mismatch
-			throw new Error("سطر: " + @1.first_line + "\n" + "محاولة ئسناد '" + $4.type + "' ئلا '" + $2 + "'");
+			ErrorManager.error("محاولة ئسناد '" + $4.symb.toString() + "' ئلا '" + $1 + "'");
 		}
-		declareSymbol(yy, @1, $3, $2);
+		
+		if ($4.symb.typeIs('نوعبنية')) {
+			// expression is an object literal
+			if (!mySymb.typeSymbol.isStruct) {
+				// mySymb is generic add struct memebers to it
+				mySymb.members = $4.symb.members;
+			}
+		}
+		
 		$$ = 'let ' + $2 + ' = ' + $4.value;
+	}
+	| IDENTIFIER '[' ']' IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		// عدد ب = 4
+		if (!Symbol.isGenericType($1) && $6.symb.typeIsNot($1)) {
+			// type mismatch
+			ErrorManager.error("محاولة ئسناد '" + $6.symb.toString() + "' ئلا '" + $1 + "'");
+		}
+		yy.symbolScopes.declareSymbol($4, $1, true);
+		$$ = 'let ' + $4 + ' = ' + $6.value;
 	}
     ;
 ////
@@ -934,15 +1108,46 @@ say_statement
 
 
 ////
+wtype_expr
+	: WTYPE expression {
+		$$ = {
+			symb: yy.symbolScopes.createSymbol('', 'نصية'),
+			value: $2.getTypeName()
+		}
+	}
+	;
+////
+
+
+////
 return_statement
     : RETURN expression {
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		funcSymb.type = $2.type;
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		if (funcSymb.typeIs('فارغ')) {
+			ErrorManager.warning("ئستخدام ئرجاع في وضيفة فارغة، سيتم التحويل ئلا منوع");
+			// convert function return type to منوع
+			funcSymb.typeSymbol = Symbol.SYSTEMTYPES['منوع'];
+		}
+		
+		if (!$2.symb.canBeAssignedTo(funcSymb)) {
+			ErrorManager.error("نوع الئرجاع " + $2.symb.toString() + " غير متوافق مع الوضيفة " + funcSymb.toString());
+		}
+		if ($2.symb.typeIs('نوعبنية')) {
+			// expression is an object literal
+			if (!funcSymb.typeSymbol.isStruct) {
+				// funcSymb is generic add struct memebers to it
+				funcSymb.members = $2.symb.members;
+			}
+		}
 		$$ = 'return ' + $2.value; 
 	}
     | RETURN {
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		funcSymb.type = "عدم";
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		if (funcSymb.typeIsNot('فارغ')) {
+			ErrorManager.error("نوع الئرجاع غير متوافق مع الوضيفة " + funcSymb.toString());
+		}
 		$$ = 'return'; 
 	}
     ;
@@ -957,7 +1162,7 @@ while_statement
 	;
 while_head
 	: WHILE expression { 
-		enterScope(yy);
+		yy.symbolScopes.enter();
 		$$ = 'while (' + $2.value + ')';
 	}
 	;
@@ -972,8 +1177,10 @@ for_in_statement
 	;
 for_in_head
 	: FOR IDENTIFIER IN expression {
-		enterScope(yy);
-		declareSymbol(yy, @1, $2, $4.type);
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.enter();
+		yy.symbolScopes.declareSymbol($2, $4.symb.typeSymbol.name);
+		// TOREVIEW
 		//if ($4.type == 'مصفوفة') {
 			$$ = 'for (var ' + $2 + ' of ' + $4.value + ')';
 		//} else {
@@ -1002,7 +1209,7 @@ if_statement
 	
 if_head
 	: IF expression {
-		enterScope(yy);
+		yy.symbolScopes.enter();
 		$$ = 'if (' + $2.value + ')';
 	}
 	;
@@ -1014,14 +1221,16 @@ elif_clauses
 	
 elif_head
 	: ELSE IF expression {
-		enterScope(yy);
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.enter();
 		$$ = 'else if (' + $3.value + ')';
 	}
 	;
 	
 noend_block
 	: ':' statement_list {
-		exitScope(yy);
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exit();
 		$$ = '{' + $2.filter(Boolean).join(';') + '}';
 	}
 	;
@@ -1032,7 +1241,7 @@ else_clause
 	
 else_head
 	: ELSE {
-		enterScope(yy);
+		yy.symbolScopes.enter();
 		$$ = 'else';
 	}
 	;
@@ -1044,43 +1253,47 @@ else_head
 ////
 assignment
     : IDENTIFIER '=' expression {
-		var mySymb = checkSymbol(yy, $1, @1);
-		if (mySymb.type != 'منوع' && (mySymb.type != $3.type)) {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($1);
+		if (!$3.symb.canBeAssignedTo(mySymb)) {
 			// type mismatch
-			throw new Error("سطر: " + @1.first_line + "\n" + "محاولة ئسناد '" + '<' + $3.type + ">' ئلا '" + mySymb.name + ' <' + mySymb.type + ">'");
+			ErrorManager.error("محاولة ئسناد " + $3.symb.toString() + " ئلا " + mySymb.toString());
 		}
-		if ($3.symb && $3.symb.type == 'كائن') {
+		if ($3.symb.typeIs('نوعبنية')) {
 			// expression is an object literal
-			// add members to identifier's symbol
-			mySymb.members = $3.symb.members;
-			// mySymb.type = $3.symb.type;
+			if (!mySymb.typeSymbol.isStruct) {
+				// mySymb is generic add struct memebers to it
+				mySymb.members = $3.symb.members;
+			}
 		}
 		$$ = {
-			type: mySymb.type,
+			symb: mySymb,
 			value: $1 + '=' + $3.value
 		}
 	}
     | member_access '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
 		if ($1.symb) {
-			if ($1.symb.type != 'منوع' && ($1.symb.type != $3.type)) {
-				throw new Error("سطر: " + @1.first_line + "\n" + "محاولة ئسناد '" + '<' + $3.type + ">' ئلا '" + $1.symb.name + ' <' + $1.symb.type + ">'");
+			var mySymb = $1.symb;
+			if (!$3.symb.canBeAssignedTo(mySymb)) {
+				ErrorManager.error("محاولة ئسناد " + $3.symb.toString() + " ئلا " + $1.symb.toString());
 			}
-			if ($3.symb && $3.symb.type == 'كائن') {
+			if ($3.symb.typeIs('نوعبنية')) {
 				// expression is an object literal
-				// add members to the assigned symbol
-				$1.symb.members = $3.symb.members;
+				if (!mySymb.typeSymbol.isStruct) {
+					// mySymb is generic add struct memebers to it
+					mySymb.members = $3.symb.members;
+				}
 			}
-
-			// $1.symb.type = $3.type
 		}
 		$$ = {
-			type: $3.type,
+			symb: $3.symb,
 			value: $1.value + '=' + $3.value
 		}
 	}
     | array_access '=' expression {
 		$$ = {
-			type: $3.type,
+			symb: $3.symb,
 			value: $1.value + '=' + $3.value
 		}
 	}
@@ -1091,27 +1304,28 @@ assignment
 ////
 arithmetic
 	// type of arithmetic is same as first operand
+	// TODO, types should be the same, check it
     : expression '+' expression {
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value + ' + ' + $3.value 
 		}
 	}
     | expression '-' expression { 
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value  + ' - ' + $3.value 
 		}
 	}
     | expression '×' expression { 
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value  + ' * ' + $3.value 
 		}
 	}
     | expression '÷' expression { 
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value  + ' / ' + $3.value 
 		}
 	}
@@ -1123,37 +1337,37 @@ arithmetic
 comparison
     : expression EQ expression {
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value + ' == ' + $3.value 
 		}
 	}
     | expression NEQ expression { 
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value + ' != ' + $3.value 
 		}
 	}
     | expression LT expression { 
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value + ' < ' + $3.value
 		}
 	}
     | expression LTE expression { 
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value  + ' <= ' + $3.value
 		}
 	}
     | expression GT expression { 
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value + ' > ' + $3.value
 		}
 	}
     | expression GTE expression { 
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value + ' >= ' + $3.value
 		}
 	}
@@ -1164,14 +1378,22 @@ comparison
 ////
 logical
 	: expression AND expression {
+		//if (!$3.symb.canBeAssignedTo($1.symb, /*printerror*/ false)) {
+		if ($1.symb.getTypeName() != $3.symb.getTypeName()) {
+			ErrorManager.error("عملية وو بين معاملان غير متوافقان " + $1.symb.toTypeString() + '،' + $3.symb.toTypeString());
+		}
 		$$ = {
-			type: 'منطق',
+			symb: $1.symb,
 			value: $1.value + ' && ' + $3.value
 		}
 	}
 	| expression OR expression {
+		//if (!$3.symb.canBeAssignedTo($1.symb, /*printerror*/ false)) {
+		if ($1.symb.getTypeName() != $3.symb.getTypeName()) {
+			ErrorManager.error("عملية ئو بين معاملان غير متوافقان " + $1.symb.toTypeString() + '،' + $3.symb.toTypeString());
+		}
 		$$ = {
-			type: 'منطق',
+			symb: $1.symb,
 			value: $1.value + ' || ' + $3.value
 		}
 	}
@@ -1185,7 +1407,7 @@ ternary
 		// TODO: add probable type $1 or $5
 		// for now type checking will be ignored for ternary
         $$ = {
-			type: 'مجهول',
+			symb: Symbol.SYSTEMTYPES['مجهول'],
 			value: $3.value + ' ? ' + $1.value + ' : ' + $5.value
 		}
     }
@@ -1196,155 +1418,241 @@ ternary
 ////
 function_call
     : IDENTIFIER '(' arg_list ')' {
-		var symb = checkSymbol(yy, $1, @1);
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($1);
+		// check args
+		var paramValues = symb.checkArgs($3);
 		// check if class or function
 		var newStr = symb.isClass ? 'new ' : '';
 		$$ = {
 			symb: symb,
-			type: symb.type,
-			value: newStr + $1 + '(' + $3 + ')'
+			value: newStr + $1 + '(' + paramValues.join(', ') + ')'
 		}
 	}
     | member_access '(' arg_list ')' {
-		// TODO: check if member_access is a function
-		// TODO: maybe add isFunction to symbolTable
+		var symb = $1.symb;
+		// check args
+		var paramValues = symb.checkArgs($3);
 		$$ = {
-			symb: $1.symb,
-			type: $1.type,
-			value: $1.value + '(' + $3 + ')'
+			symb: symb,
+			value: $1.value + '(' + paramValues.join(', ') + ')'
 		}
 	}
 	| array_access '(' arg_list ')' {
+		ErrorManager.setContext(@1, context.filePath);
+		ErrorManager.warning("تجاهل فحص المعطيين لئستدعائ وضيفة من مصفوفة");
 		$$ = {
-			type: $1.type,
-			value: $1.value + '(' + $3 + ')'
+			symb: $1.symb,
+			value: $1.value + '(' + $3.map(item => item.value).join(', ') + ')'
+		}
+	}
+	| '(' expression ')' '.' IDENTIFIER '(' arg_list ')' {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = $2.symb.typeSymbol.checkMember($5);
+		// check args
+		var paramValues = symb.checkArgs($7);
+		// check if class or function
+		// var newStr = symb.isClass ? 'new ' : '';
+		$$ = {
+			symb: symb,
+			value: '(' + $2.value + ').' + $5 + '(' + paramValues.join(', ') + ')'
 		}
 	}
     ;
-arg_list // no type property for arg_list
-    : /* empty */ { $$ = ''; }
-    | expression { 
-		$$ = $1.value; 
+arg_list
+	: /* empty */ { $$ = []; }
+	| func_arg {
+		$$ = [{
+			symb: $1.symb,
+			value: $1.value,
+			name: $1.name
+		}]
 	}
-    | arg_list '،' expression { 
-		$$ = $1 + ', ' + $3.value
+	| arg_list '،' func_arg {
+		$1.push({
+			symb: $3.symb,
+			value: $3.value,
+			name: $3.name
+		})
+		$$ = $1;
 	}
-    ;
+	;
+func_arg
+	: expression {
+		$$ = {
+			symb: $1.symb,
+			value: $1.value,
+			name: null,
+		}
+	}
+	| lambda_expr {
+		$$ = {
+			symb: $1.symb,
+			value: $1.value,
+			name: null
+		}
+	}
+	| IDENTIFIER ':' expression {
+		$$ = {
+			symb: $3.symb,
+			value: $3.value,
+			name: $1
+		}
+	}
+	| IDENTIFIER ':' lambda_expr {
+		$$ = {
+			symb: $3.symb,
+			value: $3.value,
+			name: $1
+		}
+	}
+	;
+////
+
+
+////
+lambda_expr
+	: declare_dala function_decl_params ':' expression {
+		yy.symbolScopes.exit();
+		$$ = {
+			symb: $4.symb,
+			value: $2 + "=>" + $4.value
+		}
+	}
+	;
+declare_dala
+	: DALA {
+		yy.symbolScopes.enter();
+	}
+	;
 ////
 
 
 ////
 await_expr
     : AWAIT expression {
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		funcSymb.isawait = true;
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.isAwait = true;
         $$ = {
-			type: $2.type,
+			symb: $2.symb,
 			value: 'await ' + $2.value
 		}
     }
     ;
 ////
-
-
-//// TODO unused remove
-new_expr
-	: NEW function_call {
-		$$ = {
-			type: $2.type,
-			value: 'new ' + $2.value
-		}
-	}
-	;
-////
 	
-	
+
 ////
 member_access
     : IDENTIFIER '.' IDENTIFIER {
-		var type = checkSymbol(yy, $1, @1).type;
-		var symb = checkMember(yy, $1, $3, @3);
-		type = symb.type;
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($1);
+		var memberSymb = symb.checkMember($3);	
 		$$ = {
-			symb: symb,
-			type, 
+			symb: memberSymb,
 			value: $1 + '.' + $3 
 		}
 	}
     | function_call '.' IDENTIFIER {
-		var type = $1.type;
-		var symb = checkMember(yy, type, $3, @3);
-		type = symb.type;
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = $1.symb.typeSymbol;
+		var memberSymb = symb.checkMember($3);
 		$$ = {
-			symb: symb,
-			type, 
+			symb: memberSymb,
 			value: $1.value + '.' + $3 
 		}; 
 	}
     | member_access '.' IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
 		//var type = $1.type;
 		var symb = $1.symb;
-		var symb2;
-		if (symb.type == 'كائن') {
+		var memberSymb;
+		if (symb.typeIs('نوعبنية')) {
 			// for object literals, we take symb name as member base
-			symb2 = checkMember(yy, symb, $3, @3);
+			memberSymb = symb.checkMember($3);
 		} else {
 			// for other variables, we take their symb type as member base
-			symb2 = checkMember(yy, symb.type, $3, @3);
+			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
+			var typeSymb = symb.typeSymbol;
+			memberSymb = typeSymb.checkMember($3);
 		}
-		var type = symb2.type;
 		$$ = {
-			symb: symb2,
-			type, 
+			symb: memberSymb,
 			value: $1.value + '.' + $3 
 		};
 	}
 	| array_access '.' IDENTIFIER {
 		$$ = {
-			symb: null, // TODO: may cause problems
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value + '.' + $3
 		};
 	}
     | SELF '.' IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		var symb = checkMember(yy, selfSymb, $3, @3);
-		var type = symb.type;
+		var symb = selfSymb.checkMember($3);
 		$$ = {
 			symb,
-			type,
 			value: 'this.' + $3
 		}
 	}
-    ;
+	;
+/*
+	| '(' expression ')' '.' IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = $2.symb;
+		var memberSymb;
+		if (symb.typeIs('نوعبنية')) {
+			// for object literals, we take symb name as member base
+			memberSymb = symb.checkMember($5);
+		} else {
+			// for other variables, we take their symb type as member base
+			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
+			var typeSymb = symb.typeSymbol;
+			memberSymb = typeSymb.checkMember($5);
+		}
+		$$ = {
+			symb: memberSymb,
+			value: $2.value + '.' + $5 
+		};
+	}
+*/
 ////
 	
 	
 ////
 array_access
 	: IDENTIFIER '[' expression ']' {
-		var symb = checkSymbol(yy, $1, @1);
-		if (!['مصفوفة', 'منوع', 'كائن'].includes(symb.type)) {
-			throw new Error("سطر: " + @1.first_line + "\n" + "تعدر ولوج عنصر مصفوفة من '" + symb.name + " <" + symb.type + ">'");
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($1);
+		if (!symb.isIterable()) {
+			ErrorManager.error("تعدر ولوج عنصر مصفوفة من " + symb.toString());
 		}
+		var unknownType = Symbol.SYSTEMTYPES['مجهول'];
 		$$ = {
-			type: symb.subtype || 'مجهول', //'مجهول', // we don't currently check types of array elements
+			symb: symb.isArray ? symb.typeSymbol : unknownType,
 			value: $1 + '[' + $3.value + ']'
 		}
 	}
 	| SELF '[' expression ']' {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
-			type: 'مجهول',
+			symb: Symbol.SYSTEMTYPES['مجهول'],
 			value: 'this[' + $3.value + ']'
 		}
 	}
     | member_access '[' expression ']' {
+		ErrorManager.setContext(@1, context.filePath);
 		var symb = $1.symb;
-		if (!['مصفوفة', 'منوع', 'كائن'].includes(symb.type)) {
-			throw new Error("سطر: " + @1.first_line + "\n" + "تعدر ولوج عنصر مصفوفة من '" + symb.name + " <" + symb.type + ">'");
+		if (!symb.isIterable()) {
+			ErrorManager.error("تعدر ولوج عنصر مصفوفة من " + symb.toString());
 		}
+		var unknownType = Symbol.SYSTEMTYPES['مجهول'];
 		$$ = {
-			type: symb.subtype || 'مجهول', // we don't currently check types of array elements
+			// type: symb.subtype, // || 'مجهول'
+			//yy.symbolScopes.getSymbByName(symb.subType),
+			symb: symb.isArray ? symb.typeSymbol : unknownType, 
 			value: $1.value + '[' + $3.value + ']'
 		}
 	}
@@ -1355,16 +1663,26 @@ array_access
 ////
 object_literal
     : '{' property_list '}' {
+		ErrorManager.setContext(@1, context.filePath);
 		var symbs = $2.symb; // these are symbols of object properties
-		var members = {};
+		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
+
 		symbs.forEach((sy) => {
-			members[sy.name] = sy;
+			symb.addMember(sy);
 		});
-		var symb = { name: '', type: 'كائن', members };
+		
 		$$ = {
-			type: symb.type,
 			symb: symb,
 			value: '{' + $2.value + '}'
+		}
+	}
+	| '{' /* empty */ '}' {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = new Symbol('');
+		symb.typeSymbol = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
+		$$ = {
+			symb: symb,
+			value: '{}'
 		}
 	}
     ;	
@@ -1384,16 +1702,18 @@ property_list
     ;
 property
     : IDENTIFIER ':' expression {
-		//declareMember(currentAssign, { name: $1, type: $3.type }, @1);	
-		var symb = { name: $1, type: $3.type, members: {} }
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.createSymbol($1);
+		symb.typeSymbol = $3.symb.typeSymbol;
 		$$ = {
 			symb: symb,
 			value: $1 + ': ' + $3.value
 		}
 	}
     | STRING ':' expression {
-		//declareMember(currentAssign, { name: $1, type: $3.type }, @1);
-		var symb = { name: $1, type: $3.type, members: {} }
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.createSymbol($1);
+		symb.typeSymbol = $3.symb.typeSymbol;
 		$$ = {
 			symb: symb,
 			value: $1 + ': ' + $3.value
@@ -1406,29 +1726,28 @@ property
 ////
 array_elements
     : /* empty */ {
-		throw new Error("سطر: " + @1.first_line + "\n" + "حدد نوع المصفوفة");
-		$$ = "";
-	}
-	| AS IDENTIFIER {
-		var symb = checkSymbol(yy, $2, @1);
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
-			type: symb.type,
+			symb: yy.symbolScopes.getSymbByName('منوع'),
 			value: []
 		}
+		//ErrorManager.error("حدد نوع المصفوفة");
+		//$$ = "";
 	}
 	| expression {
         $$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: [ $1.value ]
 		}
     }
     | array_elements '،' expression {
+		ErrorManager.setContext(@1, context.filePath);
         $1.value.push($3.value);
-		if ($1.type != $3.type) {
-			throw new Error("سطر: " + @1.first_line + "\n" + "نوعين غير متجانسين في المصفوفة.");
+		if (!$3.symb.canBeAssignedTo($1.symb)) {
+			ErrorManager.error("نوعين غير متجانسين في المصفوفة");
 		}
         $$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value
 		}
     }
@@ -1438,15 +1757,16 @@ array_elements
 
 ////
 type_decl
-	: IDENTFIER {
-		$$ = {
-			type: $1
-		}
-	}
-	| IDENTIFIER '[' IDENTIFIER ']' {
+	: IDENTIFIER {
 		$$ = {
 			type: $1,
-			subtype: $3
+			isArray: false
+		}
+	}
+	| IDENTIFIER '[' ']' {
+		$$ = {
+			type: $1,
+			isArray: true
 		}
 	}
 	;
@@ -1465,8 +1785,9 @@ spread_operator
 ////
 logical_negation
     : NOT expression {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: '!' + $2.value
 		}
 	}
@@ -1477,8 +1798,9 @@ logical_negation
 ////
 in_expression
 	: expression IN expression {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value + ' in ' + $3.value
 		}
 	}
@@ -1487,143 +1809,207 @@ in_expression
 
 
 ////
-expression
-    : assignment {
+type_casting
+	: AS type_decl {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($2.type);
+		// $2.isArray
 		$$ = {
-			type: $1.type,
-			value: $1.value
+			symb: symb,
+			isArray: $2.isArray
 		}
 	}
+	;
+////
+
+
+////
+parenthesis_expr
+	: '(' expression ')' {
+		$$ = {
+			symb: $2.symb,
+			value: '(' + $2.value + ')'
+		};
+	}
+	;
+////
+
+
+////
+expression
+    : logical {
+		$$ = {
+			symb: $1.symb,
+			value: $1.value
+		}
+	}	
 	| arithmetic {
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value
 		}
 	}
     | comparison {
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value
 		} 
 	}
-	| logical {
-		$$ = {
-			type: $1.type,
-			value: $1.value
-		}
-	}
 	| ternary { 
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value
 		} 
 	}
     | function_call {
 		$$ = { 
-			type: $1.type, 
+			symb: $1.symb, 
 			value: $1.value 
 		}; 
+	}
+	| function_call type_casting {
+		// function_call
+		var symb = $1.symb.duplicate($2.symb);
+		symb.isArray = $2.isArray;
+		$$ = {
+			symb: symb,
+			value: $1.value
+		};
 	}
     | await_expr {
 		// could've done $$=$1 but that's confusing
 		$$ = {
-			type: $1.type,
+			symb: $1.symb,
 			value: $1.value
 		}
 	}
-/* TODO: remove this, no new keyword
-	| new_expr {
-		$$ = {
-			type: $1.type,
-			value: $1.value
-		}
-	}
-*/
 	| member_access {
 		$$ = {
 			symb: $1.symb,
-			type: $1.type,
+			value: $1.value
+		}
+	}
+	| member_access type_casting {
+		// member_access
+		var symb = $1.symb.duplicate($2.symb);
+		symb.isArray = $2.isArray;
+		$$ = {
+			symb: symb,
 			value: $1.value
 		}
 	}
     | array_access {
 		$$ = { 
-			type: $1.type, 
+			symb: $1.symb, 
 			value: $1.value
 		} 
+	}
+	| array_access type_casting {
+		var symb = $1.symb.duplicate($2.symb);
+		symb.isArray = $2.isArray;
+		$$ = {
+			symb: symb,
+			value: $1.value
+		}
 	}
     | object_literal {
 		$$ = {
 			symb: $1.symb,
-			type: $1.type, 
 			value: $1.value
 		}; 
 	}
 	| spread_operator {
 		$$ = {
-			type: 'مجهول',
+			symb: Symbol.SYSTEMTYPES['مجهول'],
 			value: $1
 		}
 	}
 	| '[' array_elements ']' {
+		ErrorManager.setContext(@1, context.filePath);
+		var elemTypeSymb = $2.symb.typeSymbol;
+		var symb = yy.symbolScopes.createSymbol('', elemTypeSymb.name, true /*isArray*/);
 		$$ = {
-			type: 'مصفوفة',
-			subtype: $2.type,
+			symb: symb,
+			value: '[' + $2.value.join(', ') + ']'
+		}
+	}
+	| '[' array_elements ']' type_casting {
+		ErrorManager.setContext(@1, context.filePath);
+		var elemTypeSymb = $2.symb.typeSymbol;
+		var symb = yy.symbolScopes.createSymbol('', $4.symb.name, true /*isArray*/);
+		$$ = {
+			symb: symb,
 			value: '[' + $2.value.join(', ') + ']'
 		}
 	}
     | logical_negation {
 		$$ = { 
-			type: $1.type, // منطق 
+			symb: $1.symb, // منطق 
 			value: $1.value 
 		}; 
 	}
-	| '(' expression ')' {
+	| parenthesis_expr {
 		$$ = {
-			symb: $2.symb,
-			type: $2.type,
-			value: '(' + $2.value + ')'
+			symb: $1.symb,
+			value: '(' + $1.value + ')'
 		};
+	}
+	| '(' expression ')' type_casting {
+		var symb = $2.symb.duplicate($4.symb);
+		symb.isArray = $4.isArray;
+		$$ = {
+			symb: symb,
+			value: '(' + $2.value + ')'
+		}
 	}
 	| in_expression {
 		$$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $1.value
 		}
 	}
     | IDENTIFIER {
-		var symb = checkSymbol(yy, $1, @1);
+		var symb = yy.symbolScopes.getSymbByName($1);
 		$$ = {
 			symb: symb,
-			type: symb.type, 
+			value: $1
+		}; 
+	}
+	| IDENTIFIER type_casting {
+		var symb = yy.symbolScopes.getSymbByName($1);
+		var mySymb = symb.duplicate($2.symb);
+		mySymb.isArray = $2.isArray;
+		$$ = {
+			symb: mySymb,
 			value: $1
 		}; 
 	}
     | NUMBER {
 		$$ = {
-			type: 'عدد',
+			symb: yy.symbolScopes.getSymbByName('عدد'),
 			value: toEnDigit($1)
 		}
 	}
     | TRUE {
 		$$ = {
-			type: 'منطق', 
+			symb: yy.symbolScopes.getSymbByName('منطق'), 
 			value: 'true'
 		}; 
 	}
     | FALSE {
 		$$ = {
-			type: 'منطق', 
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: 'false'
 		}; 
 	}
     | NULL {
 		$$ = {
-			type: 'عدم', 
+			symb: Symbol.SYSTEMTYPES['عدم'],
 			value: 'null'
 		}; 
 	}
     | STRING {
+		ErrorManager.setContext(@1, context.filePath);
 		//inlineParse($2.replace('<x-', '<'), context, yy)
 		const regex = /{(.*?)}/g;
 		var match;
@@ -1634,25 +2020,40 @@ expression
 				inlineParse(s, context, yy);
 			}
 		}
+		var val = $1.replaceAll('"', '').replaceAll("'", "");
+		var symb = yy.symbolScopes.createSymbol(val, 'نصية');
+		symb.isLiteral = true;
 		$$ = {
-			type: 'نص',
+			symb: symb,
 			value: $1.replaceAll('"', '`').replaceAll('{', '${')
 		}
 	}
     | SELF {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
-			type: yy.selfStack[yy.selfStack.length-1].type,
+			symb: yy.selfStack[yy.selfStack.length-1],
 			value: 'this'
 		}			
 	}
+	| SELF type_casting {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.selfStack[yy.selfStack.length-1];
+		var mySymb = symb.duplicate($2.symb);
+		mySymb.isArray = $2.isArray;
+		$$ = {
+			symb: mySymb,
+			value: 'this'
+		}; 
+	}
     | JNX {
+		ErrorManager.setContext(@1, context.filePath);
 		var result = $1.replace('(', '').replace(')', '') // تعويض القوسين بعلامات ئقتباس
 					.replaceAll('\t','') // حدف الفراغين
 					.replace(/(\r\n|\n|\r)/gm,''); // حدف رجعات السطر
 					//.replaceAll('{', '${'); // تعويض متغيرين القالب
 		result = processJNX(result, context, yy);
 		$$ = {
-			type: 'نص',
+			symb: yy.symbolScopes.getSymbByName('نصية'),
 			value: result
 		}
 	}

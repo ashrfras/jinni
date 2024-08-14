@@ -1,4 +1,5 @@
 const createParser = require('./jparser');
+const ErrorManager = require('./ErrorManager');
 
 const fs = require('fs');
 const path = require('path');
@@ -8,18 +9,32 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-const mainFilePath = path.resolve(process.argv[2]);
+var mainFilePath = path.resolve(process.argv[2]);
+
+// given path can be a file named مدخل.جني
+// or a folder in which case we add file مدخل.جني
+if (!mainFilePath.endsWith('مدخل.جني')) {
+	if (mainFilePath.endsWith('.جني')) {
+		console.error('قم بتحديد ملف بئسم مدخل.جني');
+		process.exit();
+	}
+	mainFilePath = path.join(mainFilePath, 'مدخل.جني');
+}
+
 const projectPath = path.resolve(path.dirname(mainFilePath));
 const fileName = path.basename(mainFilePath, '.جني');
 const outPath = path.join(projectPath, '__خام__');
 
 // remove bin folder
-fs.rmSync(outPath, { recursive: true });
 
-// create bin folder
+
+// remove then create bin folder
 try {
+	fs.rmSync(outPath, { recursive: true });
+} catch (err) {
+} finally {
 	fs.mkdirSync(outPath);
-} catch (err) {}
+}
 
 let code;
 try {
@@ -42,6 +57,12 @@ try {
 	console.error(error);
 }
 
+ErrorManager.printAll(false);
+
+if (ErrorManager.isBlocking) {
+	console.error('خطئين فادحين، ترجا المراجعة');
+}
+
 // read from template.html
 try {
 	const data = fs.readFileSync('./template.html', 'utf8');
@@ -57,81 +78,3 @@ try {
 } catch (error) {
 	console.error('فشلت الكتابة في الملف: ', error);
 }
-
-
-
-return;
-(async function() {
-	try {
-		await fs.promises.mkdir(outPath);
-	} catch (err) {}
-  
-	let code;
-	try {
-		const data = await fs.promises.readFile(mainFilePath, 'utf8');
-		code = data;
-	} catch (error) {
-		console.error('فشلت قرائة الملف: ', error);
-	}
-
-	try {
-		const parser = createParser();
-		const result = parser.parse(code, {
-			filePath: mainFilePath,
-			projectPath: projectPath,
-			outPath: outPath
-		});
-	} catch (e) {
-		let projectBasePath = path.dirname(projectPath);
-		console.error("ملف: " + mainFilePath.replace(projectBasePath, ''));
-		console.error(e.message);
-	}
-})();
-
-return
-
-// unused code
-
-fs.readdir(projectPath, async (err, files) => {
-  if (err) {
-    console.error('فشلت قرائة المجلد:', err);
-    return;
-  }
-
-  // create out dir
-  try {
-    await fs.promises.mkdir(outPath);
-  } catch (err) {}
-
-  files.forEach(async (file) => {
-    const filePath = path.join(projectPath, file);
-    const stats = await fs.promises.stat(filePath);
-
-    if (stats.isFile()) {
-      const outFilePath = path.join(outPath, file.replace('.جني', '.js'));
-      fs.readFile(filePath, 'utf8', async (err, data) => {
-        if (err) {
-          console.error('فشلت قرائة الملف:', err);
-          return;
-        }
-
-        const code = data;
-        try {
-          const result = parser.parse(code);
-          await fs.promises.writeFile(outFilePath, result, { flag: 'w+' });
-        } catch (e) {
-          console.error("ملف: " + file);
-          console.error(e.message);
-        }
-      });
-    } else {
-      if (file != '__خام__') {
-        // is directory
-        const outdir = path.join(outPath, file);
-        try {
-         await fs.promises.mkdir(outdir);
-        } catch (err) {}
-          }
-    }
-  }); // foreach file
-}); // readdir

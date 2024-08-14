@@ -72,12 +72,12 @@
   }
 */
 var jparser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,17],$V1=[1,18],$V2=[1,45],$V3=[1,50],$V4=[1,62],$V5=[1,43],$V6=[1,21],$V7=[1,22],$V8=[1,23],$V9=[1,24],$Va=[1,25],$Vb=[1,26],$Vc=[1,55],$Vd=[1,56],$Ve=[1,57],$Vf=[1,58],$Vg=[1,51],$Vh=[1,41],$Vi=[1,59],$Vj=[1,60],$Vk=[1,61],$Vl=[1,46],$Vm=[1,47],$Vn=[1,48],$Vo=[1,49],$Vp=[1,52],$Vq=[2,5,21,26,31,40,41,46,47,49,51,53,55,56,58,60,66,68,91,94,95,98,105,107,109,110,111,112,113],$Vr=[1,66],$Vs=[1,87],$Vt=[1,86],$Vu=[1,74],$Vv=[1,75],$Vw=[1,76],$Vx=[1,77],$Vy=[1,78],$Vz=[1,79],$VA=[1,80],$VB=[1,81],$VC=[1,82],$VD=[1,83],$VE=[1,84],$VF=[1,85],$VG=[1,93],$VH=[2,31],$VI=[20,29],$VJ=[1,104],$VK=[1,107],$VL=[20,29,43,45,61,66,68,74,75,76,77,79,80,81,82,83,84,86,87,96,100],$VM=[29,96],$VN=[1,127],$VO=[1,135],$VP=[1,136],$VQ=[23,29],$VR=[1,161],$VS=[1,160],$VT=[1,176],$VU=[29,43],$VV=[2,95],$VW=[36,45],$VX=[20,29,43,45,61,68,74,75,76,77,79,80,81,82,83,84,86,87,96,100],$VY=[29,100],$VZ=[20,29,43,45,68,74,75,96,100],$V_=[20,29,43,45,68,74,75,76,77,96,100],$V$=[20,29,43,45,68,74,75,76,77,79,80,81,82,83,84,96,100],$V01=[20,29,43,45,68,74,75,76,77,79,80,81,82,83,84,86,87,96,100],$V11=[29,43,45],$V21=[46,68],$V31=[20,29,30,41,43,45,54,61,66,68,74,75,76,77,79,80,81,82,83,84,86,87,95,96,100],$V41=[1,227],$V51=[20,30],$V61=[20,29,30,43,45,61,66,68,74,75,76,77,79,80,81,82,83,84,86,87,96,100],$V71=[20,29,30,41,43,45,54,61,66,68,74,75,76,77,79,80,81,82,83,84,86,87,96,100];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[1,29],$V2=[1,34],$V3=[1,13],$V4=[1,27],$V5=[1,40],$V6=[1,24],$V7=[1,39],$V8=[1,35],$V9=[1,41],$Va=[1,42],$Vb=[1,30],$Vc=[1,31],$Vd=[1,32],$Ve=[1,33],$Vf=[1,36],$Vg=[5,26,31,36,37,58,67,79,123,124,130,132,136,137,138,139,140],$Vh=[1,46],$Vi=[1,62],$Vj=[1,61],$Vk=[1,51],$Vl=[1,52],$Vm=[1,53],$Vn=[1,54],$Vo=[1,55],$Vp=[1,56],$Vq=[1,57],$Vr=[1,58],$Vs=[1,59],$Vt=[1,60],$Vu=[1,49],$Vv=[1,50],$Vw=[1,68],$Vx=[2,51],$Vy=[25,34,43,60,68,80,91,96,98,103,104,105,106,108,109,110,111,112,113,115,116],$Vz=[1,75],$VA=[2,175],$VB=[1,78],$VC=[1,77],$VD=[1,79],$VE=[2,177],$VF=[1,82],$VG=[1,81],$VH=[34,80],$VI=[2,187],$VJ=[1,88],$VK=[1,87],$VL=[1,89],$VM=[1,94],$VN=[1,100],$VO=[1,101],$VP=[2,5,26,31,36,37,45,58,67,71,73,74,79,82,83,86,88,90,96,98,123,124,130,132,136,137,138,139,140],$VQ=[25,28,34],$VR=[1,123],$VS=[1,125],$VT=[34,60],$VU=[2,134],$VV=[1,137],$VW=[1,139],$VX=[32,43],$VY=[1,158],$VZ=[1,156],$V_=[1,159],$V$=[1,155],$V01=[25,34,43,60,68,80,91,98,103,104,105,106,108,109,110,111,112,113,115,116],$V11=[34,68],$V21=[25,34,43,60,68,80,98,103,104,105,106,108,109,110,111,112,113,115,116],$V31=[25,34,43,60,68,80,98,103,104],$V41=[25,34,43,60,68,80,98,103,104,105,106],$V51=[25,34,43,60,68,80,98,103,104,105,106,108,109,110,111,112,113],$V61=[1,185],$V71=[1,190],$V81=[1,186],$V91=[1,187],$Va1=[1,188],$Vb1=[1,189],$Vc1=[1,191],$Vd1=[1,192],$Ve1=[1,198],$Vf1=[1,199],$Vg1=[1,200],$Vh1=[25,34,39,43,60,68,80,91,96,98,103,104,105,106,108,109,110,111,112,113,115,116],$Vi1=[2,74],$Vj1=[25,32,34,35,39,43,58,60,68,79,80,91,96,98,103,104,105,106,108,109,110,111,112,113,115,116],$Vk1=[1,208],$Vl1=[25,34,39,45,60,68,73],$Vm1=[2,63],$Vn1=[1,229],$Vo1=[25,35],$Vp1=[2,31,36,45,58,67,71,73,74,79,82,83,86,88,90,96,98,123,124,130,132,136,137,138,139,140],$Vq1=[25,91,96,103,104,105,106,108,109,110,111,112,113,115,116],$Vr1=[1,258],$Vs1=[25,34,45,68],$Vt1=[25,32,34,35,43,60,68,80,91,96,98,103,104,105,106,108,109,110,111,112,113,115,116],$Vu1=[25,32,34,35,39,43,58,60,68,80,91,96,98,103,104,105,106,108,109,110,111,112,113,115,116],$Vv1=[1,293],$Vw1=[45,98];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"program":3,"statement_list":4,"EOF":5,"statement":6,"import_statement":7,"semic_or_nl":8,"function_def":9,"super_call":10,"shortcuts_call":11,"has_statement":12,"var_declaration":13,"say_statement":14,"return_statement":15,"while_statement":16,"for_in_statement":17,"if_statement":18,"expression":19,"؛":20,"IMPORT":21,"import_specifier":22,"FROM":23,"import_path":24,"import_list":25,"IDENTIFIER":26,"AS":27,"ALL":28,"،":29,".":30,"STRING":31,"function_decl":32,"function_ret":33,"body_block":34,"subfunc_decl":35,"=>":36,"type_decl":37,"function_decl_name":38,"function_decl_params":39,"DECL":40,"(":41,"param_list":42,")":43,"subfunc_decl_name":44,":":45,"END":46,"SUPER":47,"arg_list":48,"SHORTCUTS":49,"shortcuts_specifier":50,"HAS":51,"has_list":52,"DEF":53,"=":54,"SAY":55,"RETURN":56,"while_head":57,"WHILE":58,"for_in_head":59,"FOR":60,"IN":61,"if_head":62,"noend_block":63,"elif_clauses":64,"else_clause":65,"IF":66,"elif_head":67,"ELSE":68,"else_head":69,"assignment":70,"member_access":71,"array_access":72,"arithmetic":73,"+":74,"-":75,"×":76,"÷":77,"comparison":78,"EQ":79,"NEQ":80,"LT":81,"LTE":82,"GT":83,"GTE":84,"logical":85,"AND":86,"OR":87,"ternary":88,"function_call":89,"await_expr":90,"AWAIT":91,"new_expr":92,"NEW":93,"SELF":94,"[":95,"]":96,"object_literal":97,"{":98,"property_list":99,"}":100,"property":101,"array_elements":102,"IDENTFIER":103,"spread_operator":104,"SPREAD":105,"logical_negation":106,"NOT":107,"in_expression":108,"NUMBER":109,"TRUE":110,"FALSE":111,"NULL":112,"JNX":113,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",20:"؛",21:"IMPORT",23:"FROM",26:"IDENTIFIER",27:"AS",28:"ALL",29:"،",30:".",31:"STRING",36:"=>",40:"DECL",41:"(",43:")",45:":",46:"END",47:"SUPER",49:"SHORTCUTS",51:"HAS",53:"DEF",54:"=",55:"SAY",56:"RETURN",58:"WHILE",60:"FOR",61:"IN",66:"IF",68:"ELSE",74:"+",75:"-",76:"×",77:"÷",79:"EQ",80:"NEQ",81:"LT",82:"LTE",83:"GT",84:"GTE",86:"AND",87:"OR",91:"AWAIT",93:"NEW",94:"SELF",95:"[",96:"]",98:"{",100:"}",103:"IDENTFIER",105:"SPREAD",107:"NOT",109:"NUMBER",110:"TRUE",111:"FALSE",112:"NULL",113:"JNX"},
-productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,2],[6,1],[6,2],[6,2],[6,2],[6,2],[6,2],[6,2],[6,1],[6,1],[6,1],[6,2],[6,1],[8,1],[7,4],[22,1],[22,3],[22,3],[25,1],[25,3],[24,1],[24,3],[24,1],[9,3],[9,3],[33,2],[33,0],[32,2],[38,2],[39,3],[35,2],[44,4],[42,0],[42,1],[42,2],[42,3],[42,4],[34,3],[34,2],[10,5],[11,2],[50,1],[50,3],[12,2],[52,0],[52,2],[52,1],[52,4],[52,3],[13,2],[13,4],[13,3],[13,5],[14,2],[15,2],[15,1],[16,2],[57,2],[17,2],[59,4],[18,5],[18,4],[18,4],[18,3],[62,2],[64,2],[64,3],[67,3],[63,2],[65,2],[69,1],[70,3],[70,3],[70,3],[73,3],[73,3],[73,3],[73,3],[78,3],[78,3],[78,3],[78,3],[78,3],[78,3],[85,3],[85,3],[88,5],[89,4],[89,4],[89,4],[48,0],[48,1],[48,3],[90,2],[92,2],[71,3],[71,3],[71,3],[71,3],[71,3],[72,4],[72,4],[72,4],[97,3],[99,1],[99,3],[101,3],[101,3],[102,0],[102,2],[102,1],[102,3],[37,1],[37,4],[104,2],[106,2],[108,3],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,3],[19,1],[19,3],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1]],
+symbols_: {"error":2,"program":3,"declstatement_list":4,"EOF":5,"declstatement":6,"import_statement":7,"semic_or_nl":8,"function_def":9,"var_def":10,"struct_def":11,"expression":12,"statement_list":13,"statement":14,"super_call":15,"shortcuts_call":16,"has_statement":17,"var_declaration":18,"say_statement":19,"return_statement":20,"while_statement":21,"for_in_statement":22,"if_statement":23,"assignment":24,"؛":25,"IMPORT":26,"import_specifier":27,"FROM":28,"import_path":29,"import_list":30,"IDENTIFIER":31,"AS":32,"ALL":33,"،":34,".":35,"STRING":36,"DECL":37,"type_decl":38,"=":39,"struct_decl":40,"struct_body":41,"STRUCT":42,":":43,"has_list":44,"END":45,"enum_def":46,"enum_decl":47,"enum_body":48,"ENUM":49,"enum_list":50,"enum_elem":51,"function_decl":52,"function_ret":53,"body_block":54,"subfunc_decl":55,"function_decl_name":56,"function_decl_params":57,"(":58,"param_list":59,")":60,"subfunc_decl_name":61,"param":62,"param_def":63,"DALA":64,"is_param_opt":65,"dala_params":66,"{":67,"}":68,"؟":69,"dala_param_types":70,"SUPER":71,"arg_list":72,"SHORTCUTS":73,"HAS":74,"has_list_elements":75,"has_list_element":76,"param_decl":77,"param_init":78,"[":79,"]":80,"identifier_list":81,"DEF":82,"SAY":83,"wtype_expr":84,"WTYPE":85,"RETURN":86,"while_head":87,"WHILE":88,"for_in_head":89,"FOR":90,"IN":91,"if_head":92,"noend_block":93,"elif_clauses":94,"else_clause":95,"IF":96,"elif_head":97,"ELSE":98,"else_head":99,"member_access":100,"array_access":101,"arithmetic":102,"+":103,"-":104,"×":105,"÷":106,"comparison":107,"EQ":108,"NEQ":109,"LT":110,"LTE":111,"GT":112,"GTE":113,"logical":114,"AND":115,"OR":116,"ternary":117,"function_call":118,"func_arg":119,"lambda_expr":120,"declare_dala":121,"await_expr":122,"AWAIT":123,"SELF":124,"object_literal":125,"property_list":126,"property":127,"array_elements":128,"spread_operator":129,"SPREAD":130,"logical_negation":131,"NOT":132,"in_expression":133,"type_casting":134,"parenthesis_expr":135,"NUMBER":136,"TRUE":137,"FALSE":138,"NULL":139,"JNX":140,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",25:"؛",26:"IMPORT",28:"FROM",31:"IDENTIFIER",32:"AS",33:"ALL",34:"،",35:".",36:"STRING",37:"DECL",39:"=",42:"STRUCT",43:":",45:"END",49:"ENUM",58:"(",60:")",64:"DALA",67:"{",68:"}",69:"؟",71:"SUPER",73:"SHORTCUTS",74:"HAS",79:"[",80:"]",82:"DEF",83:"SAY",85:"WTYPE",86:"RETURN",88:"WHILE",90:"FOR",91:"IN",96:"IF",98:"ELSE",103:"+",104:"-",105:"×",106:"÷",108:"EQ",109:"NEQ",110:"LT",111:"LTE",112:"GT",113:"GTE",115:"AND",116:"OR",123:"AWAIT",124:"SELF",130:"SPREAD",132:"NOT",136:"NUMBER",137:"TRUE",138:"FALSE",139:"NULL",140:"JNX"},
+productions_: [0,[3,2],[3,1],[4,1],[4,2],[6,2],[6,1],[6,2],[6,1],[6,2],[13,1],[13,2],[14,2],[14,2],[14,2],[14,2],[14,2],[14,2],[14,1],[14,1],[14,1],[14,2],[14,2],[14,1],[8,1],[7,4],[7,2],[27,1],[27,3],[27,3],[30,1],[30,3],[29,1],[29,3],[29,1],[10,6],[10,6],[10,8],[11,3],[40,2],[41,3],[46,3],[47,2],[48,3],[50,1],[50,3],[51,1],[51,3],[9,3],[9,3],[53,2],[53,0],[52,2],[56,2],[57,3],[55,2],[61,4],[59,0],[59,1],[59,3],[62,1],[62,5],[62,6],[65,0],[65,1],[66,3],[70,0],[70,1],[70,3],[54,3],[54,2],[15,5],[16,2],[17,2],[44,0],[44,1],[75,1],[75,3],[76,1],[76,3],[63,1],[63,2],[77,2],[77,3],[77,5],[77,6],[78,2],[81,1],[81,3],[18,2],[18,4],[18,2],[18,4],[18,4],[18,6],[19,2],[84,2],[20,2],[20,1],[21,2],[87,2],[22,2],[89,4],[23,5],[23,4],[23,4],[23,3],[92,2],[94,2],[94,3],[97,3],[93,2],[95,2],[99,1],[24,3],[24,3],[24,3],[102,3],[102,3],[102,3],[102,3],[107,3],[107,3],[107,3],[107,3],[107,3],[107,3],[114,3],[114,3],[117,5],[118,4],[118,4],[118,4],[118,8],[72,0],[72,1],[72,3],[119,1],[119,1],[119,3],[119,3],[120,4],[121,1],[122,2],[100,3],[100,3],[100,3],[100,3],[100,3],[101,4],[101,4],[101,4],[125,3],[125,2],[126,1],[126,3],[127,3],[127,3],[128,0],[128,1],[128,3],[38,1],[38,3],[129,2],[131,2],[133,3],[134,2],[135,3],[12,1],[12,1],[12,1],[12,1],[12,1],[12,2],[12,1],[12,1],[12,2],[12,1],[12,2],[12,1],[12,1],[12,3],[12,4],[12,1],[12,1],[12,4],[12,1],[12,1],[12,2],[12,1],[12,1],[12,1],[12,1],[12,1],[12,1],[12,2],[12,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */, context) {
 /* this == yyval */
 
@@ -85,65 +85,90 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-		var globalvars = "";
-		if ($$[$0-1].includes('مدخل')) { // TODO: improve madkhal checking
-			globalvars = "globalThis['سياق'] = " + yy.env;
-		}
-		result = globalvars + $$[$0-1].filter(Boolean).join(';');
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var result = $$[$0-1].filter(Boolean).join(';');
 		if (context.inlineParse) {
 			return result;
 		}
 		let fileName = context.filePath.replace(context.projectPath, '.').replace('.جني', '.js');
+		fileName = fileName.replace(__dirname, '.');
 		fileName = fileName.replaceAll('/', '.').replace('..', '/');
+		
+		// make sure not to repeat last two names: ئساسية.ئساسية.جني becomes ئساسية.جني
+		var nameArr = fileName.split('.');
+		var lastName = nameArr[nameArr.length - 2];
+		var lastLastName = nameArr[nameArr.length - 3];
+		if (lastLastName) {
+			if (lastName == lastLastName.replace('/', '')) {
+				fileName = fileName.replace(lastName + '.', '');
+			}
+		}
+		
 		let outFilePath = path.join(context.outPath, fileName);
+		
 		fs.writeFile(outFilePath, result, { flag: 'w+' }, (err) => {
 			if (err) {
-				console.log('فشل حفض الملف: ' + outFilePath);
+				throw new Error('فشل حفض الملف: ' + outFilePath);
 			}
-		});
+		});	
 		// get global scope
-		var glob = yy.scopeStack.pop();
-		// remove env from it
-		delete glob["سياق"];
+		var glob = yy.symbolScopes.exit();
 		return glob; // return global scope
     
 break;
-case 3:
+case 3: case 10:
  this.$ = [$$[$0]]; 
 break;
-case 4:
+case 4: case 11:
  $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 break;
-case 5: case 7: case 9: case 10: case 11: case 12:
+case 5: case 7: case 12: case 14: case 15: case 16: case 17:
  this.$ = $$[$0-1]; 
 break;
-case 6: case 13: case 14: case 15: case 23: case 25: case 27:
+case 6: case 8: case 18: case 19: case 20: case 30: case 32: case 34:
  this.$ = $$[$0]; 
 break;
-case 8: case 17: case 37: case 49: case 95:
- this.$ = ''; 
-break;
-case 16:
+case 9: case 21: case 22:
  this.$ = $$[$0-1].value; 
 break;
-case 19:
+case 13: case 23: case 57:
+ this.$ = ''; 
+break;
+case 25:
 
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		ImportManager.setContext(context);
 		
-		//var myImport = $$[$0].replace(/\"/g, '').replace(/\'/g, '');
-		if (isUrlImport($$[$0])) {
-			var imp = $$[$0].replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
-			// path should start with '//' 
-			// then consider specifier as مجهول and add symbol
-			if (!imp.startsWith('//')) {
-				throw new Error("ئيراد عنونت لا يبدئ ب //");
+		var importSpecifier = $$[$0-2];	
+		var scope = ImportManager.addImport($$[$0], context.filePath);
+		
+		if (importSpecifier.find == 'all') {
+			var mySymb;
+			if (!scope) { // string import
+				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
+			} else {
+				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
+				scope.copyToSymbol(mySymb);
 			}
-			if ($$[$0-2].find == 'all') {
-				declareSymbol(yy, _$[$0-3], $$[$0-2].add, 'مجهول');
-			}else {
-				$$[$0-2].add.forEach((add) => {
-					declareSymbol(yy, _$[$0-3], add, 'مجهول');
+		} else {
+			if (!scope) { // string import
+				importSpecifier.add.forEach((add) => {
+					yy.symbolScopes.declareSymbol(add, 'مجهول');
+				});
+			} else {
+				importSpecifier.find.forEach((find) => {
+					var symb = scope.getSymbolByName(find);
+					if (!symb) {
+						ErrorManager.error("الئسم " + find + " غير معروف في الوحدة '" + $$[$0] + "'");
+					}
+					// TODO REVIEW symb.name = sym.add
+					yy.symbolScopes.addSymbol(symb);
 				});
 			}
+		}
+		
+		if (!scope) { // this is a string import
+			var imp = $$[$0].replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
 			if (imp == '//') {
 				// nonfunctional import just for the parser
 				this.$ = "";
@@ -151,24 +176,7 @@ case 19:
 				this.$ = 'import ' + $$[$0-2].value + ' from "' + imp + '";'; 
 			}
 		} else {
-			// import is not a string
-			var myFileImport = importExists($$[$0], context);
-
-			if (myFileImport.exists) {
-				// local import, build path and parse file
-				processImport(yy, _$[$0-2], context, myFileImport.relativePath, $$[$0-2]);
-			} else {
-				// unfound locally, download from library
-				// and continue just like local
-				// addDownloadFromLibrary();
-				myFileImport = importExists('مكون.' + $$[$0], context);
-				if (myFileImport.exists) {
-					processImport(yy, _$[$0-2], context, myFileImport.relativePath, $$[$0-2]);
-				} else {
-					throw new Error("تعدر ئيجاد الوحدة '" +  $$[$0] + "'")
-				}
-			}
-			var imp = myFileImport.relativePath.replaceAll('/', '.').replace('.جني', '.js').replace('..', './');
+			var imp = './' + $$[$0] + '.js';
 			var exp = $$[$0-2].value;
 			if (exp.includes('* as ')) {
 				exp = '{' + exp.replace('* as ', '') + '}';
@@ -177,8 +185,31 @@ case 19:
 		}
 	
 break;
-case 20:
+case 26:
 
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		ImportManager.setContext(context);
+		var importNames = $$[$0].split(', ');
+		var result = '';
+		importNames.forEach (impName => {
+			var scope = ImportManager.addImport(impName, context.filePath);
+			var symb = scope.getSymbolByName(impName);
+			if (!symb) {
+				ErrorManager.error("الئسم " + impName + " غير معروف في الوحدة '" + impName + "'");
+			}
+			// TODO REVIEW symb.name = sym.add
+			yy.symbolScopes.addSymbol(symb);
+			var imp = './' + impName + '.js';
+			var exp = impName;
+			var sep = result == '' ? '' : ';';
+			result += sep + 'import {' + impName + '} from "' + imp + '";export {' + exp + '}';
+		});
+		this.$ = result;
+	
+break;
+case 27:
+
+		ErrorManager.setContext(_$[$0], context.filePath);
 		this.$ = {
 			find: $$[$0].split(', '),
 			add: $$[$0].split(', '),
@@ -186,8 +217,9 @@ case 20:
 		}			
 	
 break;
-case 21:
- 
+case 28:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		this.$ = {
 			find: [$$[$0-2]],
 			add: [$$[$0]],
@@ -195,8 +227,9 @@ case 21:
 		}
 	
 break;
-case 22:
- 
+case 29:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		this.$ = {
 			find: "all",
 			add: $$[$0],
@@ -204,116 +237,264 @@ case 22:
 		}
 	
 break;
-case 24:
- 
-		this.$ = $$[$0-2] + ', ' + $$[$0]
-	
-break;
-case 26:
-
-		this.$ = $$[$0-2] + '.' + $$[$0]
-	
-break;
-case 28:
-
-		var selfSymb = yy.selfStack.pop();
-		var funcSymb = yy.functionStack.pop();
-		
-		if ($$[$0].includes('this.')) {
-			// we used this keyword, so self is a class
-			selfSymb.isClass = true;
-		}
-		
-		var extendStr = '';
-		if (yy.mysuper != '') { // this class inherits
-			extendStr = ' extends ' + yy.mysuper,
-            yy.mysuper = '';
-        }
-		
-		if (!selfSymb.isClass && (funcSymb.type != $$[$0-1].type)) {
-			throw new Error("سطر: " + _$[$0-2].first_line + "\n" + "نوع الئرجاع غير متوافق في الوضيفة '" + funcSymb.name + " <" + funcSymb.type + ">'");
-		}
-		
-		if ($$[$0-2].funcname == 'مدخل') { // self exec main function
-			this.$ = '(function ' + $$[$0-2].funcname + $$[$0-2].params + $$[$0] + ')()'; 
-		} else if (yy.myshortcut != '') { // this is a shortcut
-			this.$ = $$[$0-2].exportStr + 'const ' + $$[$0-2].funcname + '=' + yy.myshortcut + ';'
-				+ $$[$0-2].funcname + '.prototype || (' + $$[$0-2].funcname + '.prototype = {});'
-				+ $$[$0].slice(1,-1); // remove first and last { }
-			yy.myshortcut = '';
-		} else if (selfSymb.isClass) { // this is a class
-			// we should not have a return
-			if ($$[$0-1].type) {
-				throw new Error("سطر: " + _$[$0-2].first_line + "\n" + "لا يجب تحديد نوع ئرجاع لصنف.");
-			}
-			this.$ = $$[$0-2].exportStr + 'class ' + $$[$0-2].funcname + extendStr + '{constructor' + $$[$0-2].params + $$[$0] + '}';
-		} else { // this is a function
-			var asyncStr = funcSymb.isawait ? 'async ' : '';
-			this.$ = $$[$0-2].exportStr + asyncStr + 'function ' + $$[$0-2].funcname + $$[$0-2].params + $$[$0];
-		}
-	
-break;
-case 29:
-
-		var funcSymb = yy.functionStack.pop();
-		if (funcSymb.type != $$[$0-1].type) {
-			throw new Error("سطر: " + _$[$0-2].first_line + "\n" + "نوع الئرجاع غير متوافق في الوضيفة '" + funcSymb.name + " <" + funcSymb.type + ">'");
-		}
-		if (yy.myshortcut != '') {
-			var result = $$[$0-2].objname + '.prototype.' + $$[$0-2].funcname + '=' + $$[$0-2].objname + '.prototype.' + yy.myshortcut + ';';
-			result += $$[$0-2].objname + '.' + $$[$0-2].funcname + '=' + $$[$0-2].objname + '.' + yy.myshortcut + ';';
-			this.$ = result;
-			yy.myshortcut = '';
-		} else {
-			var asyncStr = funcSymb.isawait ? 'async ' : '';
-			this.$ = $$[$0-2].objname + '.prototype.' + $$[$0-2].funcname + '=' + $$[$0-2].objname + '.' + $$[$0-2].funcname + '=' + asyncStr + 'function' + $$[$0-2].value + $$[$0];
-		}
-	
-break;
-case 30:
-
-		// $$[$0] = { type, subtype }
-		this.$ = {
-			type: $$[$0].type,
-			subtype: $$[$0].subtype
-		}
-	
-break;
 case 31:
 
-		this.$ = {
-			type: null
-		}
-	
-break;
-case 32:
-
-		this.$ = {
-			funcname: $$[$0-1].funcname,
-			exportStr: $$[$0-1].isExport ? 'export ' : '',
-			params: $$[$0],
-			value: $$[$0-1].value + $$[$0] // TODO unused
-		}
+		this.$ = $$[$0-2] + ', ' + $$[$0]
 	
 break;
 case 33:
 
-		var mySymb = declareSymbol(yy, _$[$0-1], $$[$0], $$[$0]);
+		this.$ = $$[$0-2] + '.' + $$[$0]
+	
+break;
+case 35:
+
+		ErrorManager.setContext(_$[$0-5], context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($$[$0-4]);
+		var mySymb2 = yy.symbolScopes.createSymbol($$[$0-2], $$[$0].type, $$[$0].isArray);
+		mySymb.addMember(mySymb2);
+		this.$ = $$[$0-4] + '.' + $$[$0-2] + ' = null';
+	
+break;
+case 36:
+
+		ErrorManager.setContext(_$[$0-5], context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($$[$0-4]);
+		var mySymb2 = yy.symbolScopes.createSymbol($$[$0-2], 'منوع', $$[$0].symb.isArray);
+		mySymb.addMember(mySymb2);
+		this.$ = $$[$0-4] + '.' + $$[$0-2] + ' = ' + $$[$0].value;
+	
+break;
+case 37:
+
+		ErrorManager.setContext(_$[$0-7], context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($$[$0-6]);
+		var mySymb2 = yy.symbolScopes.createSymbol($$[$0-4], $$[$0-2].type, $$[$0-2].isArray);
+		if (! $$[$0].symb.canBeAssignedTo(mySymb2) ) {
+			// type mismatch
+			ErrorManager.error("محاولة ئسناد " + $$[$0].symb.toString() + " ئلا " + mySymb2.toTypeString());
+		}
+		mySymb.addMember(mySymb2);
+		this.$ = $$[$0-6] + '.' + $$[$0-4] + ' = ' + $$[$0].value;
+	
+break;
+case 38:
+
+		var funcSymb = yy.funcStack.pop(); // exit struct scope
+		yy.symbolScopes.exit();
+		this.$ = 'export const ' + $$[$0-1] + ' = {}'; // no output
+	
+break;
+case 39:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var mySymb = yy.symbolScopes.declareSymbol($$[$0], null, false, false);
+		mySymb.isStruct = true; // bad but legacy
+		yy.funcStack.push(mySymb);
+		yy.symbolScopes.enter();
+		this.$ = $$[$0];
+	
+break;
+case 40:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1]; // current struct symbol
+		var symbols = $$[$0-1]; // $$[$0-1] has_list is an array of symbols
+		symbols.forEach((symb) => {
+			funcSymb.addMember(symb);
+		});
+	
+break;
+case 41:
+
+		var funcSymb = yy.funcStack.pop(); // exit enum scope
+		yy.symbolScopes.exit();
+		this.$ = ''; // no output
+	
+break;
+case 42:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var mySymb = yy.symbolScopes.declareSymbol($$[$0], null, false, false);
+		mySymb.isEnum = true; // bad but legacy
+		yy.funcStack.push(mySymb);
+		yy.symbolScopes.enter();
+	
+break;
+case 43:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1]; // current enum symbol
+		var enums = $$[$0-1]; // $$[$0-1] enum_list is an array of {symb, value}
+		enums.forEach((enu) => {
+			funcSymb.addMember(enu.symb);
+		});
+	
+break;
+case 44: case 87:
+
+		this.$ = [$$[$0]]
+	
+break;
+case 45:
+
+		$$[$0-2].push($$[$0]);
+		if ($$[$0].value == null) {
+			$$[$0].value = $$[$0-2].length
+		}
+		this.$ = $$[$0-2];
+	
+break;
+case 46:
+
+		this.$ = {
+			symb: yy.symbolScopes.createSymbol($$[$0], 'عدد'),
+			value: null
+		}
+	
+break;
+case 47:
+
+		this.$ = {
+			symb: yy.symbolScopes.createSymbol($$[$0-2], $$[$0].symb.getTypeName()),
+			value: $$[$0].value
+		}
+	
+break;
+case 48:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		
+		var function_decl = $$[$0-2];
+		var function_ret = $$[$0-1];
+		var body_block = $$[$0];
+		
+		var selfSymb = yy.selfStack.pop();
+		var funcSymb = yy.funcStack.pop();
+		
+		if (body_block.includes('this.')) {
+			// we used this keyword, so self is a class
+			selfSymb.isClass = true;
+			selfSymb.typeSymbol = selfSymb;
+		}
+		
+		var extendStr = '';
+		if (funcSymb.hasParent()) {
+			extendStr = ' extends ' + funcSymb.mySuper;
+		}
+		
+		if (!selfSymb.isClass && !function_ret.symb.canBeAssignedTo(funcSymb)) {
+			ErrorManager.error("نوع الئرجاع غير متوافق مع الوضيفة '" + funcSymb.toString() + "'");
+		}
+		
+		if (function_decl.funcname == 'مدخل') { // self exec main function
+			this.$ = '(function ' + function_decl.funcname + function_decl.params + body_block + ')()'; 
+		} else if (funcSymb.isShortcut()) { // this is a shortcut
+			this.$ = function_decl.exportStr + 'const ' + function_decl.funcname + '=' + funcSymb.myShortcut + ';'
+				+ function_decl.funcname + '.prototype || (' + function_decl.funcname + '.prototype = {});'
+				+ body_block.slice(1,-1); // remove first and last { }
+		} else if (selfSymb.isClass) { // this is a class
+			// we should not have a return
+			if (funcSymb.typeIsNot(funcSymb.name)) {
+				ErrorManager.error("لا يجب تحديد نوع ئرجاع لصنف <" + funcSymb.getTypeName() + ">");
+			}
+			this.$ = function_decl.exportStr + 'class ' + function_decl.funcname + extendStr + '{constructor' + function_decl.params + body_block + '}';
+		} else { // this is a function
+			var asyncStr = funcSymb.isAwait ? 'async ' : '';
+			this.$ = function_decl.exportStr + asyncStr + 'function ' + function_decl.funcname + function_decl.params + body_block;
+		}
+	
+break;
+case 49:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		
+		var function_decl = $$[$0-2];
+		var function_ret = $$[$0-1];
+		var body_block = $$[$0];
+		
+		var funcSymb = yy.funcStack.pop();
+		
+		/* unecessary check, to remove
+		if (!funcSymb.sameTypeAs(function_ret.symb)) {
+			ErrorManager.error("نوع الئرجاع " + function_ret.symb.toString() + " غير متوافق مع الوضيفة " + funcSymb.toString());
+		}
+		*/
+		
+		// dealing with setters and getters (DISABLED FOR NOW)
+		/*
+		var setterCode = '';
+		var getterCode = '';
+		if (function_decl.funcname.startsWith('رد')) {
+			// getter function
+			getterCode = `Object.defineProperty(${function_decl.objname}.prototype,'${function_decl.funcname}',{get: function() {return this.${function_decl.funcname}();},configurable:true});`;
+		}
+		if (function_decl.funcname.startsWith('خد')) {
+			// setter function
+			setterCode = `Object.defineProperty(${function_decl.objname}.prototype,'${function_decl.funcname}',{set: function (value) {this.${function_decl.funcname}(value);},configurable:true});`;
+		}
+		*/
+		
+		if (funcSymb.isShortcut()) {
+			var result = function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.prototype.' + funcSymb.myShortcut + ';';
+			result += function_decl.objname + '.' + function_decl.funcname + '=' + function_decl.objname + '.' + funcSymb.myShortcut + ';';
+			this.$ = result;
+		} else {
+			var asyncStr = funcSymb.isAwait ? 'async ' : '';
+			this.$ = function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.' + function_decl.funcname + '=' + asyncStr + 'function' + function_decl.value + body_block;
+		}
+	
+break;
+case 50:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		// $$[$0] = { type, subtype }
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($$[$0].type);
+		funcSymb.isArray = $$[$0].isArray;
+		this.$ = {
+			symb: funcSymb//.typeSymbol
+		}
+	
+break;
+case 51:
+
+		this.$ = {
+			symb: Symbol.SYSTEMTYPES['فارغ']
+		}
+	
+break;
+case 52:
+
+		this.$ = {
+			funcname: $$[$0-1].funcname,
+			exportStr: $$[$0-1].isExport ? 'export ' : '',
+			params: $$[$0]
+		}
+	
+break;
+case 53:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		ErrorManager.setFunc($$[$0]);
+		var mySymb = yy.symbolScopes.declareSymbol($$[$0], 'فارغ');
+		
 		yy.selfStack.push(mySymb);
-		yy.functionStack.push(mySymb);
-		enterScope(yy);
+		yy.funcStack.push(mySymb);
+		yy.symbolScopes.enter();	
+		
 		this.$ = {
 			funcname: $$[$0],
 			isExport: !$$[$0].startsWith('_'),
 		}
 	
 break;
-case 34:
+case 54:
 
 		this.$ = '(' + $$[$0-1] + ')';
 	
 break;
-case 35:
+case 55:
 
 		this.$ = {
 			funcname: $$[$0-1].funcname,
@@ -322,13 +503,16 @@ case 35:
 		}
 	
 break;
-case 36:
+case 56:
 
-		var mySymb = checkSymbol(yy, $$[$0-2], _$[$0-3]);
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		ErrorManager.setFunc($$[$0-2] + '.' + $$[$0]);
+		var mySymb = yy.symbolScopes.getSymbByName($$[$0-2]);
 		yy.selfStack.push(mySymb);
-		enterScope(yy);
-		var mySymb2 = declareMember(yy, mySymb, { name: $$[$0], type: 'عدم' });
-		yy.functionStack.push(mySymb2);
+		yy.symbolScopes.enter();
+		var mySymb2 = yy.symbolScopes.createSymbol($$[$0], 'فارغ');
+		mySymb.addMember(mySymb2);
+		yy.funcStack.push(mySymb2);
 		this.$ = {
 			funcname: $$[$0],
 			objname: $$[$0-2]
@@ -336,226 +520,421 @@ case 36:
 		}
 	
 break;
-case 38:
+case 58:
 
-		declareSymbol(yy, _$[$0], $$[$0], 'منوع');
-		this.$ = $$[$0]; 
-	
-break;
-case 39:
-
-		declareSymbol(yy, _$[$0-1], $$[$0].type, $$[$0-1]);
+		ErrorManager.setContext(_$[$0], context.filePath);
 		this.$ = $$[$0];
 	
 break;
-case 40:
+case 59:
 
-		declareSymbol(yy, _$[$0-2], $$[$0], 'منوع');
-		this.$ = $$[$0-2] + ',' + $$[$0]; 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		this.$ = $$[$0-2] + ',' + $$[$0];
 	
 break;
-case 41:
+case 60:
 
-		declareSymbol(yy, _$[$0-3], $$[$0].type, $$[$0-1]);
-		this.$ = $$[$0-3] + ',' + $$[$0];
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.args.push({
+			symb: $$[$0].symb,
+			init: $$[$0].init
+		});
+		this.$ = $$[$0].value;
 	
 break;
-case 42:
+case 61:
 
-		exitScope(yy);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		var symb = yy.symbolScopes.declareSymbol($$[$0-3], 'دالة');
+		funcSymb.args.push({
+			symb: symb,
+			init: $$[$0-2]
+		});
+		this.$ = $$[$0-3];
+	
+break;
+case 62:
+
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		var symb = yy.symbolScopes.declareSymbol($$[$0-4], null, false, false);
+		symb.isStruct = true; // bad but legacy
+		funcSymb.args.push({
+			symb: symb,
+			init: $$[$0-3]
+		});
+		// $$[$0-1] has_list is an array of symbols
+		var symbols = $$[$0-1];
+		symbols.forEach((s) => {
+			symb.addMember(s);
+		});
+		this.$ = $$[$0-4];
+	
+break;
+case 63:
+
+		/* empty */
+		this.$ = false;
+	
+break;
+case 64:
+
+		this.$ = true;
+	
+break;
+case 65: case 66:
+
+		this.$ = "";
+	
+break;
+case 67: case 68:
+
+		yy.symbolScopes.getSymbByName($$[$0].type);
+		this.$ = "";
+	
+break;
+case 69:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		yy.symbolScopes.exit();
 		this.$ = '{' + $$[$0-1].filter(Boolean).join(';') + '}';
 	
 break;
-case 43:
+case 70:
 
-		exitScope(yy);
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		yy.symbolScopes.exit();
 		this.$ = '{}';
 	
 break;
-case 44:
+case 71:
 
-		var superSymb = checkSymbol(yy, $$[$0-3], _$[$0-3]);
-        yy.mysuper = $$[$0-3];
-		// copy super members to self members
+		ErrorManager.setContext(_$[$0-4], context.filePath);
+		var superSymb = yy.symbolScopes.getSymbByName($$[$0-3]);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		for (var key in superSymb.members) {
-			selfSymb.members[key] = superSymb.members[key]
-		}
+		selfSymb.mySuper = $$[$0-3];
+		
+		// check args
+		var paramValues = superSymb.checkArgs($$[$0-1]);
+
+		// copy super members to self members
+		// superSymb.copyMembersTo(selfSymb);
+		selfSymb.superSymbol = superSymb;
 		selfSymb.isClass = true;
-		//this.$ = 'Reflect.construct(' + $$[$0-3] + ', [' + $$[$0-1] + '], new.target || ' + selfSymb.name + ')';
-		//this.$ = 'super(' + $$[$0-1] + ')';
-        //this.$ = $$[$0-3] + '.call(this' + ($$[$0-1] ? ', ' + $$[$0-1] : '') + ')';
+		selfSymb.typeSymbol = selfSymb; // change type to itself
+
 		// if this class already shortcuts, then don't call super()
-		if (yy.myshortcut != '') {
+		if (selfSymb.isShortcut()) {
 			this.$ = '';
-		}else {
+		} else {
 			this.$ = 'super(' + $$[$0-1] + ')';
 		}
     
 break;
-case 45:
+case 72:
 
+		ErrorManager.setContext(_$[$0-1], context.filePath);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		yy.myshortcut = $$[$0].identifier;
-		if (selfSymb.name == funcSymb.name) { // we are in an object
-			var superSymb = checkSymbol(yy, $$[$0].identifier, _$[$0]);
-			selfSymb.myshortcut = $$[$0].identifier;
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.myShortcut = $$[$0];
+		if (selfSymb.name == funcSymb.name) { // we are in a class
+			selfSymb.myShortcut = $$[$0];
+			var superSymb = yy.symbolScopes.getSymbByName($$[$0]);
 			// TODO: for now we grant that when a func shortcuts then its a class
 			selfSymb.isClass = true;
+			selfSymb.typeSymbol = selfSymb; // change type to itself
+			// if already have members, this means we used a has or extends before shortcuts > error
+			if (selfSymb.members.length) {
+				ErrorManager.error('يجب ئن تكون صيغة يختصر كئول سطر في المجموعة');
+			}
 			// copy origi members to self members if we are in a class
-			for (var key in superSymb.members) {
-				selfSymb.members[key] = superSymb.members[key]
-			}
+			superSymb.copyMembersTo(selfSymb);
 		} else { // we are in a subfunction
-			// if there is no AS TYPE then error
-			if (!$$[$0].astype) {
-				throw new Error("سطر: " + _$[$0-1].first_line + "\n" + "يلزم تحديد نوع الئختصار في الوضيفة '" + funcSymb.name + "' ");
-			}
-			var superSymb;
-			if (!selfSymb.myshortcut) {
+			if (!selfSymb.isShortcut()) {
 				// parent not shortcuting
-				superSymb = checkMember(yy, selfSymb, $$[$0].identifier, _$[$0-1]);
+				selfSymb.checkMember($$[$0]);
 			} else {
 				// parent have a shortcut
-				superSymb = checkMember(yy, selfSymb.myshortcut, $$[$0], _$[$0-1]);
+				var superSymb = yy.symbolScopes.getSymbByName(selfSymb.myShortcut);
+				superSymb.checkMember($$[$0]);
 			}
-			// function type is the one specified in AS TYPE
-			funcSymb.type = $$[$0].astype;
 		}
 	
 break;
-case 46:
+case 73:
 
-		this.$ = {
-			identifier: $$[$0]
-		}
-	
-break;
-case 47:
-
-		this.$ = {
-			identifier: $$[$0-2],
-			astype: $$[$0]
-		}
-	
-break;
-case 48:
-
+		ErrorManager.setContext(_$[$0-1], context.filePath);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		selfSymb.isClass = true;
-		var names = $$[$0].split(',');
-		var result = '';
+		selfSymb.isClass = true; // has keyword makes this a class
+		selfSymb.typeSymbol = selfSymb; // change type to itself
+		
 		var thisStr = 'this';
-		if (yy.myshortcut != '') {
+		if (selfSymb.isShortcut()) {
 			thisStr = selfSymb.name + '.prototype';
 		}
-		names.forEach((param) => {
-			param = param.split(' ');
-			var name = param[1] || param[0];
-			var type = param.length > 1 ? param[0] : 'منوع';
-			declareMember(yy, selfSymb, {name: name, type: type}, _$[$0-1]);
-			// declare setters & getters
-			var setter = 'خد' + name;
-			var getter = 'رد' + name;
-			//declareMember(yy, selfSymb, {name: setter, type: 'مجهول'}, _$[$0-1]);
-			//declareMember(yy, selfSymb, {name: getter, type: 'مجهول'}, _$[$0-1]);
-			result += `Object.defineProperty(${selfSymb.name}.prototype, '${name}', {get: function() {return this.${getter}()}, set: function(value) {this.${setter}(value)} });`;
-			result += `${thisStr}.${setter} = function (value) { this._${name} = value; };`;
-			result += `${thisStr}.${getter} = function () { return this._${name}; };`;
+		var result = ''; // will contain setter, getter output for the property
+		
+		// $$[$0] has_list is an array of symbols
+		var symbols = $$[$0];
+		symbols.forEach((symb) => {
+			selfSymb.addMember(symb);
+			if (symb.isShortcut()) {
+				// declare setters & getters
+				var name = symb.myShortcut;
+				var getterCode = `return this.${name}`;
+				var setterCode = `this.${name} = value;`;
+				result += `Object.defineProperty(${selfSymb.name}.prototype, '${symb.name}', {get: function() {${getterCode}}, set: function(value) {${setterCode}} });`;
+			}
 		});
 		this.$ = result;
 	
 break;
-case 50:
-
-		this.$ = $$[$0-1] + ' ' + $$[$0];
+case 74:
+ 
+		this.$ = []; 
 	
 break;
-case 51:
+case 75: case 86:
 
-		//declareSymbol(yy, _$[$0], $$[$0], 'مجهول');
-		this.$ = $$[$0]; 
+		this.$ = $$[$0];
 	
 break;
-case 52:
+case 76:
 
-		this.$ = $$[$0-3] + ',' + $$[$0-1] + ' ' + $$[$0];
+		this.$ = [$$[$0]];
 	
 break;
-case 53:
+case 77:
 
-		//declareSymbol(yy, _$[$0-2], $$[$0], 'مجهول');
-		this.$ = $$[$0-2] + ',' + $$[$0]; 
+		$$[$0-2].push($$[$0]);
+		this.$ = $$[$0-2];
 	
 break;
-case 54:
+case 78:
 
+		this.$ = $$[$0].symb
+	
+break;
+case 79:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var selfSymb = yy.selfStack[yy.selfStack.length-1];
+		if (!selfSymb.isShortcut()) {
+			// parent not shortcuting
+			selfSymb.checkMember($$[$0]);
+		} else {
+			// parent have a shortcut
+			var superSymb = yy.symbolScopes.getSymbByName(selfSymb.myShortcut);
+			superSymb.checkMember($$[$0]);
+		}
+		$$[$0-2].symb.myShortcut = $$[$0];
+		this.$ = $$[$0-2].symb;
+	
+break;
+case 80:
+
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value,
+			init: $$[$0].init
+		}
+	
+break;
+case 81:
+
+		var paramSymb = $$[$0-1].symb;
+		var initSymb = $$[$0].symb;
+		if (!initSymb.canBeAssignedTo(paramSymb)) {
+			ErrorManager.error("محاولة ئسناد " + initSymb.toString() + " ئلا " + paramSymb.toTypeString());
+		}
+		this.$ = {
+			symb: paramSymb,
+			value: $$[$0-1].value + '=' + $$[$0].value,
+			init: true
+		}
+	
+break;
+case 82:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		this.$ = {
+			symb: yy.symbolScopes.declareSymbol($$[$0-1], 'منوع'),
+			value: $$[$0-1],
+			init: $$[$0]
+		}
+	
+break;
+case 83:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		this.$ = {
+			symb: yy.symbolScopes.declareSymbol($$[$0-1], $$[$0-2]),
+			value: $$[$0-1],
+			init: $$[$0]
+		}
+	
+break;
+case 84:
+
+		ErrorManager.setContext(_$[$0-4], context.filePath);
+		this.$ = {
+			symb: yy.symbolScopes.declareSymbol($$[$0-1], $$[$0-4], true /*isArray*/),
+			value: $$[$0-1],
+			init: $$[$0]
+		}
+	
+break;
+case 85:
+
+		ErrorManager.setContext(_$[$0-5], context.filePath);
+		var symb = yy.symbolScopes.declareSymbol($$[$0-4], 'نوعتعداد');
+		symb.isEnum = true; // bad but legacy
+		symb.allowed = $$[$0-1];
+		this.$ = {
+			symb: symb,
+			value: $$[$0-4],
+			init: $$[$0-3]
+		}
+	
+break;
+case 88:
+
+		$$[$0-2].push($$[$0]);
+		this.$ = $$[$0-2]
+	
+break;
+case 89:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
 		// دع ب
-		declareSymbol(yy, _$[$0-1], $$[$0], 'منوع');
+		yy.symbolScopes.declareSymbol($$[$0], 'منوع');
         this.$ = 'let ' + $$[$0]; 
     
 break;
-case 55:
+case 90:
 
+		ErrorManager.setContext(_$[$0-3], context.filePath);
 		// دع ب = 4
-		declareSymbol(yy, _$[$0-3], $$[$0-2], $$[$0].type);
+		var mySymb = yy.symbolScopes.declareSymbol($$[$0-2], 'منوع', $$[$0].symb.isArray);
+		if ($$[$0].symb.typeIs('نوعبنية')) {
+			// mySymb is generic add struct memebers to it
+			mySymb.members = $$[$0].symb.members;
+		}
         this.$ = 'let ' + $$[$0-2] + ' = ' + $$[$0].value;
     
 break;
-case 56:
+case 91:
 
-		// دع عدد ب
-		declareSymbol(yy, _$[$0-2], $$[$0], $$[$0-1]);
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		// عدد ب
+		yy.symbolScopes.declareSymbol($$[$0], $$[$0-1]);
 		this.$ = 'let ' + $$[$0];
 	
 break;
-case 57:
+case 92:
 
-		// دع عدد ب = 4
-		if ($$[$0-3] != $$[$0-1].type) {
-			// type mismatch
-			throw new Error("سطر: " + _$[$0-4].first_line + "\n" + "محاولة ئسناد '" + $$[$0-1].type + "' ئلا '" + $$[$0-3] + "'");
-		}
-		declareSymbol(yy, _$[$0-4], $$[$0-2], $$[$0-3]);
-		this.$ = 'let ' + $$[$0-3] + ' = ' + $$[$0-1].value;
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		// عدد[] ب
+		yy.symbolScopes.declareSymbol($$[$0], $$[$0-3], true);
+		this.$ = 'let ' + $$[$0];
 	
 break;
-case 58:
+case 93:
+
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		// عدد ب = 4
+		var mySymb = yy.symbolScopes.declareSymbol($$[$0-2], $$[$0-3]);
+		if (!$$[$0].symb.canBeAssignedTo(mySymb)) {
+			// type mismatch
+			ErrorManager.error("محاولة ئسناد '" + $$[$0].symb.toString() + "' ئلا '" + $$[$0-3] + "'");
+		}
+		
+		if ($$[$0].symb.typeIs('نوعبنية')) {
+			// expression is an object literal
+			if (!mySymb.typeSymbol.isStruct) {
+				// mySymb is generic add struct memebers to it
+				mySymb.members = $$[$0].symb.members;
+			}
+		}
+		
+		this.$ = 'let ' + $$[$0-2] + ' = ' + $$[$0].value;
+	
+break;
+case 94:
+
+		ErrorManager.setContext(_$[$0-5], context.filePath);
+		// عدد ب = 4
+		if (!Symbol.isGenericType($$[$0-5]) && $$[$0].symb.typeIsNot($$[$0-5])) {
+			// type mismatch
+			ErrorManager.error("محاولة ئسناد '" + $$[$0].symb.toString() + "' ئلا '" + $$[$0-5] + "'");
+		}
+		yy.symbolScopes.declareSymbol($$[$0-2], $$[$0-5], true);
+		this.$ = 'let ' + $$[$0-2] + ' = ' + $$[$0].value;
+	
+break;
+case 95:
 
         //this.$ = $$[$0-1] + '(' + $$[$0].value + ')';
 		this.$ = 'console.log(' + $$[$0].value + ')';
     
 break;
-case 59:
+case 96:
 
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		funcSymb.type = $$[$0].type;
+		this.$ = {
+			symb: yy.symbolScopes.createSymbol('', 'نصية'),
+			value: $$[$0].getTypeName()
+		}
+	
+break;
+case 97:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		if (funcSymb.typeIs('فارغ')) {
+			ErrorManager.warning("ئستخدام ئرجاع في وضيفة فارغة، سيتم التحويل ئلا منوع");
+			// convert function return type to منوع
+			funcSymb.typeSymbol = Symbol.SYSTEMTYPES['منوع'];
+		}
+		
+		if (!$$[$0].symb.canBeAssignedTo(funcSymb)) {
+			ErrorManager.error("نوع الئرجاع " + $$[$0].symb.toString() + " غير متوافق مع الوضيفة " + funcSymb.toString());
+		}
+		if ($$[$0].symb.typeIs('نوعبنية')) {
+			// expression is an object literal
+			if (!funcSymb.typeSymbol.isStruct) {
+				// funcSymb is generic add struct memebers to it
+				funcSymb.members = $$[$0].symb.members;
+			}
+		}
 		this.$ = 'return ' + $$[$0].value; 
 	
 break;
-case 60:
+case 98:
 
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		funcSymb.type = "عدم";
+		ErrorManager.setContext(_$[$0], context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		if (funcSymb.typeIsNot('فارغ')) {
+			ErrorManager.error("نوع الئرجاع غير متوافق مع الوضيفة " + funcSymb.toString());
+		}
 		this.$ = 'return'; 
 	
 break;
-case 61: case 63:
+case 99: case 101:
 
 		this.$ = $$[$0-1] + $$[$0];
 	
 break;
-case 62:
+case 100:
  
-		enterScope(yy);
+		yy.symbolScopes.enter();
 		this.$ = 'while (' + $$[$0].value + ')';
 	
 break;
-case 64:
+case 102:
 
-		enterScope(yy);
-		declareSymbol(yy, _$[$0-3], $$[$0-2], $$[$0].type);
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		yy.symbolScopes.enter();
+		yy.symbolScopes.declareSymbol($$[$0-2], $$[$0].symb.typeSymbol.name);
+		// TOREVIEW
 		//if ($$[$0].type == 'مصفوفة') {
 			this.$ = 'for (var ' + $$[$0-2] + ' of ' + $$[$0].value + ')';
 		//} else {
@@ -563,373 +942,467 @@ case 64:
 		//}
 	
 break;
-case 65:
+case 103:
 
 		this.$ = $$[$0-4] + $$[$0-3] + $$[$0-2] + $$[$0-1];
 	
 break;
-case 66: case 67:
+case 104: case 105:
 
 		this.$ = $$[$0-3] + $$[$0-2] + $$[$0-1];
 	
 break;
-case 68:
+case 106:
 
 		this.$ = $$[$0-2] + $$[$0-1];
 	
 break;
-case 69:
+case 107:
 
-		enterScope(yy);
+		yy.symbolScopes.enter();
 		this.$ = 'if (' + $$[$0].value + ')';
 	
 break;
-case 70: case 71: case 74:
+case 108: case 109: case 112:
  this.$ = $$[$0-1] + $$[$0] 
 break;
-case 72:
+case 110:
 
-		enterScope(yy);
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		yy.symbolScopes.enter();
 		this.$ = 'else if (' + $$[$0].value + ')';
 	
 break;
-case 73:
+case 111:
 
-		exitScope(yy);
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		yy.symbolScopes.exit();
 		this.$ = '{' + $$[$0].filter(Boolean).join(';') + '}';
 	
 break;
-case 75:
+case 113:
 
-		enterScope(yy);
+		yy.symbolScopes.enter();
 		this.$ = 'else';
 	
 break;
-case 76:
+case 114:
 
-		var mySymb = checkSymbol(yy, $$[$0-2], _$[$0-2]);
-		if (mySymb.type != 'منوع' && (mySymb.type != $$[$0].type)) {
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var mySymb = yy.symbolScopes.getSymbByName($$[$0-2]);
+		if (!$$[$0].symb.canBeAssignedTo(mySymb)) {
 			// type mismatch
-			throw new Error("سطر: " + _$[$0-2].first_line + "\n" + "محاولة ئسناد '" + '<' + $$[$0].type + ">' ئلا '" + mySymb.name + ' <' + mySymb.type + ">'");
+			ErrorManager.error("محاولة ئسناد " + $$[$0].symb.toString() + " ئلا " + mySymb.toString());
 		}
-		if ($$[$0].symb && $$[$0].symb.type == 'كائن') {
+		if ($$[$0].symb.typeIs('نوعبنية')) {
 			// expression is an object literal
-			// add members to identifier's symbol
-			mySymb.members = $$[$0].symb.members;
-			// mySymb.type = $$[$0].symb.type;
+			if (!mySymb.typeSymbol.isStruct) {
+				// mySymb is generic add struct memebers to it
+				mySymb.members = $$[$0].symb.members;
+			}
 		}
 		this.$ = {
-			type: mySymb.type,
+			symb: mySymb,
 			value: $$[$0-2] + '=' + $$[$0].value
 		}
 	
 break;
-case 77:
+case 115:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		if ($$[$0-2].symb) {
-			if ($$[$0-2].symb.type != 'منوع' && ($$[$0-2].symb.type != $$[$0].type)) {
-				throw new Error("سطر: " + _$[$0-2].first_line + "\n" + "محاولة ئسناد '" + '<' + $$[$0].type + ">' ئلا '" + $$[$0-2].symb.name + ' <' + $$[$0-2].symb.type + ">'");
+			var mySymb = $$[$0-2].symb;
+			if (!$$[$0].symb.canBeAssignedTo(mySymb)) {
+				ErrorManager.error("محاولة ئسناد " + $$[$0].symb.toString() + " ئلا " + $$[$0-2].symb.toString());
 			}
-			if ($$[$0].symb && $$[$0].symb.type == 'كائن') {
+			if ($$[$0].symb.typeIs('نوعبنية')) {
 				// expression is an object literal
-				// add members to the assigned symbol
-				$$[$0-2].symb.members = $$[$0].symb.members;
+				if (!mySymb.typeSymbol.isStruct) {
+					// mySymb is generic add struct memebers to it
+					mySymb.members = $$[$0].symb.members;
+				}
 			}
-
-			// $$[$0-2].symb.type = $$[$0].type
 		}
 		this.$ = {
-			type: $$[$0].type,
+			symb: $$[$0].symb,
 			value: $$[$0-2].value + '=' + $$[$0].value
 		}
 	
 break;
-case 78:
+case 116:
 
 		this.$ = {
-			type: $$[$0].type,
+			symb: $$[$0].symb,
 			value: $$[$0-2].value + '=' + $$[$0].value
 		}
 	
 break;
-case 79:
+case 117:
 
 		this.$ = {
-			type: $$[$0-2].type,
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value + ' + ' + $$[$0].value 
 		}
 	
 break;
-case 80:
+case 118:
  
 		this.$ = {
-			type: $$[$0-2].type,
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value  + ' - ' + $$[$0].value 
 		}
 	
 break;
-case 81:
+case 119:
  
 		this.$ = {
-			type: $$[$0-2].type,
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value  + ' * ' + $$[$0].value 
 		}
 	
 break;
-case 82:
+case 120:
  
 		this.$ = {
-			type: $$[$0-2].type,
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value  + ' / ' + $$[$0].value 
 		}
 	
 break;
-case 83:
+case 121:
 
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value + ' == ' + $$[$0].value 
 		}
 	
 break;
-case 84:
+case 122:
  
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value + ' != ' + $$[$0].value 
 		}
 	
 break;
-case 85:
+case 123:
  
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value + ' < ' + $$[$0].value
 		}
 	
 break;
-case 86:
+case 124:
  
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value  + ' <= ' + $$[$0].value
 		}
 	
 break;
-case 87:
+case 125:
  
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value + ' > ' + $$[$0].value
 		}
 	
 break;
-case 88:
+case 126:
  
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value + ' >= ' + $$[$0].value
 		}
 	
 break;
-case 89:
+case 127:
 
+		//if (!$$[$0].symb.canBeAssignedTo($$[$0-2].symb, /*printerror*/ false)) {
+		if ($$[$0-2].symb.getTypeName() != $$[$0].symb.getTypeName()) {
+			ErrorManager.error("عملية وو بين معاملان غير متوافقان " + $$[$0-2].symb.toTypeString() + '،' + $$[$0].symb.toTypeString());
+		}
 		this.$ = {
-			type: 'منطق',
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value + ' && ' + $$[$0].value
 		}
 	
 break;
-case 90:
+case 128:
 
+		//if (!$$[$0].symb.canBeAssignedTo($$[$0-2].symb, /*printerror*/ false)) {
+		if ($$[$0-2].symb.getTypeName() != $$[$0].symb.getTypeName()) {
+			ErrorManager.error("عملية ئو بين معاملان غير متوافقان " + $$[$0-2].symb.toTypeString() + '،' + $$[$0].symb.toTypeString());
+		}
 		this.$ = {
-			type: 'منطق',
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value + ' || ' + $$[$0].value
 		}
 	
 break;
-case 91:
+case 129:
 
 		// TODO: add probable type $$[$0-4] or $$[$0]
 		// for now type checking will be ignored for ternary
         this.$ = {
-			type: 'مجهول',
+			symb: Symbol.SYSTEMTYPES['مجهول'],
 			value: $$[$0-2].value + ' ? ' + $$[$0-4].value + ' : ' + $$[$0].value
 		}
     
 break;
-case 92:
+case 130:
 
-		var symb = checkSymbol(yy, $$[$0-3], _$[$0-3]);
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($$[$0-3]);
+		// check args
+		var paramValues = symb.checkArgs($$[$0-1]);
 		// check if class or function
 		var newStr = symb.isClass ? 'new ' : '';
 		this.$ = {
 			symb: symb,
-			type: symb.type,
-			value: newStr + $$[$0-3] + '(' + $$[$0-1] + ')'
+			value: newStr + $$[$0-3] + '(' + paramValues.join(', ') + ')'
 		}
 	
 break;
-case 93:
+case 131:
 
-		// TODO: check if member_access is a function
-		// TODO: maybe add isFunction to symbolTable
+		var symb = $$[$0-3].symb;
+		// check args
+		var paramValues = symb.checkArgs($$[$0-1]);
+		this.$ = {
+			symb: symb,
+			value: $$[$0-3].value + '(' + paramValues.join(', ') + ')'
+		}
+	
+break;
+case 132:
+
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		ErrorManager.warning("تجاهل فحص المعطيين لئستدعائ وضيفة من مصفوفة");
 		this.$ = {
 			symb: $$[$0-3].symb,
-			type: $$[$0-3].type,
-			value: $$[$0-3].value + '(' + $$[$0-1] + ')'
+			value: $$[$0-3].value + '(' + $$[$0-1].map(item => item.value).join(', ') + ')'
 		}
 	
 break;
-case 94:
+case 133:
+
+		ErrorManager.setContext(_$[$0-7], context.filePath);
+		var symb = $$[$0-6].symb.typeSymbol.checkMember($$[$0-3]);
+		// check args
+		var paramValues = symb.checkArgs($$[$0-1]);
+		// check if class or function
+		// var newStr = symb.isClass ? 'new ' : '';
+		this.$ = {
+			symb: symb,
+			value: '(' + $$[$0-6].value + ').' + $$[$0-3] + '(' + paramValues.join(', ') + ')'
+		}
+	
+break;
+case 134:
+ this.$ = []; 
+break;
+case 135:
+
+		this.$ = [{
+			symb: $$[$0].symb,
+			value: $$[$0].value,
+			name: $$[$0].name
+		}]
+	
+break;
+case 136:
+
+		$$[$0-2].push({
+			symb: $$[$0].symb,
+			value: $$[$0].value,
+			name: $$[$0].name
+		})
+		this.$ = $$[$0-2];
+	
+break;
+case 137:
 
 		this.$ = {
-			type: $$[$0-3].type,
-			value: $$[$0-3].value + '(' + $$[$0-1] + ')'
+			symb: $$[$0].symb,
+			value: $$[$0].value,
+			name: null,
 		}
 	
 break;
-case 96:
- 
-		this.$ = $$[$0].value; 
-	
-break;
-case 97:
- 
-		this.$ = $$[$0-2] + ', ' + $$[$0].value
-	
-break;
-case 98:
+case 138:
 
-		var funcSymb = yy.functionStack[yy.functionStack.length-1];
-		funcSymb.isawait = true;
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value,
+			name: null
+		}
+	
+break;
+case 139: case 140:
+
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value,
+			name: $$[$0-2]
+		}
+	
+break;
+case 141:
+
+		yy.symbolScopes.exit();
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0-2] + "=>" + $$[$0].value
+		}
+	
+break;
+case 142:
+
+		yy.symbolScopes.enter();
+	
+break;
+case 143:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.isAwait = true;
         this.$ = {
-			type: $$[$0].type,
+			symb: $$[$0].symb,
 			value: 'await ' + $$[$0].value
 		}
     
 break;
-case 99:
+case 144:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($$[$0-2]);
+		var memberSymb = symb.checkMember($$[$0]);	
 		this.$ = {
-			type: $$[$0].type,
-			value: 'new ' + $$[$0].value
-		}
-	
-break;
-case 100:
-
-		var type = checkSymbol(yy, $$[$0-2], _$[$0-2]).type;
-		var symb = checkMember(yy, $$[$0-2], $$[$0], _$[$0]);
-		type = symb.type;
-		this.$ = {
-			symb: symb,
-			type, 
+			symb: memberSymb,
 			value: $$[$0-2] + '.' + $$[$0] 
 		}
 	
 break;
-case 101:
+case 145:
 
-		var type = $$[$0-2].type;
-		var symb = checkMember(yy, type, $$[$0], _$[$0]);
-		type = symb.type;
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var symb = $$[$0-2].symb.typeSymbol;
+		var memberSymb = symb.checkMember($$[$0]);
 		this.$ = {
-			symb: symb,
-			type, 
+			symb: memberSymb,
 			value: $$[$0-2].value + '.' + $$[$0] 
 		}; 
 	
 break;
-case 102:
+case 146:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		//var type = $$[$0-2].type;
 		var symb = $$[$0-2].symb;
-		var symb2;
-		if (symb.type == 'كائن') {
+		var memberSymb;
+		if (symb.typeIs('نوعبنية')) {
 			// for object literals, we take symb name as member base
-			symb2 = checkMember(yy, symb, $$[$0], _$[$0]);
+			memberSymb = symb.checkMember($$[$0]);
 		} else {
 			// for other variables, we take their symb type as member base
-			symb2 = checkMember(yy, symb.type, $$[$0], _$[$0]);
+			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
+			var typeSymb = symb.typeSymbol;
+			memberSymb = typeSymb.checkMember($$[$0]);
 		}
-		var type = symb2.type;
 		this.$ = {
-			symb: symb2,
-			type, 
+			symb: memberSymb,
 			value: $$[$0-2].value + '.' + $$[$0] 
 		};
 	
 break;
-case 103:
+case 147:
 
 		this.$ = {
-			symb: null, // TODO: may cause problems
-			type: $$[$0-2].type,
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value + '.' + $$[$0]
 		};
 	
 break;
-case 104:
+case 148:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
-		var symb = checkMember(yy, selfSymb, $$[$0], _$[$0]);
-		var type = symb.type;
+		var symb = selfSymb.checkMember($$[$0]);
 		this.$ = {
 			symb,
-			type,
 			value: 'this.' + $$[$0]
 		}
 	
 break;
-case 105:
+case 149:
 
-		var symb = checkSymbol(yy, $$[$0-3], _$[$0-3]);
-		if (!['مصفوفة', 'منوع', 'كائن'].includes(symb.type)) {
-			throw new Error("سطر: " + _$[$0-3].first_line + "\n" + "تعدر ولوج عنصر مصفوفة من '" + symb.name + " <" + symb.type + ">'");
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($$[$0-3]);
+		if (!symb.isIterable()) {
+			ErrorManager.error("تعدر ولوج عنصر مصفوفة من " + symb.toString());
 		}
+		var unknownType = Symbol.SYSTEMTYPES['مجهول'];
 		this.$ = {
-			type: symb.subtype || 'مجهول', //'مجهول', // we don't currently check types of array elements
+			symb: symb.isArray ? symb.typeSymbol : unknownType,
 			value: $$[$0-3] + '[' + $$[$0-1].value + ']'
 		}
 	
 break;
-case 106:
+case 150:
 
+		ErrorManager.setContext(_$[$0-3], context.filePath);
 		this.$ = {
-			type: 'مجهول',
+			symb: Symbol.SYSTEMTYPES['مجهول'],
 			value: 'this[' + $$[$0-1].value + ']'
 		}
 	
 break;
-case 107:
+case 151:
 
+		ErrorManager.setContext(_$[$0-3], context.filePath);
 		var symb = $$[$0-3].symb;
-		if (!['مصفوفة', 'منوع', 'كائن'].includes(symb.type)) {
-			throw new Error("سطر: " + _$[$0-3].first_line + "\n" + "تعدر ولوج عنصر مصفوفة من '" + symb.name + " <" + symb.type + ">'");
+		if (!symb.isIterable()) {
+			ErrorManager.error("تعدر ولوج عنصر مصفوفة من " + symb.toString());
 		}
+		var unknownType = Symbol.SYSTEMTYPES['مجهول'];
 		this.$ = {
-			type: symb.subtype || 'مجهول', // we don't currently check types of array elements
+			// type: symb.subtype, // || 'مجهول'
+			//yy.symbolScopes.getSymbByName(symb.subType),
+			symb: symb.isArray ? symb.typeSymbol : unknownType, 
 			value: $$[$0-3].value + '[' + $$[$0-1].value + ']'
 		}
 	
 break;
-case 108:
+case 152:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		var symbs = $$[$0-1].symb; // these are symbols of object properties
-		var members = {};
+		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
+
 		symbs.forEach((sy) => {
-			members[sy.name] = sy;
+			symb.addMember(sy);
 		});
-		var symb = { name: '', type: 'كائن', members };
+		
 		this.$ = {
-			type: symb.type,
 			symb: symb,
 			value: '{' + $$[$0-1].value + '}'
 		}
 	
 break;
-case 109:
+case 153:
+
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var symb = new Symbol('');
+		symb.typeSymbol = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
+		this.$ = {
+			symb: symb,
+			value: '{}'
+		}
+	
+break;
+case 154:
  
 		this.$ = {
 			symb: [$$[$0].symb],
@@ -937,7 +1410,7 @@ case 109:
 		}
 	
 break;
-case 110:
+case 155:
 
 		this.$ = {
 			symb: $$[$0-2].symb.concat($$[$0].symb),
@@ -945,250 +1418,315 @@ case 110:
 		}
 	
 break;
-case 111:
+case 156: case 157:
 
-		//declareMember(currentAssign, { name: $$[$0-2], type: $$[$0].type }, _$[$0-2]);	
-		var symb = { name: $$[$0-2], type: $$[$0].type, members: {} }
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var symb = yy.symbolScopes.createSymbol($$[$0-2]);
+		symb.typeSymbol = $$[$0].symb.typeSymbol;
 		this.$ = {
 			symb: symb,
 			value: $$[$0-2] + ': ' + $$[$0].value
 		}
 	
 break;
-case 112:
+case 158:
 
-		//declareMember(currentAssign, { name: $$[$0-2], type: $$[$0].type }, _$[$0-2]);
-		var symb = { name: $$[$0-2], type: $$[$0].type, members: {} }
+		ErrorManager.setContext(_$[$0], context.filePath);
 		this.$ = {
-			symb: symb,
-			value: $$[$0-2] + ': ' + $$[$0].value
-		}
-	
-break;
-case 113:
-
-		throw new Error("سطر: " + _$[$0].first_line + "\n" + "حدد نوع المصفوفة");
-		this.$ = "";
-	
-break;
-case 114:
-
-		var symb = checkSymbol(yy, $$[$0], _$[$0-1]);
-		this.$ = {
-			type: symb.type,
+			symb: yy.symbolScopes.getSymbByName('منوع'),
 			value: []
 		}
+		//ErrorManager.error("حدد نوع المصفوفة");
+		//this.$ = "";
 	
 break;
-case 115:
+case 159:
 
         this.$ = {
-			type: $$[$0].type,
+			symb: $$[$0].symb,
 			value: [ $$[$0].value ]
 		}
     
 break;
-case 116:
+case 160:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
         $$[$0-2].value.push($$[$0].value);
-		if ($$[$0-2].type != $$[$0].type) {
-			throw new Error("سطر: " + _$[$0-2].first_line + "\n" + "نوعين غير متجانسين في المصفوفة.");
+		if (!$$[$0].symb.canBeAssignedTo($$[$0-2].symb)) {
+			ErrorManager.error("نوعين غير متجانسين في المصفوفة");
 		}
         this.$ = {
-			type: $$[$0-2].type,
+			symb: $$[$0-2].symb,
 			value: $$[$0-2].value
 		}
     
 break;
-case 117:
+case 161:
 
 		this.$ = {
-			type: $$[$0]
+			type: $$[$0],
+			isArray: false
 		}
 	
 break;
-case 118:
+case 162:
 
 		this.$ = {
-			type: $$[$0-3],
-			subtype: $$[$0-1]
+			type: $$[$0-2],
+			isArray: true
 		}
 	
 break;
-case 119:
+case 163:
 
 		this.$ = '...' + $$[$0].value;
 	
 break;
-case 120:
+case 164:
 
+		ErrorManager.setContext(_$[$0-1], context.filePath);
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: '!' + $$[$0].value
 		}
 	
 break;
-case 121:
+case 165:
 
+		ErrorManager.setContext(_$[$0-2], context.filePath);
 		this.$ = {
-			type: 'منطق',
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: $$[$0-2].value + ' in ' + $$[$0].value
 		}
 	
 break;
-case 122: case 123: case 125:
+case 166:
 
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($$[$0].type);
+		// $$[$0].isArray
 		this.$ = {
-			type: $$[$0].type,
-			value: $$[$0].value
+			symb: symb,
+			isArray: $$[$0].isArray
 		}
 	
 break;
-case 124:
-
-		this.$ = {
-			type: $$[$0].type,
-			value: $$[$0].value
-		} 
-	
-break;
-case 126:
- 
-		this.$ = {
-			type: $$[$0].type,
-			value: $$[$0].value
-		} 
-	
-break;
-case 127:
-
-		this.$ = { 
-			type: $$[$0].type, 
-			value: $$[$0].value 
-		}; 
-	
-break;
-case 128:
-
-		// could've done this.$=$$[$0] but that's confusing
-		this.$ = {
-			type: $$[$0].type,
-			value: $$[$0].value
-		}
-	
-break;
-case 129:
-
-		this.$ = {
-			symb: $$[$0].symb,
-			type: $$[$0].type,
-			value: $$[$0].value
-		}
-	
-break;
-case 130:
-
-		this.$ = { 
-			type: $$[$0].type, 
-			value: $$[$0].value
-		} 
-	
-break;
-case 131:
-
-		this.$ = {
-			symb: $$[$0].symb,
-			type: $$[$0].type, 
-			value: $$[$0].value
-		}; 
-	
-break;
-case 132:
-
-		this.$ = {
-			type: 'مجهول',
-			value: $$[$0]
-		}
-	
-break;
-case 133:
-
-		this.$ = {
-			type: 'مصفوفة',
-			subtype: $$[$0-1].type,
-			value: '[' + $$[$0-1].value.join(', ') + ']'
-		}
-	
-break;
-case 134:
-
-		this.$ = { 
-			type: $$[$0].type, // منطق 
-			value: $$[$0].value 
-		}; 
-	
-break;
-case 135:
+case 167:
 
 		this.$ = {
 			symb: $$[$0-1].symb,
-			type: $$[$0-1].type,
 			value: '(' + $$[$0-1].value + ')'
 		};
 	
 break;
-case 136:
+case 168: case 169: case 175:
 
 		this.$ = {
-			type: 'منطق',
+			symb: $$[$0].symb,
 			value: $$[$0].value
 		}
 	
 break;
-case 137:
+case 170:
 
-		var symb = checkSymbol(yy, $$[$0], _$[$0]);
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value
+		} 
+	
+break;
+case 171:
+ 
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value
+		} 
+	
+break;
+case 172:
+
+		this.$ = { 
+			symb: $$[$0].symb, 
+			value: $$[$0].value 
+		}; 
+	
+break;
+case 173:
+
+		// function_call
+		var symb = $$[$0-1].symb.duplicate($$[$0].symb);
+		symb.isArray = $$[$0].isArray;
 		this.$ = {
 			symb: symb,
-			type: symb.type, 
+			value: $$[$0-1].value
+		};
+	
+break;
+case 174:
+
+		// could've done this.$=$$[$0] but that's confusing
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value
+		}
+	
+break;
+case 176:
+
+		// member_access
+		var symb = $$[$0-1].symb.duplicate($$[$0].symb);
+		symb.isArray = $$[$0].isArray;
+		this.$ = {
+			symb: symb,
+			value: $$[$0-1].value
+		}
+	
+break;
+case 177:
+
+		this.$ = { 
+			symb: $$[$0].symb, 
+			value: $$[$0].value
+		} 
+	
+break;
+case 178:
+
+		var symb = $$[$0-1].symb.duplicate($$[$0].symb);
+		symb.isArray = $$[$0].isArray;
+		this.$ = {
+			symb: symb,
+			value: $$[$0-1].value
+		}
+	
+break;
+case 179:
+
+		this.$ = {
+			symb: $$[$0].symb,
+			value: $$[$0].value
+		}; 
+	
+break;
+case 180:
+
+		this.$ = {
+			symb: Symbol.SYSTEMTYPES['مجهول'],
+			value: $$[$0]
+		}
+	
+break;
+case 181:
+
+		ErrorManager.setContext(_$[$0-2], context.filePath);
+		var elemTypeSymb = $$[$0-1].symb.typeSymbol;
+		var symb = yy.symbolScopes.createSymbol('', elemTypeSymb.name, true /*isArray*/);
+		this.$ = {
+			symb: symb,
+			value: '[' + $$[$0-1].value.join(', ') + ']'
+		}
+	
+break;
+case 182:
+
+		ErrorManager.setContext(_$[$0-3], context.filePath);
+		var elemTypeSymb = $$[$0-2].symb.typeSymbol;
+		var symb = yy.symbolScopes.createSymbol('', $$[$0].symb.name, true /*isArray*/);
+		this.$ = {
+			symb: symb,
+			value: '[' + $$[$0-2].value.join(', ') + ']'
+		}
+	
+break;
+case 183:
+
+		this.$ = { 
+			symb: $$[$0].symb, // منطق 
+			value: $$[$0].value 
+		}; 
+	
+break;
+case 184:
+
+		this.$ = {
+			symb: $$[$0].symb,
+			value: '(' + $$[$0].value + ')'
+		};
+	
+break;
+case 185:
+
+		var symb = $$[$0-2].symb.duplicate($$[$0].symb);
+		symb.isArray = $$[$0].isArray;
+		this.$ = {
+			symb: symb,
+			value: '(' + $$[$0-2].value + ')'
+		}
+	
+break;
+case 186:
+
+		this.$ = {
+			symb: yy.symbolScopes.getSymbByName('منطق'),
+			value: $$[$0].value
+		}
+	
+break;
+case 187:
+
+		var symb = yy.symbolScopes.getSymbByName($$[$0]);
+		this.$ = {
+			symb: symb,
 			value: $$[$0]
 		}; 
 	
 break;
-case 138:
+case 188:
+
+		var symb = yy.symbolScopes.getSymbByName($$[$0-1]);
+		var mySymb = symb.duplicate($$[$0].symb);
+		mySymb.isArray = $$[$0].isArray;
+		this.$ = {
+			symb: mySymb,
+			value: $$[$0-1]
+		}; 
+	
+break;
+case 189:
 
 		this.$ = {
-			type: 'عدد',
+			symb: yy.symbolScopes.getSymbByName('عدد'),
 			value: toEnDigit($$[$0])
 		}
 	
 break;
-case 139:
+case 190:
 
 		this.$ = {
-			type: 'منطق', 
+			symb: yy.symbolScopes.getSymbByName('منطق'), 
 			value: 'true'
 		}; 
 	
 break;
-case 140:
+case 191:
 
 		this.$ = {
-			type: 'منطق', 
+			symb: yy.symbolScopes.getSymbByName('منطق'),
 			value: 'false'
 		}; 
 	
 break;
-case 141:
+case 192:
 
 		this.$ = {
-			type: 'عدم', 
+			symb: Symbol.SYSTEMTYPES['عدم'],
 			value: 'null'
 		}; 
 	
 break;
-case 142:
+case 193:
 
+		ErrorManager.setContext(_$[$0], context.filePath);
 		//inlineParse($$[$01].replace('<x-', '<'), context, yy)
 		const regex = /{(.*?)}/g;
 		var match;
@@ -1199,37 +1737,54 @@ case 142:
 				inlineParse(s, context, yy);
 			}
 		}
+		var val = $$[$0].replaceAll('"', '').replaceAll("'", "");
+		var symb = yy.symbolScopes.createSymbol(val, 'نصية');
+		symb.isLiteral = true;
 		this.$ = {
-			type: 'نص',
+			symb: symb,
 			value: $$[$0].replaceAll('"', '`').replaceAll('{', '${')
 		}
 	
 break;
-case 143:
+case 194:
 
+		ErrorManager.setContext(_$[$0], context.filePath);
 		this.$ = {
-			type: yy.selfStack[yy.selfStack.length-1].type,
+			symb: yy.selfStack[yy.selfStack.length-1],
 			value: 'this'
 		}			
 	
 break;
-case 144:
+case 195:
 
+		ErrorManager.setContext(_$[$0-1], context.filePath);
+		var symb = yy.selfStack[yy.selfStack.length-1];
+		var mySymb = symb.duplicate($$[$0].symb);
+		mySymb.isArray = $$[$0].isArray;
+		this.$ = {
+			symb: mySymb,
+			value: 'this'
+		}; 
+	
+break;
+case 196:
+
+		ErrorManager.setContext(_$[$0], context.filePath);
 		var result = $$[$0].replace('(', '').replace(')', '') // تعويض القوسين بعلامات ئقتباس
 					.replaceAll('\t','') // حدف الفراغين
 					.replace(/(\r\n|\n|\r)/gm,''); // حدف رجعات السطر
 					//.replaceAll('{', '${'); // تعويض متغيرين القالب
 		result = processJNX(result, context, yy);
 		this.$ = {
-			type: 'نص',
+			symb: yy.symbolScopes.getSymbByName('نصية'),
 			value: result
 		}
 	
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,5:[1,3],6:4,7:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,16:13,17:14,18:15,19:16,21:$V1,26:$V2,31:$V3,32:19,35:20,38:53,40:$V4,41:$V5,44:54,47:$V6,49:$V7,51:$V8,53:$V9,55:$Va,56:$Vb,57:27,58:$Vc,59:28,60:$Vd,62:29,66:$Ve,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{1:[3]},{2:$V0,5:[1,63],6:64,7:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,16:13,17:14,18:15,19:16,21:$V1,26:$V2,31:$V3,32:19,35:20,38:53,40:$V4,41:$V5,44:54,47:$V6,49:$V7,51:$V8,53:$V9,55:$Va,56:$Vb,57:27,58:$Vc,59:28,60:$Vd,62:29,66:$Ve,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{1:[2,2]},o($Vq,[2,3]),{8:65,20:$Vr},o($Vq,[2,6]),{8:67,20:$Vr},{8:68,20:$Vr},{8:69,20:$Vr},{8:70,20:$Vr},{8:71,20:$Vr},{8:72,20:$Vr},o($Vq,[2,13]),o($Vq,[2,14]),o($Vq,[2,15]),{8:73,20:$Vr,61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($Vq,[2,17]),{22:88,25:89,26:[1,90],28:[1,91]},{33:92,36:$VG,45:$VH},{33:94,36:$VG,45:$VH},{26:[1,95]},{26:[1,97],50:96},o($VI,[2,49],{52:98,26:[1,99]}),{26:[1,100]},{19:101,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:102,20:[2,60],26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{34:103,45:$VJ},{34:105,45:$VJ},{45:$VK,63:106},o($VL,[2,122]),o($VL,[2,123]),o($VL,[2,124]),o($VL,[2,125]),o($VL,[2,126]),o($VL,[2,127],{30:[1,108]}),o($VL,[2,128]),o($VL,[2,129],{30:[1,111],41:[1,110],54:[1,109],95:[1,112]}),o($VL,[2,130],{30:[1,115],41:[1,114],54:[1,113]}),o($VL,[2,131]),o($VL,[2,132]),o($VM,[2,113],{70:30,73:31,78:32,85:33,88:34,89:35,90:36,71:37,72:38,97:39,104:40,106:42,108:44,102:116,19:118,26:$V2,27:[1,117],31:$V3,41:$V5,91:$Vf,94:$Vg,95:$Vh,98:$Vi,105:$Vj,107:$Vk,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp}),o($VL,[2,134]),{19:119,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VL,[2,136]),o($VL,[2,137],{30:[1,122],41:[1,121],54:[1,120],95:[1,123]}),o($VL,[2,138]),o($VL,[2,139]),o($VL,[2,140]),o($VL,[2,141]),o($VL,[2,142]),o($VL,[2,143],{30:[1,124],95:[1,125]}),o($VL,[2,144]),{39:126,41:$VN},{39:128,41:$VN},{19:129,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{26:[1,130]},{19:131,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:132,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{26:$VO,31:$VP,99:133,101:134},{19:137,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:138,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{26:[1,139]},{1:[2,1]},o($Vq,[2,4]),o($Vq,[2,5]),o($Vq,[2,18]),o($Vq,[2,7]),o($Vq,[2,8]),o($Vq,[2,9]),o($Vq,[2,10]),o($Vq,[2,11]),o($Vq,[2,12]),o($Vq,[2,16]),{19:140,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:141,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:142,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:143,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:144,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:145,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:146,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:147,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:148,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:149,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:150,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:151,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:152,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:153,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{23:[1,154]},{23:[2,20],29:[1,155]},o($VQ,[2,23],{27:[1,156]}),{27:[1,157]},{34:158,45:$VJ},{26:$VR,37:159,103:$VS},{34:162,45:$VJ},{41:[1,163]},{20:[2,45]},{20:[2,46],27:[1,164]},{20:[2,48],29:[1,165]},o($VI,[2,51],{26:[1,166]}),{20:[2,54],26:[1,168],54:[1,167]},{20:[2,58],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},{20:[2,59],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($Vq,[2,61]),{2:$V0,4:169,6:4,7:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,16:13,17:14,18:15,19:16,21:$V1,26:$V2,31:$V3,32:19,35:20,38:53,40:$V4,41:$V5,44:54,46:[1,170],47:$V6,49:$V7,51:$V8,53:$V9,55:$Va,56:$Vb,57:27,58:$Vc,59:28,60:$Vd,62:29,66:$Ve,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($Vq,[2,63]),{46:[1,173],64:171,65:172,67:174,68:$VT,69:175},{2:$V0,4:177,6:4,7:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,16:13,17:14,18:15,19:16,21:$V1,26:$V2,31:$V3,32:19,35:20,38:53,40:$V4,41:$V5,44:54,47:$V6,49:$V7,51:$V8,53:$V9,55:$Va,56:$Vb,57:27,58:$Vc,59:28,60:$Vd,62:29,66:$Ve,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{26:[1,178]},{19:179,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VU,$VV,{70:30,73:31,78:32,85:33,88:34,89:35,90:36,71:37,72:38,97:39,104:40,106:42,108:44,48:180,19:181,26:$V2,31:$V3,41:$V5,91:$Vf,94:$Vg,95:$Vh,98:$Vi,105:$Vj,107:$Vk,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp}),{26:[1,182]},{19:183,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:184,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VU,$VV,{70:30,73:31,78:32,85:33,88:34,89:35,90:36,71:37,72:38,97:39,104:40,106:42,108:44,19:181,48:185,26:$V2,31:$V3,41:$V5,91:$Vf,94:$Vg,95:$Vh,98:$Vi,105:$Vj,107:$Vk,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp}),{26:[1,186]},{29:[1,188],96:[1,187]},{26:[1,189]},o($VM,[2,115],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),{43:[1,190],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},{19:191,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VU,$VV,{70:30,73:31,78:32,85:33,88:34,89:35,90:36,71:37,72:38,97:39,104:40,106:42,108:44,19:181,48:192,26:$V2,31:$V3,41:$V5,91:$Vf,94:$Vg,95:$Vh,98:$Vi,105:$Vj,107:$Vk,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp}),{26:[1,193]},{19:194,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{26:[1,195]},{19:196,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VW,[2,32]),o($VU,[2,37],{42:197,26:[1,198]}),o($VW,[2,35]),{45:[2,62],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},{61:[1,199]},{45:[2,69],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($VX,[2,98],{66:$Vt}),{29:[1,201],100:[1,200]},o($VY,[2,109]),{45:[1,202]},{45:[1,203]},o([20,29,43,45,68,96,100],[2,119],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($VX,[2,120],{66:$Vt}),{30:[1,204],41:[2,33]},o($VZ,[2,79],{61:$Vs,66:$Vt,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($VZ,[2,80],{61:$Vs,66:$Vt,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($V_,[2,81],{61:$Vs,66:$Vt,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($V_,[2,82],{61:$Vs,66:$Vt,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($V$,[2,83],{61:$Vs,66:$Vt,86:$VE,87:$VF}),o($V$,[2,84],{61:$Vs,66:$Vt,86:$VE,87:$VF}),o($V$,[2,85],{61:$Vs,66:$Vt,86:$VE,87:$VF}),o($V$,[2,86],{61:$Vs,66:$Vt,86:$VE,87:$VF}),o($V$,[2,87],{61:$Vs,66:$Vt,86:$VE,87:$VF}),o($V$,[2,88],{61:$Vs,66:$Vt,86:$VE,87:$VF}),o($V01,[2,89],{61:$Vs,66:$Vt}),o($V01,[2,90],{61:$Vs,66:$Vt}),{61:$Vs,66:$Vt,68:[1,205],74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($VX,[2,121],{66:$Vt}),{24:206,26:[1,207],31:[1,208]},{26:[1,209]},{26:[1,210]},{26:[1,211]},o($Vq,[2,28]),{45:[2,30]},o($V11,[2,117]),{95:[1,212]},o($Vq,[2,29]),o($VU,$VV,{70:30,73:31,78:32,85:33,88:34,89:35,90:36,71:37,72:38,97:39,104:40,106:42,108:44,19:181,48:213,26:$V2,31:$V3,41:$V5,91:$Vf,94:$Vg,95:$Vh,98:$Vi,105:$Vj,107:$Vk,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp}),{26:[1,214]},{26:[1,215]},o($VI,[2,50]),{19:216,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{20:[2,56],54:[1,217]},{2:$V0,6:64,7:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,16:13,17:14,18:15,19:16,21:$V1,26:$V2,31:$V3,32:19,35:20,38:53,40:$V4,41:$V5,44:54,46:[1,218],47:$V6,49:$V7,51:$V8,53:$V9,55:$Va,56:$Vb,57:27,58:$Vc,59:28,60:$Vd,62:29,66:$Ve,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($Vq,[2,43]),{46:[1,220],65:219,67:221,68:$VT,69:175},{46:[1,222]},o($Vq,[2,68]),{45:$VK,63:223},{45:$VK,63:224},{45:[2,75],66:[1,225]},o($V21,[2,73],{7:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,16:13,17:14,18:15,19:16,32:19,35:20,57:27,59:28,62:29,70:30,73:31,78:32,85:33,88:34,89:35,90:36,71:37,72:38,97:39,104:40,106:42,108:44,38:53,44:54,6:64,2:$V0,21:$V1,26:$V2,31:$V3,40:$V4,41:$V5,47:$V6,49:$V7,51:$V8,53:$V9,55:$Va,56:$Vb,58:$Vc,60:$Vd,66:$Ve,91:$Vf,94:$Vg,95:$Vh,98:$Vi,105:$Vj,107:$Vk,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp}),o($V31,[2,101]),o($VX,[2,77],{66:$Vt}),{29:$V41,43:[1,226]},o($VU,[2,96],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($V31,[2,102]),{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF,96:[1,228]},o($VX,[2,78],{66:$Vt}),{29:$V41,43:[1,229]},o($V31,[2,103]),o($VL,[2,133]),{19:230,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VM,[2,114]),o($VL,[2,135]),o($VX,[2,76],{66:$Vt}),{29:$V41,43:[1,231]},o($V31,[2,100]),{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF,96:[1,232]},o($V31,[2,104]),{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF,96:[1,233]},{29:[1,235],43:[1,234]},o($VU,[2,38],{37:236,26:$VR,103:$VS}),{19:237,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($VL,[2,108]),{26:$VO,31:$VP,101:238},{19:239,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{19:240,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{26:[1,241]},{19:242,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},{20:[2,19],30:[1,243]},o($V51,[2,25]),o($V51,[2,27]),o($VQ,[2,24]),{23:[2,21]},{23:[2,22]},{26:[1,244]},{29:$V41,43:[1,245]},{20:[2,47]},o($VI,[2,53],{26:[1,246]}),{20:[2,55],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},{19:247,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($Vq,[2,42]),{46:[1,248]},o($Vq,[2,66]),{45:$VK,63:249},o($Vq,[2,67]),o($V21,[2,70]),{46:[2,74]},{19:250,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($V61,[2,93]),{19:251,26:$V2,31:$V3,41:$V5,70:30,71:37,72:38,73:31,78:32,85:33,88:34,89:35,90:36,91:$Vf,94:$Vg,95:$Vh,97:39,98:$Vi,104:40,105:$Vj,106:42,107:$Vk,108:44,109:$Vl,110:$Vm,111:$Vn,112:$Vo,113:$Vp},o($V71,[2,107]),o($V61,[2,94]),o($VM,[2,116],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($V61,[2,92]),o($V71,[2,105]),o($V71,[2,106]),o($VW,[2,34]),{26:[1,252]},o($VU,[2,39]),{45:[2,64],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($VY,[2,110]),o($VY,[2,111],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($VY,[2,112],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),{41:[2,36]},o($VX,[2,91],{66:$Vt}),{26:[1,253]},{96:[1,254]},{20:[2,44]},o($VI,[2,52]),{20:[2,57],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($Vq,[2,65]),o($V21,[2,71]),{45:[2,72],61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF},o($VU,[2,97],{61:$Vs,66:$Vt,74:$Vu,75:$Vv,76:$Vw,77:$Vx,79:$Vy,80:$Vz,81:$VA,82:$VB,83:$VC,84:$VD,86:$VE,87:$VF}),o($VU,[2,40],{37:255,26:$VR,103:$VS}),o($V51,[2,26]),o($V11,[2,118]),o($VU,[2,41])],
-defaultActions: {3:[2,2],63:[2,1],96:[2,45],159:[2,30],210:[2,21],211:[2,22],214:[2,47],224:[2,74],241:[2,36],245:[2,44]},
+table: [{3:1,4:2,5:[1,3],6:4,7:5,9:6,10:7,11:8,12:9,26:$V0,31:$V1,36:$V2,37:$V3,52:11,55:12,56:37,58:$V4,61:38,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{1:[3]},{5:[1,43],6:44,7:5,9:6,10:7,11:8,12:9,26:$V0,31:$V1,36:$V2,37:$V3,52:11,55:12,56:37,58:$V4,61:38,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{1:[2,2]},o($Vg,[2,3]),{8:45,25:$Vh},o($Vg,[2,6]),{8:47,25:$Vh},o($Vg,[2,8]),{8:48,25:$Vh,91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{27:63,30:64,31:[1,65],33:[1,66]},{32:$Vw,43:$Vx,53:67},{32:$Vw,43:$Vx,53:69},{31:[1,70],40:71,42:[1,72]},o($Vy,[2,168]),o($Vy,[2,169]),o($Vy,[2,170]),o($Vy,[2,171]),o($Vy,[2,172],{134:73,32:$Vz,35:[1,74]}),o($Vy,[2,174]),o($Vy,$VA,{134:76,32:$Vz,35:$VB,58:$VC,79:$VD}),o($Vy,$VE,{134:80,32:$Vz,35:$VF,58:$VG}),o($Vy,[2,179]),o($Vy,[2,180]),o($VH,[2,158],{114:14,102:15,107:16,117:17,118:18,122:19,100:20,101:21,125:22,129:23,131:25,135:26,133:28,128:83,12:84,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),o($Vy,[2,183]),o($Vy,[2,184]),{12:85,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vy,[2,186]),o($Vy,$VI,{134:86,32:$Vz,35:$VJ,58:$VK,79:$VL}),o($Vy,[2,189]),o($Vy,[2,190]),o($Vy,[2,191]),o($Vy,[2,192]),o($Vy,[2,193]),o($Vy,[2,194],{134:90,32:$Vz,35:[1,91],79:[1,92]}),o($Vy,[2,196]),{57:93,58:$VM},{57:95,58:$VM},{12:96,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{31:$VN,36:$VO,68:[1,98],126:97,127:99},{12:102,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:103,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{1:[2,1]},o($Vg,[2,4]),o($Vg,[2,5]),o($VP,[2,24]),o($Vg,[2,7]),o($Vg,[2,9]),{12:104,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:105,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:106,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:107,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:108,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:109,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:110,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:111,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:112,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:113,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:114,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:115,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:116,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:117,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{28:[1,118]},{25:[2,26],28:[2,27],34:[1,119]},o($VQ,[2,30],{32:[1,120]}),{32:[1,121]},{43:$VR,54:122},{31:$VS,38:124},{43:$VR,54:126},{35:[1,127],58:[2,53]},{41:128,43:[1,129]},{31:[1,130]},o($Vy,[2,173]),{31:[1,131]},{31:$VS,38:132},o($Vy,[2,176]),o($VT,$VU,{114:14,102:15,107:16,117:17,118:18,122:19,100:20,101:21,125:22,129:23,131:25,135:26,133:28,72:133,119:134,12:135,120:136,121:138,31:$VV,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),{31:[1,140]},{12:141,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vy,[2,178]),o($VT,$VU,{114:14,102:15,107:16,117:17,118:18,122:19,100:20,101:21,125:22,129:23,131:25,135:26,133:28,119:134,12:135,120:136,121:138,72:142,31:$VV,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),{31:[1,143]},{34:[1,145],80:[1,144]},o($VH,[2,159],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),{60:[1,146],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vy,[2,188]),o($VT,$VU,{114:14,102:15,107:16,117:17,118:18,122:19,100:20,101:21,125:22,129:23,131:25,135:26,133:28,119:134,12:135,120:136,121:138,72:147,31:$VV,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),{31:[1,148]},{12:149,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vy,[2,195]),{31:[1,150]},{12:151,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($VX,[2,52]),o($VT,[2,57],{59:152,62:153,63:154,77:157,31:$VY,42:$VZ,49:$V_,64:$V$}),o($VX,[2,55]),o($V01,[2,143],{96:$Vj}),{34:[1,161],68:[1,160]},o($Vy,[2,153]),o($V11,[2,154]),{43:[1,162]},{43:[1,163]},o([25,34,43,60,68,80,98],[2,163],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V01,[2,164],{96:$Vj}),o([25,34,43,60,68,80,98,103,104,105,106,108,109,110,111,112,113,115],[2,127],{91:$Vi,96:$Vj,116:$Vv}),o($V21,[2,128],{91:$Vi,96:$Vj}),o($V31,[2,117],{91:$Vi,96:$Vj,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V31,[2,118],{91:$Vi,96:$Vj,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V41,[2,119],{91:$Vi,96:$Vj,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V41,[2,120],{91:$Vi,96:$Vj,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V51,[2,121],{91:$Vi,96:$Vj,115:$Vu,116:$Vv}),o($V51,[2,122],{91:$Vi,96:$Vj,115:$Vu,116:$Vv}),o($V51,[2,123],{91:$Vi,96:$Vj,115:$Vu,116:$Vv}),o($V51,[2,124],{91:$Vi,96:$Vj,115:$Vu,116:$Vv}),o($V51,[2,125],{91:$Vi,96:$Vj,115:$Vu,116:$Vv}),o($V51,[2,126],{91:$Vi,96:$Vj,115:$Vu,116:$Vv}),{91:$Vi,96:$Vj,98:[1,164],103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($V21,[2,165],{91:$Vi,96:$Vj}),{29:165,31:[1,166],36:[1,167]},{31:[1,168]},{31:[1,169]},{31:[1,170]},o($Vg,[2,48]),{2:$V61,12:184,13:171,14:173,15:174,16:175,17:176,18:177,19:178,20:179,21:180,22:181,23:182,24:183,31:$V71,36:$V2,45:[1,172],58:$V4,67:$V5,71:$V81,73:$V91,74:$Va1,79:$V6,82:$Vb1,83:$Vc1,86:$Vd1,87:193,88:$Ve1,89:194,90:$Vf1,92:195,96:$Vg1,100:196,101:197,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o([34,43,60],[2,50]),o($Vh1,[2,161],{79:[1,201]}),o($Vg,[2,49]),{31:[1,202]},o($Vg,[2,38]),{31:$VY,44:203,45:$Vi1,49:$V_,75:204,76:205,77:206},{43:[2,39]},o($Vj1,[2,145]),o($Vy,[2,166]),{34:$Vk1,60:[1,207]},o($VT,[2,135]),o($VT,[2,137],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($VT,[2,138]),o([34,60,91,96,103,104,105,106,108,109,110,111,112,113,115,116],$VI,{134:86,32:$Vz,35:$VJ,43:[1,209],58:$VK,79:$VL}),{57:210,58:$VM},{58:[2,142]},o($Vj1,[2,146]),{80:[1,211],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{34:$Vk1,60:[1,212]},o($Vj1,[2,147]),o($Vy,[2,181],{134:213,32:$Vz}),{12:214,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vy,[2,167],{134:215,32:$Vz,35:[1,216]}),{34:$Vk1,60:[1,217]},o($Vj1,[2,144]),{80:[1,218],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vj1,[2,148]),{80:[1,219],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{34:[1,221],60:[1,220]},o($VT,[2,58]),o($VT,[2,60]),{31:[1,222]},{31:[1,223]},o($VT,[2,80],{78:224,39:[1,225]}),o($Vl1,$Vm1,{65:226,31:[1,227],69:$Vn1,79:[1,228]}),{31:[1,230]},o($Vy,[2,152]),{31:$VN,36:$VO,127:231},{12:232,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:233,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:234,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{25:[2,25],35:[1,235]},o($Vo1,[2,32]),o($Vo1,[2,34]),o($VQ,[2,31]),{28:[2,28]},{28:[2,29]},{2:$V61,12:184,14:237,15:174,16:175,17:176,18:177,19:178,20:179,21:180,22:181,23:182,24:183,31:$V71,36:$V2,45:[1,236],58:$V4,67:$V5,71:$V81,73:$V91,74:$Va1,79:$V6,82:$Vb1,83:$Vc1,86:$Vd1,87:193,88:$Ve1,89:194,90:$Vf1,92:195,96:$Vg1,100:196,101:197,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($VP,[2,70]),o($Vp1,[2,10]),{8:238,25:$Vh},{8:239,25:$Vh},{8:240,25:$Vh},{8:241,25:$Vh},{8:242,25:$Vh},{8:243,25:$Vh},o($Vp1,[2,18]),o($Vp1,[2,19]),o($Vp1,[2,20]),{8:244,25:$Vh},{8:245,25:$Vh,91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vp1,[2,23]),{31:[1,246]},{31:[1,247]},{25:$Vi1,31:$VY,44:248,49:$V_,75:204,76:205,77:206},{31:[1,249]},o($Vq1,$VI,{134:86,31:[1,250],32:$Vz,35:$VJ,39:[1,252],58:$VK,79:[1,251]}),{12:253,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:254,25:[2,98],31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{43:$VR,54:255},{43:$VR,54:256},{43:$Vr1,93:257},o($Vq1,$VA,{134:76,32:$Vz,35:$VB,39:[1,259],58:$VC,79:$VD}),o($Vq1,$VE,{134:80,32:$Vz,35:$VF,39:[1,260],58:$VG}),{12:261,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{31:[1,262]},{12:263,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{80:[1,264]},{32:[1,265],39:[1,266],58:[2,56]},{45:[1,267]},o([25,45,68],[2,75],{34:[1,268]}),o($Vs1,[2,76]),o($Vs1,[2,78],{73:[1,269]}),o($Vt1,[2,131]),{12:135,31:$VV,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,119:270,120:136,121:138,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:271,31:$V1,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,120:272,121:138,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{43:[1,273]},o($Vu1,[2,151]),o($Vt1,[2,132]),o($Vy,[2,182]),o($VH,[2,160],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($Vy,[2,185]),{31:[1,274]},o($Vt1,[2,130]),o($Vu1,[2,149]),o($Vu1,[2,150]),o($VX,[2,54]),{31:$VY,42:$VZ,49:$V_,62:275,63:154,64:$V$,77:157},{58:$Vm1,65:276,69:$Vn1},{65:277,67:$Vm1,69:$Vn1},o($VT,[2,81]),{12:278,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vl1,[2,82]),o($Vl1,$Vm1,{65:279,69:$Vn1}),{80:[1,280]},o([25,34,39,45,58,60,67,68,73,79],[2,64]),{65:281,69:$Vn1,79:$Vm1},o($V11,[2,155]),o($V11,[2,156],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V11,[2,157],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($V01,[2,129],{96:$Vj}),{31:[1,282]},o($VP,[2,69]),o($Vp1,[2,11]),o($Vp1,[2,12]),o($Vp1,[2,13]),o($Vp1,[2,14]),o($Vp1,[2,15]),o($Vp1,[2,16]),o($Vp1,[2,17]),o($Vp1,[2,21]),o($Vp1,[2,22]),{58:[1,283]},{25:[2,72]},{25:[2,73]},{25:[2,89],39:[1,284]},{25:[2,91],39:[1,285]},{12:149,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,80:[1,286],100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:287,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{25:[2,95],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{25:[2,97],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vp1,[2,99]),o($Vp1,[2,101]),{45:[1,290],94:288,95:289,97:291,98:$Vv1,99:292},{2:$V61,12:184,13:294,14:173,15:174,16:175,17:176,18:177,19:178,20:179,21:180,22:181,23:182,24:183,31:$V71,36:$V2,58:$V4,67:$V5,71:$V81,73:$V91,74:$Va1,79:$V6,82:$Vb1,83:$Vc1,86:$Vd1,87:193,88:$Ve1,89:194,90:$Vf1,92:195,96:$Vg1,100:196,101:197,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:295,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:296,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{43:[2,100],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{91:[1,297]},{43:[2,107],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vh1,[2,162]),{31:$VS,38:298},{12:299,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vg,[2,40]),{31:$VY,49:$V_,76:300,77:206},{31:[1,301]},o($VT,[2,136]),o($VT,[2,139],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($VT,[2,140]),{12:302,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{58:[1,303]},o($VT,[2,59]),{58:[1,305],66:304},{67:[1,306]},o($VT,[2,86],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($Vl1,[2,83]),{31:[1,307]},{79:[1,308]},o($Vo1,[2,33]),o($VT,$VU,{114:14,102:15,107:16,117:17,118:18,122:19,100:20,101:21,125:22,129:23,131:25,135:26,133:28,119:134,12:135,120:136,121:138,72:309,31:$VV,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),{12:310,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{12:311,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{31:[1,312]},{25:[2,114],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{45:[1,314],95:313,97:315,98:$Vv1,99:292},{45:[1,316]},o($Vp1,[2,106]),{43:$Vr1,93:317},{43:$Vr1,93:318},{43:[2,113],96:[1,319]},o($Vw1,[2,111],{114:14,102:15,107:16,117:17,118:18,122:19,125:22,129:23,131:25,135:26,133:28,15:174,16:175,17:176,18:177,19:178,20:179,21:180,22:181,23:182,24:183,12:184,87:193,89:194,92:195,100:196,101:197,14:237,2:$V61,31:$V71,36:$V2,58:$V4,67:$V5,71:$V81,73:$V91,74:$Va1,79:$V6,82:$Vb1,83:$Vc1,86:$Vd1,88:$Ve1,90:$Vf1,96:$Vg1,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),{25:[2,115],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{25:[2,116],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{12:320,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{25:[2,35],39:[1,321]},{25:[2,36],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vs1,[2,77]),o($Vs1,[2,79]),o($VT,[2,141],{91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv}),o($VT,$VU,{114:14,102:15,107:16,117:17,118:18,122:19,100:20,101:21,125:22,129:23,131:25,135:26,133:28,119:134,12:135,120:136,121:138,72:322,31:$VV,36:$V2,58:$V4,64:$VW,67:$V5,79:$V6,123:$V7,124:$V8,130:$V9,132:$Va,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf}),o($VT,$Vx,{53:323,32:$Vw}),o($VT,[2,66],{70:324,38:325,31:$VS}),{31:$VY,44:326,49:$V_,68:$Vi1,75:204,76:205,77:206},o($Vl1,$Vm1,{65:327,69:$Vn1}),{31:[1,329],81:328},{34:$Vk1,60:[1,330]},{25:[2,90],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{25:[2,93],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{25:[2,92],39:[1,331]},{45:[1,332]},o($Vp1,[2,104]),{43:$Vr1,93:333},o($Vp1,[2,105]),o($Vw1,[2,108]),{45:[2,112]},{12:334,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{43:[2,102],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{12:335,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},{34:$Vk1,60:[1,336]},o($VT,[2,61]),{34:[1,338],60:[1,337]},o($VT,[2,67]),{68:[1,339]},o($Vl1,[2,84]),{34:[1,341],80:[1,340]},o($VH,[2,87]),{25:[2,71]},{12:342,31:$V1,36:$V2,58:$V4,67:$V5,79:$V6,100:20,101:21,102:15,107:16,114:14,117:17,118:18,122:19,123:$V7,124:$V8,125:22,129:23,130:$V9,131:25,132:$Va,133:28,135:26,136:$Vb,137:$Vc,138:$Vd,139:$Ve,140:$Vf},o($Vp1,[2,103]),o($Vw1,[2,109]),{43:[2,110],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},{25:[2,37],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($Vt1,[2,133]),o([32,34,60],[2,65]),{31:$VS,38:343},o($VT,[2,62]),o($Vl1,[2,85]),{31:[1,344]},{25:[2,94],91:$Vi,96:$Vj,103:$Vk,104:$Vl,105:$Vm,106:$Vn,108:$Vo,109:$Vp,110:$Vq,111:$Vr,112:$Vs,113:$Vt,115:$Vu,116:$Vv},o($VT,[2,68]),o($VH,[2,88])],
+defaultActions: {3:[2,2],43:[2,1],130:[2,39],139:[2,142],169:[2,28],170:[2,29],247:[2,72],248:[2,73],318:[2,112],330:[2,71]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1480,286 +2035,91 @@ _handle_error:
 
     const fs = require('fs');
     const path = require('path');
-	//const _parser = require('./jparser');
-	const globalSymb = { name: 'العام', type: 'العام', members: {} };
-	var importPath;
-	var result;
-	var mustImp = ["كائن", "منطق", "نص", "مصفوفة"]; // automatic imports
-	
+	const SymbolScopes = require('./SymbolScopes');
+	const ErrorManager = require('./ErrorManager');
+	const ImportManager = require('./ImportManager');
+	const Symbol = require('./Symbol');
 	
 	function createParser (yy) {
 		const parser = new Parser();
-		// read .env file
-		const mainFilePath = process.argv[2];
-		const projectPath = path.dirname(mainFilePath);
-		const envpath = path.join(projectPath, "/.سياق");
-		var scope = {
-			'سياق': {name: 'سياق', type: 'سياق', members: {} },
-			'العام': globalSymb
-		};
-		if (!yy) { // no yy, means new parser without context
-			var env = "";
-			try {
-				env = fs.readFileSync(envpath, 'utf8');
-			} catch (e) {}
-			try {
-				env = JSON.parse('{' + env.replaceAll('\n', ',') + '}');
-			} catch (e) {
-				throw new Error('علا .سياق ئن يكون بصيغة: "متغير": "قيمة"');
+		
+		// .env file's path
+		var mainFilePath = path.resolve(process.argv[2]);
+
+		// given path can be a file named مدخل.جني
+		// or a folder in which case we add file مدخل.جني
+		if (!mainFilePath.endsWith('مدخل.جني')) {
+			if (mainFilePath.endsWith('.جني')) {
+				console.error('قم بتحديد ملف بئسم مدخل.جني');
+				process.exit();
 			}
-			for (var key in env) {
-				if (env[key] == "") { 
-					// empty context vars are considered nulls
-					env[key] = null;
-				}
-				scope["سياق"].members[key] = {name: key, type: "نص", members: {}}
-			}
+			mainFilePath = path.join(mainFilePath, 'مدخل.جني');
 		}
+		
+		const projectPath = path.dirname(mainFilePath);
+		//const envpath = path.join(projectPath, "/.سياق");
+		
+		// Either pass symbolScopes object (for inline parsing)
+		// Or make a new one
+		const symbolScopes = yy ? yy.symbolScopes : new SymbolScopes(); //envpath);
+		
+		// I use yy to pass variables to the newly created parser
 		parser.yy = {
-			scopeStack: yy ? yy.scopeStack : [scope], // symbol table
+			symbolScopes: symbolScopes, // symbol table
 			selfStack: yy ? yy.selfStack : [], // holder stack for current SELF object symbol
-			functionStack: yy ? yy.functionStack : [], // holder stack for current function
-			mysuper: '', // super holder if current function inherits
-			myshortcut: '', // shortcut holder if current function shortcuts another
-			isawait: false, // if current function contains await, TODO: unused, remove it
-			env: JSON.stringify(env) // environment variables (سياق)
+			funcStack: yy ? yy.funcStack: [] // holder stack for current function symbol		
 		}
 		
 		parser.originalParse = parser.parse;
 		parser.parse = function (input, ctx) {
+			// here we add global imports to the input source code
 			// do not add global imports on inlineparses
-			input = (ctx.inlineParse ? '' : globalImport(ctx.filePath)) + input;
-			return parser.originalParse(input, ctx);
+			var fileName = path.basename(ctx.filePath, '.جني');
+			input = ( ctx.inlineParse ? '' : SymbolScopes.autoImportText(fileName) ) + input;
+			try {
+				var result = parser.originalParse(input, ctx);
+				return result;
+			} catch (e) {
+				// exception while parsing, lets show errors
+				console.log(e);
+				ErrorManager.printAll();
+			}
 		}
 		
 		return parser;
 	}
-
+	
 	// override default error handler
-    parser.parseError = function (str, hash) {
-		let errorMessage = "خطئ نحوي سطر: " + hash?.loc?.first_line;
-		errorMessage += "\nلم يتوقع: '" + hash.text + "'";
-		errorMessage += "\n" + str;
-        throw new Error(errorMessage);
-    }
-
-	// symbol table logic
-	
-	function enterScope(yy) {
-		yy.scopeStack.push({});
+	parser.parseError = function (str, hash) {
+		ErrorManager.error(
+			"لم يتوقع: '" + hash.text + "'" + '\n' + str
+		);
+		ErrorManager.printAll();
 	}
-	
-	function exitScope(yy) {
-		yy.scopeStack.pop();
-	}
-	
-	function declareSymbol(yy, ctx, name, type, members = {}, isClass = false) {
-		var currentScope = yy.scopeStack[yy.scopeStack.length-1];
-		if (currentScope[name]) {
-			throw new Error("ال" + type + " '" + name + "' معررف مسبقا.");
-		}
-		// isClass is false by default
-		// a function becomes class when having: has, super, extends, shortcut?
-		if (name != type) {
-			// this is a variable of type
-			var smb = checkSymbol(yy, type, ctx);
-			members = smb.members;
-		}
-		currentScope[name] = { name: name, type: type, members: members, isClass: isClass };
-		return currentScope[name];
-	}
-	
-	function checkSymbol(yy, name, ctx) {
-		if (['مجهول', 'فارغ', 'كائن', 'منوع', 'عدم'].includes(name)) {
-			return { type: name, name: name }
-		}
-		for (var i=yy.scopeStack.length-1; i >=0; i--) {
-			if (yy.scopeStack[i][name]) {
-				return yy.scopeStack[i][name];
-			}
-		}
-		console.log(ctx);
-		throw new Error("سطر: " + ctx?.first_line + "\n" + "الئسم '" + name + "' غير معروف.");
-	}
-	
-	function declareMember(yy, object, member, ctx) {
-		let name = object.name || object;		
-		let symb = checkSymbol(yy, name, ctx);
-		if (symb.members[member]) {
-			throw new Error("الئسم '" + member + "' معررف مسبقا في الكائن " + name + "'.");
-		}
-		checkSymbol(yy, member.type, ctx);
-		symb.members[member.name] = { name: member.name, type: member.type, members: (member.members || {}) };
-		return symb.members[member.name];
-	}
-	
-	function checkMember(yy, object, member, ctx) {
-		let name = object.name || object;
-		var symb;
-		if (object.type && object.type == 'كائن') {
-			symb = object; // when its an object literal, we don't check type symbol, we only check variable members
-		} else {
-			symb = checkSymbol(yy, name, ctx); // check symbol of base object
-		}
-		if (symb.type && ['مجهول', 'منوع'].includes(symb.type)) {
-			// غض الطرف عن النوعين مجهول ومنوع
-			return {type: symb.type, name: member};
-		}
-		if (!symb.members[member]) {
-			if (name == 'العام') {
-				throw new Error("سطر: " + ctx?.first_line + "\n" + "الئسم '" + member + "' غير معروف.");
-			} else {
-				throw new Error("سطر: " + ctx?.first_line + "\n" + "الئسم '" + member + "' غير معروف في الكائن " + name + " <" + symb.type + ">.");
-			}
-		}
-		return symb.members[member];
-	}
-
-	// imports logic
-	
-	// unused function TO REMOVE
-	function checkImportFile(s) {
-		var splited = s.split('/');
-		var lastPart = splited[splited.length-1];
-		if (!lastPart.includes('.')) {
-			// no extension add default
-			return s + '/' + lastPart + '.جني';
-		}
-		return s;
-	}
-	
-	function importExists(s, context) {
-		// find a file like ./name.js
-		// or like /name/name.js
-		//var myFileImport = myImport.replace('.', '/') + '.js';
-		var splitted = s.split('.');
-		var name = splitted[splitted.length-1]; // last part is file name
-		var myImport = s.replace('.', '/');
-		
-		//imports are relative to project path not current file
-		//var fileBase = path.dirname(context.filePath);
-		var fileBase = context.projectPath;
-		
-		var filePath1 = path.join(fileBase, myImport + '.جني');
-		var filePath2 = path.join(fileBase, myImport, name + '.جني');
-
-		try {
-			fs.statSync(filePath1);
-			return {
-				exists: true,
-				path: filePath1,
-				relativePath: '.' + filePath1.replace(context.projectPath, '')
-				//relativePath: './' + myImport + '.جني'
-			}
-		} catch (err) {}
-		try {		
-			fs.statSync(filePath2);
-			return {
-				exists: true,
-				path: filePath2,
-				relativePath: '.' + filePath2.replace(context.projectPath, '')
-				//relativePath: './' + path.join(myImport, name + '.جني')
-			}
-		} catch (err) {}
-		return {
-			exists: false
-		}
-	}
-	
-	function processImport(yy, meta, context, importString, importSpecifier) {
-		var fileBase = path.dirname(context.filePath);
-		var importPath = path.join(context.projectPath, importString);
-		var scope = readAndParseFile(importPath, context);
-		if (!scope) {
-			process.exit();
-		}
-		if (importSpecifier.find == "all") {
-			var mysymb = declareSymbol(yy, null, importSpecifier.add, importSpecifier.add);
-			for (const key in scope) {
-				var symb = scope[key];
-				declareMember(yy, mysymb, symb, meta);
-			}
-		} else {
-			importSpecifier.find.forEach((find) => {
-				var symb = scope[find];
-				if (!symb) {
-					throw new Error ("الئسم " + find + " غير معروف في الوحدة '" + importString + "'")
-				}
-				declareSymbol(yy, null, symb.name, symb.type, symb.members, symb.isClass);
-			});	
-		}
-	}
-
-    // Function to read and parse imported file
-    function readAndParseFile(filePath, context) {
-		filePath = path.resolve(filePath);
-		let fileContent;
-		try {
-			fileContent = fs.readFileSync(filePath, 'utf8');
-		} catch (e) {
-			let projectBasePath = path.dirname(context.projectPath);
-			throw new Error("تعدر ئيراد الوحدة: " + filePath);
-		}
-		fileContent = fileContent; // + globalImport(filePath);
-		try {
-			const createParser = require('./jparser');
-			_parser = createParser();
-			const symTable = _parser.parse(fileContent, {
-				filePath: filePath,
-				projectPath: path.resolve(context.projectPath),
-				outPath: context.outPath
-			});
-			return symTable;
-			//console.log(symTable);
-			//symbolTable = { ...symbolTable, ...symTable }
-			//await fs.promises.writeFile(outFilePath, result, { flag: 'w+' });
-		} catch (e) {
-			let projectBasePath = path.dirname(context.projectPath);
-			console.error("ملف: " + filePath.replace(projectBasePath, ''));
-			console.error(e);
-			return null;
-		}
-    }
 	
 	function inlineParse(s, context, yy) {
 		if (!s.endsWith('؛')) {
 			s += '؛';
 		}
 		const createParser = require('./jparser');
-		_parser = createParser(yy);
-		const result = _parser.parse(s, {
-			inlineParse: true,
-			projectPath: path.resolve(context.projectPath),
-			outPath: context.outPath
-		});
-		return result;
-	}
-	
-	function isUrlImport(s) {
-		//return s.startsWith('//');
-		return s.startsWith('"') || s.startsWith("'");
-	}
-	
-	function isRelativeImport(s) {
-		return s.startsWith('.');
-	}
-	
-	function isAbsoluteImport(s) {
-		return !s.startsWith('/') && !s.startsWith('//') && !s.startsWith('.')
-	}
-	
-	function globalImport(filePath) {
-		let filname = path.basename(filePath, '.جني');
-		if (!mustImp.includes(filname) && filname != 'بدائي') {
-			return "ئورد " + mustImp.join('، ') + " من ئساسية.بدائي؛";
-		} else {
-			return "";
+		const _parser = createParser(yy);
+		try {
+			const scope = _parser.parse(s, {
+				inlineParse: true,
+				filePath: context.filePath,
+				projectPath: path.resolve(context.projectPath),
+				outPath: context.outPath
+			});
+			return scope;
+		} catch (e) {
+			console.log(e);
+			ErrorManager.printAll();
 		}
 	}
 
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
 		.replaceAll(":", '":"').replaceAll(',', '","');
@@ -1805,11 +2165,6 @@ _handle_error:
 	}
 
 	// Utils
-	function startup() {
-		return "globalThis.العام=globalThis;";
-		//return "Object.defineProperty(globalThis)"
-	}
-	
     function toEnDigit(s) {
 		return s.replace(/[\u0660-\u0669]/g,
             function(a) { return a.charCodeAt(0) & 0xf }
@@ -2143,134 +2498,142 @@ stateStackSize:function stateStackSize() {
     },
 options: {},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
-	var line_number = 1; // Track line numbers
-
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:/* skip comments */
+case 1: return false 
 break;
-case 2: line_number++; return 'NEWLINE' 
+case 2:/* skip comments */
 break;
-case 3:return 113
+case 3:return 140
 break;
-case 4:return 66
+case 4:return 96
 break;
-case 5:return 68
+case 5:return 98
 break;
-case 6:return 46
+case 6:return 45
 break;
-case 7:return 110
+case 7:return 137
 break;
-case 8:return 111
+case 8:return 138
 break;
-case 9:return 112
+case 9:return 139
 break;
-case 10:return 53
+case 10:return 82
 break;
-case 11:return 40
+case 11:return 37
 break;
-case 12:return 79
+case 12:return 64
 break;
-case 13:return 80
+case 13:return 42
 break;
-case 14:return 82
+case 14:return 49
 break;
-case 15:return 84
+case 15:return 108
 break;
-case 16:return 81
+case 16:return 109
 break;
-case 17:return 83
+case 17:return 111
 break;
-case 18:return 86
+case 18:return 113
 break;
-case 19:return 87
+case 19:return 110
 break;
-case 20:return 74
+case 20:return 112
 break;
-case 21:return 75
+case 21:return 115
 break;
-case 22:return 76
+case 22:return 116
 break;
-case 23:return 77
+case 23:return 103
 break;
-case 24:return '%'
+case 24:return 'RETURNS'
 break;
-case 25:return 41
+case 25:return 104
 break;
-case 26:return 43
+case 26:return 105
 break;
-case 27:return 95
+case 27:return 106
 break;
-case 28:return 96
+case 28:return '%'
 break;
-case 29:return 98
+case 29:return 58
 break;
-case 30:return 100
+case 30:return 60
 break;
-case 31:return 45
+case 31:return 79
 break;
-case 32:return 20
+case 32:return 80
 break;
-case 33:return 29
+case 33:return 67
 break;
-case 34:return 105
+case 34:return 68
 break;
-case 35:return 30
+case 35:return 43
 break;
-case 36:return 54
+case 36:return 25
 break;
-case 37:return 56
+case 37:return 34
 break;
-case 38:return 94
+case 38:return 130
 break;
-case 39:return 47
+case 39:return 35
 break;
-case 40:return 49
+case 40:return 39
 break;
-case 41:return 51
+case 41:return 69
 break;
-case 42:return 60
+case 42:return 86
 break;
-case 43:return 61
+case 43:return 124
 break;
-case 44:return 58
+case 44:return 71
 break;
-case 45:return 55
+case 45:return 73
 break;
-case 46:return 21
+case 46:return 74
 break;
-case 47:return 27
+case 47:return 90
 break;
-case 48:return 93
+case 48:return 91
 break;
-case 49:return 23
+case 49:return 88
 break;
-case 50:return 28
+case 50:return 83
 break;
-case 51:return 91
+case 51:return 26
 break;
-case 52:return 107
+case 52:return 32
 break;
-case 53:return 31 // Double quoted string
+case 53:return 'NEW'
 break;
-case 54:return 31 // Single quoted string
+case 54:return 28
 break;
-case 55:return 109  // Eastern Arabic numerals
+case 55:return 33
 break;
-case 56:return 26
+case 56:return 123
 break;
-case 57:return 109 // Western Arabic numerals
+case 57:return 132
 break;
-case 58:return 5
+case 58:return 36 // Double quoted string
 break;
-case 59:return 'UNKNOWN'
+case 59:return 36 // Single quoted string
+break;
+case 60:return 136  // Eastern Arabic numerals
+break;
+case 61:return 31
+break;
+case 62:return 136 // Western Arabic numerals
+break;
+case 63:return 5
+break;
+case 64:return 'UNKNOWN'
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:#[^\n]*)/,/^(?:\n)/,/^(?:\([\n\r\s]*<(?:[^)\\]|\\[\s\S])*>[\n\r\s]*\))/,/^(?:ئدا)/,/^(?:وئلا)/,/^(?:تم)/,/^(?:صحيح)/,/^(?:خطئ)/,/^(?:عدم)/,/^(?:دع)/,/^(?:ئعلن)/,/^(?:==)/,/^(?:لا=)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:وو )/,/^(?:ئو )/,/^(?:\+)/,/^(?:-)/,/^(?:×)/,/^(?:÷)/,/^(?:%)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:\{)/,/^(?:\})/,/^(?::)/,/^(?:؛)/,/^(?:،)/,/^(?:\.\.\.)/,/^(?:\.)/,/^(?:=)/,/^(?:ئرجع )/,/^(?:هدا)/,/^(?:يمدد )/,/^(?:يختصر )/,/^(?:يملك )/,/^(?:لكل )/,/^(?:في )/,/^(?:طالما )/,/^(?:قل )/,/^(?:ئورد )/,/^(?:ك )/,/^(?:ئنشئ )/,/^(?:من )/,/^(?:الكل )/,/^(?:ريتما )/,/^(?:ليس )/,/^(?:"(?:[^"\\]|\\[\s\S])*")/,/^(?:'[^'\n]*')/,/^(?:[\u0660-\u0669]+(\.[\u0660-\u0669]+)?)/,/^(?:[a-zA-Z_\u0621-\u064A][a-zA-Z0-9_\u0621-\u0669]*)/,/^(?:\d+(\.\d+)?\b)/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59],"inclusive":true}}
+rules: [/^(?:[ \t\v\f\r\n]+)/,/^(?:\n)/,/^(?:#[^\n]*)/,/^(?:\([\n\r\s]*<(?:[^)\\]|\\[\s\S])*>[\n\r\s]*\))/,/^(?:ئدا)/,/^(?:وئلا)/,/^(?:تم)/,/^(?:صحيح)/,/^(?:خطئ)/,/^(?:عدم)/,/^(?:دع)/,/^(?:ئعلن)/,/^(?:دالة)/,/^(?:بنية)/,/^(?:تعداد)/,/^(?:==)/,/^(?:لا=)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:وو )/,/^(?:ئو )/,/^(?:\+)/,/^(?:->)/,/^(?:-)/,/^(?:×)/,/^(?:÷)/,/^(?:%)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:\{)/,/^(?:\})/,/^(?::)/,/^(?:؛)/,/^(?:،)/,/^(?:\.\.\.)/,/^(?:\.)/,/^(?:=)/,/^(?:؟)/,/^(?:ئرجع )/,/^(?:هدا)/,/^(?:يمدد )/,/^(?:يختصر )/,/^(?:يملك )/,/^(?:لكل )/,/^(?:في )/,/^(?:طالما )/,/^(?:قل )/,/^(?:ئورد )/,/^(?:ك )/,/^(?:ئنشئ )/,/^(?:من )/,/^(?:الكل )/,/^(?:ريتما )/,/^(?:ليس )/,/^(?:"(?:[^"\\]|\\[\s\S])*")/,/^(?:'[^'\n]*')/,/^(?:[\u0660-\u0669]+(\.[\u0660-\u0669]+)?)/,/^(?:[a-zA-Z_\u0621-\u064A][a-zA-Z0-9_\u0621-\u0669]*)/,/^(?:\d+(\.\d+)?\b)/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64],"inclusive":true}}
 });
 return lexer;
 })();
