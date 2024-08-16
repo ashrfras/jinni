@@ -10,6 +10,10 @@ if (process.argv.length < 3) {
 }
 
 var mainFilePath = path.resolve(process.argv[2]);
+var is_nowarning = process.argv.includes('nowarning');
+var is_run = process.argv.includes('run');
+
+ErrorManager.showWarnings = !is_nowarning;
 
 // given path can be a file named مدخل.جني
 // or a folder in which case we add file مدخل.جني
@@ -65,7 +69,7 @@ if (ErrorManager.isBlocking) {
 
 // read from template.html
 try {
-	const data = fs.readFileSync('./template.html', 'utf8');
+	const data = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8');
 	code = data;
 } catch (error) {
 	console.error('فشلت قرائة الملف: ', error);

@@ -91,7 +91,6 @@ class ImportManager {
 					name: imp,
 					scope: ImportManager.processImport(myFileImp.path, fromFilePath)
 				}
-				
 				// don't add this file to importedScopes if marked to reparse
 				// bc files with circular dependancy are to be reparsed again
 				//var toreparse = ImportManager.toReparse.find((elem => elem.reparse == fromFilePath));
@@ -164,7 +163,7 @@ class ImportManager {
 		var splitted = impPath.split('.');
 		var name = splitted[splitted.length-1]; // last part is filename
 		// ئساسية.عنصر becomes ئساسية/عنصر
-		var myImport = impPath.replace('.', '/');
+		var myImport = impPath.replaceAll('.', '/');
 		
 		// try to find like /projectPath/ئساسية.جني
 		var filePath1 = Path.join(basePath, myImport + '.جني');
@@ -188,7 +187,7 @@ class ImportManager {
 				relativePath: '.' + filePath2.replace(basePath, '')
 			}
 		} catch (err) {}
-		
+
 		return {
 			exists: false
 		}

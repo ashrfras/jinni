@@ -2,6 +2,7 @@ class ErrorManager {
 	static errorRegistry = [];
 	static lineShift = {}; // we save line shifting over files
 	static isBlocking = false; // is there a blocking error in our registry
+	static showWarnings = true;
 	
 	static ctx;
 	static file;
@@ -49,12 +50,12 @@ class ErrorManager {
 	}
 	
 	static printAll(exit = true) {
-		ErrorManager.errorRegistry.forEach (er => {
-			if (er.type != Error.WARNING) {
-				er.print();
-				console.log('====');
-			}
-		});
+		var warnings = ErrorManager.errorRegistry.filter(er => er.type == Error.WARNING);
+		var errors = ErrorManager.errorRegistry.filter(er => er.type == Error.BLOCKING);
+		if (ErrorManager.showWarnings) {
+			warnings.forEach (wr => { wr.print(); console.log('==='); });
+		}
+		errors.forEach (er => { er.print(); console.log('==='); });
 		if (exit) {
 			console.log("نهاية الئجرائ");
 			process.exit();

@@ -23,6 +23,7 @@
 "دع"												return 'DEF'
 "ئعلن"												return 'DECL'
 "دالة"												return 'DALA'
+"وعد"												return 'PROMISE'
 "بنية"												return 'STRUCT'
 "تعداد"												return 'ENUM'
 "=="												return 'EQ'
@@ -171,7 +172,7 @@
 %{
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
 		.replaceAll(":", '":"').replaceAll(',', '","');
@@ -192,7 +193,7 @@
 			src = src.replace(rg, attrs[att]);
 		}
 		src = processJNXControl(src, context, yy);
-		src = src.replaceAll('{', '${');
+		src = src.replaceAll('_{', '${');
 		return src;
 	}
 	
@@ -670,6 +671,16 @@ function_ret
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
 		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($2.type);
 		funcSymb.isArray = $2.isArray;
+		$$ = {
+			symb: funcSymb//.typeSymbol
+		}
+	}
+	| AS PROMISE type_decl {
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($3.type);
+		funcSymb.isArray = $3.isArray;
+		funcSymb.isAwait = true;
 		$$ = {
 			symb: funcSymb//.typeSymbol
 		}
@@ -1533,7 +1544,10 @@ await_expr
     : AWAIT expression {
 		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		funcSymb.isAwait = true;
+		if (!funcSymb.isAwait) {
+			ErrorManager.error("ئستخدام ريتما في وضيفة متزامنة " + funcSymb.toString());
+		}
+		//funcSymb.isAwait = true;
         $$ = {
 			symb: $2.symb,
 			value: 'await ' + $2.value
@@ -2011,7 +2025,7 @@ expression
     | STRING {
 		ErrorManager.setContext(@1, context.filePath);
 		//inlineParse($2.replace('<x-', '<'), context, yy)
-		const regex = /{(.*?)}/g;
+		const regex = /_{(.*?)}/g;
 		var match;
 		
 		while ((match = regex.exec($1)) !== null) {
@@ -2025,7 +2039,7 @@ expression
 		symb.isLiteral = true;
 		$$ = {
 			symb: symb,
-			value: $1.replaceAll('"', '`').replaceAll('{', '${')
+			value: $1.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('هدا.', 'this.')
 		}
 	}
     | SELF {
