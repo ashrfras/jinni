@@ -2,9 +2,18 @@ const Symbol = require('./Symbol');
 
 class Scope {
 	symbols;
+	sourceFile;
 	
 	constructor (smbs) {
 		this.symbols = smbs || [];
+	}
+	
+	setSourceFile (sourceFile) {
+		this.sourceFile = sourceFile;
+	}
+	
+	getSourceFile() {
+		return this.sourceFile;
 	}
 	
 	// check if scope contains symb

@@ -129,6 +129,10 @@
 			input = ( ctx.inlineParse ? '' : SymbolScopes.autoImportText(fileName) ) + input;
 			try {
 				var result = parser.originalParse(input, ctx);
+				// result is the parsed file's global scope;
+				if (result.setSourceFile) {
+					result.setSourceFile(fileName);
+				}
 				return result;
 			} catch (e) {
 				// exception while parsing, lets show errors
@@ -267,7 +271,7 @@ program
 		if (context.inlineParse) {
 			return result;
 		}
-		let fileName = context.filePath.replace(context.projectPath, '.').replace('.جني', '.js');
+		let fileName = context.filePath.replace(context.projectPath, '.').replace('.جني', '.mjs');
 		fileName = fileName.replace(__dirname, '.');
 		fileName = fileName.replaceAll('/', '.').replace('..', '/');
 		
@@ -345,13 +349,24 @@ import_statement
 		ErrorManager.setContext(@1, context.filePath);
 		ImportManager.setContext(context);
 		
-		var importSpecifier = $2;	
-		var scope = ImportManager.addImport($4, context.filePath);
+		var importSpecifier = $2;
+		var scope;
+		
+		// if there is only one find, we pass it to the importmanager
+		// so we can treat cases like these:
+		// import جيزن from ئساسية
+		// it will look for جيزن in path ئساسية/جيزن.جني
+		// since it will not find neither ئساسية.جني nor ئساسية/ئساسية.جني
+		if (importSpecifier.find.length == 1) {
+			scope = ImportManager.addImport($4, context.filePath, importSpecifier.find);
+		} else {
+			scope = ImportManager.addImport($4, context.filePath);
+		}
 		
 		if (importSpecifier.find == 'all') {
 			var mySymb;
 			if (!scope) { // string import
-				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
+				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add, 'مجهول');
 			} else {
 				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
 				scope.copyToSymbol(mySymb);
@@ -373,19 +388,22 @@ import_statement
 			}
 		}
 		
+		var exp = $2.value;
+		if (exp.includes('* as ')) {
+			exp = '{' + exp.replace('* as ', '') + '}';
+		}
 		if (!scope) { // this is a string import
 			var imp = $4.replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
 			if (imp == '//') {
 				// nonfunctional import just for the parser
 				$$ = "";
 			} else {
-				$$ = 'import ' + $2.value + ' from "' + imp + '";'; 
+				$$ = 'import ' + $2.value + ' from "' + imp + '";export ' + exp; 
 			}
 		} else {
-			var imp = './' + $4 + '.js';
-			var exp = $2.value;
-			if (exp.includes('* as ')) {
-				exp = '{' + exp.replace('* as ', '') + '}';
+			var imp = './' + $4 + '.mjs';
+			if (scope.getSourceFile() && (!$4.endsWith(scope.getSourceFile()))) {
+				imp = './' + $4 + '.' + scope.getSourceFile() + '.mjs';
 			}
 			$$ = 'import ' + $2.value + ' from "' + imp + '";export ' + exp;
 		}
@@ -403,7 +421,7 @@ import_statement
 			}
 			// TODO REVIEW symb.name = sym.add
 			yy.symbolScopes.addSymbol(symb);
-			var imp = './' + impName + '.js';
+			var imp = './' + impName + '.mjs';
 			var exp = impName;
 			var sep = result == '' ? '' : ';';
 			result += sep + 'import {' + impName + '} from "' + imp + '";export {' + exp + '}';
@@ -611,7 +629,7 @@ function_def
 			$$ = '(function ' + function_decl.funcname + function_decl.params + body_block + ')()'; 
 		} else if (funcSymb.isShortcut()) { // this is a shortcut
 			$$ = function_decl.exportStr + 'const ' + function_decl.funcname + '=' + funcSymb.myShortcut + ';'
-				+ function_decl.funcname + '.prototype || (' + function_decl.funcname + '.prototype = {});'
+				/* + function_decl.funcname + '.prototype || (' + function_decl.funcname + '.prototype = {});' */
 				+ body_block.slice(1,-1); // remove first and last { }
 		} else if (selfSymb.isClass) { // this is a class
 			// we should not have a return
@@ -633,12 +651,6 @@ function_def
 		
 		var funcSymb = yy.funcStack.pop();
 		
-		/* unecessary check, to remove
-		if (!funcSymb.sameTypeAs(function_ret.symb)) {
-			ErrorManager.error("نوع الئرجاع " + function_ret.symb.toString() + " غير متوافق مع الوضيفة " + funcSymb.toString());
-		}
-		*/
-		
 		// dealing with setters and getters (DISABLED FOR NOW)
 		/*
 		var setterCode = '';
@@ -654,7 +666,7 @@ function_def
 		*/
 		
 		if (funcSymb.isShortcut()) {
-			var result = function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.prototype.' + funcSymb.myShortcut + ';';
+			var result = function_decl.objname + '.prototype != null && (' + function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.prototype.' + funcSymb.myShortcut + ');';
 			result += function_decl.objname + '.' + function_decl.funcname + '=' + function_decl.objname + '.' + funcSymb.myShortcut + ';';
 			$$ = result;
 		} else {

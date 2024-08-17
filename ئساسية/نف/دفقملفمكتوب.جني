@@ -1,4 +1,4 @@
-ئورد FileSystemWritableFileStream من '//'؛
+ئورد FileSystemWritableFileStream من 'file-system-access/lib/FileSystemWritableFileStream.js'؛
 ئورد مصفوصوان من ئساسية.مصفوصوان؛
 ئورد بلوب من ئساسية.بلوب؛
 ئورد دفقمكتوب من ئساسية.نف.دفقمكتوب؛

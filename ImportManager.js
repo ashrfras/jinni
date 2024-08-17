@@ -19,7 +19,7 @@ class ImportManager {
 	
 	// imp is import path
 	// fromFilePath is path of file from which import occuring
-	static addImport (imp, fromFilePath) {
+	static addImport (imp, fromFilePath, findName = null) {
 		// check if currently open => circular dependancy
 		// don't parse an already open file
 		// just return the symbol as منوع
@@ -61,7 +61,7 @@ class ImportManager {
 			imp = imp.replace(/\"/g, '').replace(/\'/g, '');
 			if (!imp.startsWith('//')) {
 				// string import should start with '//' 
-				ErrorManager.error("ئيراد عنونت لا يبدئ ب //");
+				ErrorManager.warning("ئيراد عنونت لا يبدئ ب //");
 			}
 			// string imports are not added to importedScopes
 			// since no symbols are declared
@@ -77,7 +77,7 @@ class ImportManager {
 			}
 		
 			// this is not a string, this is not a URL import
-			var myFileImp = ImportManager.getImportInfo(imp);
+			var myFileImp = ImportManager.getImportInfo(imp, findName);
 			
 			if (myFileImp.exists) {
 				if (myFileImp.path == fromFilePath) {
@@ -143,23 +143,23 @@ class ImportManager {
 		}
 	}
 	
-	static getImportInfo (impPath) {	
+	static getImportInfo (impPath, findName = null) {	
 		// imports can be relative to project path to current file
 		// if not, they are relative to the compiler executable
 		var projectBase = ImportManager.projectPath;
 		var compilerBase = __dirname;
 		
 		// look in the current project path
-		var ret = ImportManager._getImportInfo(impPath, projectBase);
+		var ret = ImportManager._getImportInfo(impPath, projectBase, findName);
 		if (!ret.exists) {
 			// look in the compiler exec path
-			ret = ImportManager._getImportInfo(impPath, compilerBase);
+			ret = ImportManager._getImportInfo(impPath, compilerBase, findName);
 		}
 		
 		return ret;
 	}
 	
-	static _getImportInfo (impPath, basePath) {		
+	static _getImportInfo (impPath, basePath, findName = null) {		
 		var splitted = impPath.split('.');
 		var name = splitted[splitted.length-1]; // last part is filename
 		// ئساسية.عنصر becomes ئساسية/عنصر
@@ -169,6 +169,11 @@ class ImportManager {
 		var filePath1 = Path.join(basePath, myImport + '.جني');
 		// or find like /projectPath/ئساسية/ئساسية.جني
 		var filePath2 = Path.join(basePath, myImport, name + '.جني');
+		// or if findName find like /projectPath/ئساسية/جيزن.جني
+		var filePath3 = null;
+		if (findName) {
+			filePath3 = Path.join(basePath, myImport, findName + '.جني');
+		}
 		
 		try {
 			fs.statSync(filePath1);
@@ -187,6 +192,17 @@ class ImportManager {
 				relativePath: '.' + filePath2.replace(basePath, '')
 			}
 		} catch (err) {}
+		
+		if (filePath3) {
+			try {
+				fs.statSync(filePath3);
+				return {
+					exists: true,
+					path: filePath3,
+					relativePath: '.' + filePath3.replace(basePath, '')
+				}
+			} catch (err) {}
+		}
 
 		return {
 			exists: false

@@ -1,4 +1,4 @@
-ئورد FileSystemHandle من '//'؛
+ئورد FileSystemHandle من 'file-system-access/lib/es2018.js'؛
 
 ئعلن نفمقبض ():
 	يختصر FileSystemHandle؛
@@ -7,7 +7,7 @@
 تم
 
 ئعلن نفمقبض.نوعملف = 'file'؛
-ئعلن نفمبض.نوعمجلد = 'directory'؛
+ئعلن نفمقبض.نوعمجلد = 'directory'؛
 
 ئعلن نفمقبض.هونفسه (نفمقبض قرين) ك منطق:
 	يختصر isSameEntry؛
@@ -17,6 +17,6 @@
 	دع نتج = {
 		'file': 'ملف'،
 		'directory': 'مجلد'
-	}
-	ئرجع نتج[هدا.نوع]؛
+	}؛
+	ئرجع نتج[هدا.نوع] ك نصية؛
 تم
