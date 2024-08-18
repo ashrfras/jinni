@@ -37,10 +37,13 @@ class SymbolScopes {
 	// create a symbol without declaring it
 	// or scope checking it
 	// use this to create a symbol, never use new Symbol by your own
-	createSymbol (name, type, isArray = false) {
+	createSymbol (name, type, isArray = false, subType = null) {
 		var mySymb = new Symbol(name);
 		if (!type) {
 			type = name;
+		}
+		if (subType) {
+			mySymb.subTypeSymbol = this.getSymbByName(subType);
 		}
 		if (type == 'فارغ') {
 			mySymb.typeSymbol = Symbol.SYSTEMTYPES['فارغ']
@@ -56,7 +59,17 @@ class SymbolScopes {
 		return mySymb;
 	}
 	
-	declareSymbol (name, type, isArray = false) {
+	// like createSymbol() above but takes symbol arguments not type names
+	createSymbolS (name, typeSymbol, isArray, subTypeSymbol = null) {
+		var mySymb = new Symbol(name);
+		mySymb.subTypeSymbol = subTypeSymbol;
+
+		mySymb.members = typeSymbol.members;
+		mySymb.isArray = isArray;
+		mySymb.typeSymbol = typeSymbol;
+	}
+	
+	declareSymbol (name, type, isArray = false, subType = null) {
 		// declare symb in the current scope
 		var scope = this.getCurrent();
 		if (scope.containsByName(name)) {
@@ -65,7 +78,7 @@ class SymbolScopes {
 		if (!type) {
 			type = name;
 		}
-		var mySymb = this.createSymbol(name, type, isArray);
+		var mySymb = this.createSymbol(name, type, isArray, subType);
 		return scope.add(mySymb);
 	}
 	

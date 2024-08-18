@@ -2,7 +2,7 @@ const ErrorManager = require('./ErrorManager');
 
 class Symbol {
 	// Automatically import these types in every source
-	static AUTOIMPORTS = ['عدد', 'نوعبنية', 'منطق', 'نصية', 'مصفوفة', 'نوعتعداد'];
+	static AUTOIMPORTS = ['عدد', 'منطق', 'مصفوفة', 'نصية', 'نوعبنية', 'نوعتعداد'];
 	
 	// system types known by the compiler
 	static SYSTEMTYPES = {
@@ -22,7 +22,7 @@ class Symbol {
 	
 	name;
 	typeSymbol;
-	subType; // unused	
+	subTypeSymbol; // type of arrays	
 	isClass; // bad but legacy
 	isStruct; // bad but legacy
 	isEnum; // bad but legacy
@@ -364,7 +364,7 @@ class Symbol {
 		} else {
 			return ("'" + 
 				(this.name != '' ? this.name + ' ك ' : '') + 
-				this.typeSymbol.name +
+				(this.isArray ? this.subTypeSymbol.name : this.typeSymbol.name) +
 				(this.isArray ? '[]' : '') +
 			"'");
 		} 

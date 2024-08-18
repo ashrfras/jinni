@@ -181,6 +181,9 @@ case 25:
 		var exp = $$[$0-2].value;
 		if (exp.includes('* as ')) {
 			exp = '{' + exp.replace('* as ', '') + '}';
+		} else if (exp.includes(' as ')) {
+			var tmp = exp.split (' as ');
+			exp = '{' + tmp[1];
 		}
 		if (!scope) { // this is a string import
 			var imp = $$[$0].replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
@@ -265,7 +268,8 @@ case 35:
 
 		ErrorManager.setContext(_$[$0-5], context.filePath);
 		var mySymb = yy.symbolScopes.getSymbByName($$[$0-4]);
-		var mySymb2 = yy.symbolScopes.createSymbol($$[$0-2], $$[$0].type, $$[$0].isArray);
+		//var mySymb2 = yy.symbolScopes.createSymbol($$[$0-2], $$[$0].type, $$[$0].isArray);
+		var mySymb2 = yy.symbolScope.createSymbolS($$[$0-2], $$[$0].symb, $$[$0].isArray, $$[$0].subTypeSymbol);
 		mySymb.addMember(mySymb2);
 		this.$ = $$[$0-4] + '.' + $$[$0-2] + ' = null';
 	
@@ -283,7 +287,8 @@ case 37:
 
 		ErrorManager.setContext(_$[$0-7], context.filePath);
 		var mySymb = yy.symbolScopes.getSymbByName($$[$0-6]);
-		var mySymb2 = yy.symbolScopes.createSymbol($$[$0-4], $$[$0-2].type, $$[$0-2].isArray);
+		//var mySymb2 = yy.symbolScopes.createSymbol($$[$0-4], $$[$0-2].type, $$[$0-2].isArray);
+		var mySymb2 = yy.symbolScopes.createSymbol($$[$0-4], $$[$0-2].symb, $$[$0-2].isArray, $$[$0-2].subTypeSymbol);
 		if (! $$[$0].symb.canBeAssignedTo(mySymb2) ) {
 			// type mismatch
 			ErrorManager.error("محاولة ئسناد " + $$[$0].symb.toString() + " ئلا " + mySymb2.toTypeString());
@@ -458,8 +463,14 @@ case 50:
 		ErrorManager.setContext(_$[$0-1], context.filePath);
 		// $$[$0] = { type, subtype }
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($$[$0].type);
+		//funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($$[$0].type);
+		funcSymb.typeSymbol = $$[$0].symb;
 		funcSymb.isArray = $$[$0].isArray;
+		if ($$[$0].isArray && !$$[$0].subTypeSymbol) {	
+			console.error($$[$0]);
+			throw new Error ('مصفوفة دون نوع فرعي');
+		}
+		funcSymb.subTypeSymbol = $$[$0].subTypeSymbol;
 		this.$ = {
 			symb: funcSymb//.typeSymbol
 		}
@@ -469,8 +480,10 @@ case 51:
 
 		ErrorManager.setContext(_$[$0-2], context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($$[$0].type);
+		//funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($$[$0].type);
+		funcSymb.typeSymbol = $$[$0].symb;
 		funcSymb.isArray = $$[$0].isArray;
+		funcSymb.subTypeSymbol = $$[$0].subTypeSymbol;
 		funcSymb.isAwait = true;
 		this.$ = {
 			symb: funcSymb//.typeSymbol
@@ -608,7 +621,7 @@ case 66: case 67:
 break;
 case 68: case 69:
 
-		yy.symbolScopes.getSymbByName($$[$0].type);
+		//yy.symbolScopes.getSymbByName($$[$0].type);
 		this.$ = "";
 	
 break;
@@ -797,7 +810,7 @@ case 85:
 
 		ErrorManager.setContext(_$[$0-4], context.filePath);
 		this.$ = {
-			symb: yy.symbolScopes.declareSymbol($$[$0-1], $$[$0-4], true /*isArray*/),
+			symb: yy.symbolScopes.declareSymbol($$[$0-1], 'مصفوفة', true /*isArray*/, $$[$0-4]/*subtype*/),
 			value: $$[$0-1],
 			init: $$[$0]
 		}
@@ -854,7 +867,8 @@ case 93:
 
 		ErrorManager.setContext(_$[$0-3], context.filePath);
 		// عدد[] ب
-		yy.symbolScopes.declareSymbol($$[$0], $$[$0-3], true);
+		symb: yy.symbolScopes.declareSymbol($$[$0], 'مصفوفة', true /*isArray*/, $$[$0-3]/*subtype*/);
+		//yy.symbolScopes.declareSymbol($$[$0], $$[$0-3], true);
 		this.$ = 'let ' + $$[$0];
 	
 break;
@@ -883,11 +897,13 @@ case 95:
 
 		ErrorManager.setContext(_$[$0-5], context.filePath);
 		// عدد ب = 4
-		if (!Symbol.isGenericType($$[$0-5]) && $$[$0].symb.typeIsNot($$[$0-5])) {
+		var symb = yy.symbolScopes.declareSymbol($$[$0-2], 'مصفوفة', true /*isArray*/, $$[$0-5]/*subtype*/);
+		
+		if (!$$[$0].symb.canBeAssignedTo(symb)) {
 			// type mismatch
-			ErrorManager.error("محاولة ئسناد '" + $$[$0].symb.toString() + "' ئلا '" + $$[$0-5] + "'");
+			ErrorManager.error("محاولة ئسناد " + $$[$0].symb.toString() + " ئلا " + symb.toString());
 		}
-		yy.symbolScopes.declareSymbol($$[$0-2], $$[$0-5], true);
+		//yy.symbolScopes.declareSymbol($$[$0-2], $$[$0-5], true);
 		this.$ = 'let ' + $$[$0-2] + ' = ' + $$[$0].value;
 	
 break;
@@ -953,7 +969,7 @@ case 103:
 
 		ErrorManager.setContext(_$[$0-3], context.filePath);
 		yy.symbolScopes.enter();
-		yy.symbolScopes.declareSymbol($$[$0-2], $$[$0].symb.typeSymbol.name);
+		yy.symbolScopes.declareSymbol($$[$0-2], $$[$0].symb.subTypeSymbol ? $$[$0].symb.subTypeSymbol.name : $$[$0].symb.typeSymbol.name);
 		// TOREVIEW
 		//if ($$[$0].type == 'مصفوفة') {
 			this.$ = 'for (var ' + $$[$0-2] + ' of ' + $$[$0].value + ')';
@@ -1163,10 +1179,17 @@ case 129:
 break;
 case 130:
 
-		// TODO: add probable type $$[$0-4] or $$[$0]
+		var bool1 = $$[$0-4].symb.canBeAssignedTo($$[$0].symb);
+		var bool2 = $$[$0].symb.canBeAssignedTo($$[$0-4].symb);
+		if (!bool1 && !bool2) {
+			ErrorManager.error("ئستخدام نوعين غير متوافقين في عبارة تلاتية " + $$[$0-4].symb.toString() + " و " + $$[$0].symb.toString());
+		}
+		var symb;
+		if (bool1) symb = $$[$0-4].symb;
+		if (bool2) symb = $$[$0].symb;
 		// for now type checking will be ignored for ternary
         this.$ = {
-			symb: Symbol.SYSTEMTYPES['مجهول'],
+			symb: symb, //Symbol.SYSTEMTYPES['مجهول'],
 			value: $$[$0-2].value + ' ? ' + $$[$0-4].value + ' : ' + $$[$0].value
 		}
     
@@ -1187,6 +1210,7 @@ case 131:
 break;
 case 132:
 
+		ErrorManager.setContext(_$[$0-3], context.filePath);
 		var symb = $$[$0-3].symb;
 		// check args
 		var paramValues = symb.checkArgs($$[$0-1]);
@@ -1368,7 +1392,7 @@ case 150:
 		}
 		var unknownType = Symbol.SYSTEMTYPES['مجهول'];
 		this.$ = {
-			symb: symb.isArray ? symb.typeSymbol : unknownType,
+			symb: symb.isArray ? symb.subTypeSymbol : unknownType,
 			value: $$[$0-3] + '[' + $$[$0-1].value + ']'
 		}
 	
@@ -1393,7 +1417,7 @@ case 152:
 		this.$ = {
 			// type: symb.subtype, // || 'مجهول'
 			//yy.symbolScopes.getSymbByName(symb.subType),
-			symb: symb.isArray ? symb.typeSymbol : unknownType, 
+			symb: symb.isArray ? symb.subTypeSymbol : unknownType, 
 			value: $$[$0-3].value + '[' + $$[$0-1].value + ']'
 		}
 	
@@ -1486,17 +1510,22 @@ case 161:
 break;
 case 162:
 
+		var symb = yy.symbolScopes.getSymbByName($$[$0]);
 		this.$ = {
-			type: $$[$0],
+			symb: symb,
+			subTypeSymbol: null,
 			isArray: false
 		}
 	
 break;
 case 163:
 
+		var symb = yy.symbolScopes.getSymbByName('مصفوفة');
+		var subTypeSymb = yy.symbolScopes.getSymbByName($$[$0-2]);
 		this.$ = {
-			type: $$[$0-2],
-			isArray: true
+			symb: symb,
+			subTypeSymbol: subTypeSymb,
+			isArray: true,
 		}
 	
 break;
@@ -1526,11 +1555,12 @@ break;
 case 167:
 
 		ErrorManager.setContext(_$[$0-1], context.filePath);
-		var symb = yy.symbolScopes.getSymbByName($$[$0].type);
+		var symb = $$[$0].symb;	//yy.symbolScopes.getSymbByName($$[$0].type);
 		// $$[$0].isArray
 		this.$ = {
 			symb: symb,
-			isArray: $$[$0].isArray
+			isArray: $$[$0].isArray,
+			subTypeSymbol: $$[$0].subTypeSymb
 		}
 	
 break;

@@ -391,6 +391,9 @@ import_statement
 		var exp = $2.value;
 		if (exp.includes('* as ')) {
 			exp = '{' + exp.replace('* as ', '') + '}';
+		} else if (exp.includes(' as ')) {
+			var tmp = exp.split (' as ');
+			exp = '{' + tmp[1];
 		}
 		if (!scope) { // this is a string import
 			var imp = $4.replace(/\"/g, '').replace(/\'/g, ''); // remove " and '
@@ -485,7 +488,8 @@ var_def
 	: DECL IDENTIFIER '.' IDENTIFIER AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
 		var mySymb = yy.symbolScopes.getSymbByName($2);
-		var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
+		//var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
+		var mySymb2 = yy.symbolScope.createSymbolS($4, $6.symb, $6.isArray, $6.subTypeSymbol);
 		mySymb.addMember(mySymb2);
 		$$ = $2 + '.' + $4 + ' = null';
 	}
@@ -499,7 +503,8 @@ var_def
 	| DECL IDENTIFIER '.' IDENTIFIER AS type_decl '=' expression {
 		ErrorManager.setContext(@1, context.filePath);
 		var mySymb = yy.symbolScopes.getSymbByName($2);
-		var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
+		//var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
+		var mySymb2 = yy.symbolScopes.createSymbol($4, $6.symb, $6.isArray, $6.subTypeSymbol);
 		if (! $8.symb.canBeAssignedTo(mySymb2) ) {
 			// type mismatch
 			ErrorManager.error("محاولة ئسناد " + $8.symb.toString() + " ئلا " + mySymb2.toTypeString());
@@ -681,8 +686,14 @@ function_ret
 		ErrorManager.setContext(@1, context.filePath);
 		// $2 = { type, subtype }
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($2.type);
+		//funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($2.type);
+		funcSymb.typeSymbol = $2.symb;
 		funcSymb.isArray = $2.isArray;
+		if ($2.isArray && !$2.subTypeSymbol) {	
+			console.error($2);
+			throw new Error ('مصفوفة دون نوع فرعي');
+		}
+		funcSymb.subTypeSymbol = $2.subTypeSymbol;
 		$$ = {
 			symb: funcSymb//.typeSymbol
 		}
@@ -690,8 +701,10 @@ function_ret
 	| AS PROMISE type_decl {
 		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($3.type);
+		//funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($3.type);
+		funcSymb.typeSymbol = $3.symb;
 		funcSymb.isArray = $3.isArray;
+		funcSymb.subTypeSymbol = $3.subTypeSymbol;
 		funcSymb.isAwait = true;
 		$$ = {
 			symb: funcSymb//.typeSymbol
@@ -824,11 +837,11 @@ dala_param_types
 		$$ = "";
 	}
 	| type_decl {
-		yy.symbolScopes.getSymbByName($1.type);
+		//yy.symbolScopes.getSymbByName($1.type);
 		$$ = "";
 	}
 	| dala_param_types '،' type_decl {
-		yy.symbolScopes.getSymbByName($3.type);
+		//yy.symbolScopes.getSymbByName($3.type);
 		$$ = "";
 	}
 	;
@@ -1023,7 +1036,7 @@ param_decl
 	| IDENTIFIER '[' ']' IDENTIFIER is_param_opt {
 		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
-			symb: yy.symbolScopes.declareSymbol($4, $1, true /*isArray*/),
+			symb: yy.symbolScopes.declareSymbol($4, 'مصفوفة', true /*isArray*/, $1/*subtype*/),
 			value: $4,
 			init: $5
 		}
@@ -1084,7 +1097,8 @@ var_declaration
 	| IDENTIFIER '[' ']' IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		// عدد[] ب
-		yy.symbolScopes.declareSymbol($4, $1, true);
+		symb: yy.symbolScopes.declareSymbol($4, 'مصفوفة', true /*isArray*/, $1/*subtype*/);
+		//yy.symbolScopes.declareSymbol($4, $1, true);
 		$$ = 'let ' + $4;
 	}
 	| IDENTIFIER IDENTIFIER '=' expression {
@@ -1109,11 +1123,13 @@ var_declaration
 	| IDENTIFIER '[' ']' IDENTIFIER '=' expression {
 		ErrorManager.setContext(@1, context.filePath);
 		// عدد ب = 4
-		if (!Symbol.isGenericType($1) && $6.symb.typeIsNot($1)) {
+		var symb = yy.symbolScopes.declareSymbol($4, 'مصفوفة', true /*isArray*/, $1/*subtype*/);
+		
+		if (!$6.symb.canBeAssignedTo(symb)) {
 			// type mismatch
-			ErrorManager.error("محاولة ئسناد '" + $6.symb.toString() + "' ئلا '" + $1 + "'");
+			ErrorManager.error("محاولة ئسناد " + $6.symb.toString() + " ئلا " + symb.toString());
 		}
-		yy.symbolScopes.declareSymbol($4, $1, true);
+		//yy.symbolScopes.declareSymbol($4, $1, true);
 		$$ = 'let ' + $4 + ' = ' + $6.value;
 	}
     ;
@@ -1202,7 +1218,7 @@ for_in_head
 	: FOR IDENTIFIER IN expression {
 		ErrorManager.setContext(@1, context.filePath);
 		yy.symbolScopes.enter();
-		yy.symbolScopes.declareSymbol($2, $4.symb.typeSymbol.name);
+		yy.symbolScopes.declareSymbol($2, $4.symb.subTypeSymbol ? $4.symb.subTypeSymbol.name : $4.symb.typeSymbol.name);
 		// TOREVIEW
 		//if ($4.type == 'مصفوفة') {
 			$$ = 'for (var ' + $2 + ' of ' + $4.value + ')';
@@ -1427,10 +1443,17 @@ logical
 ////
 ternary
     : expression IF expression ELSE expression {
-		// TODO: add probable type $1 or $5
+		var bool1 = $1.symb.canBeAssignedTo($5.symb);
+		var bool2 = $5.symb.canBeAssignedTo($1.symb);
+		if (!bool1 && !bool2) {
+			ErrorManager.error("ئستخدام نوعين غير متوافقين في عبارة تلاتية " + $1.symb.toString() + " و " + $5.symb.toString());
+		}
+		var symb;
+		if (bool1) symb = $1.symb;
+		if (bool2) symb = $5.symb;
 		// for now type checking will be ignored for ternary
         $$ = {
-			symb: Symbol.SYSTEMTYPES['مجهول'],
+			symb: symb, //Symbol.SYSTEMTYPES['مجهول'],
 			value: $3.value + ' ? ' + $1.value + ' : ' + $5.value
 		}
     }
@@ -1453,6 +1476,7 @@ function_call
 		}
 	}
     | member_access '(' arg_list ')' {
+		ErrorManager.setContext(@1, context.filePath);
 		var symb = $1.symb;
 		// check args
 		var paramValues = symb.checkArgs($3);
@@ -1657,7 +1681,7 @@ array_access
 		}
 		var unknownType = Symbol.SYSTEMTYPES['مجهول'];
 		$$ = {
-			symb: symb.isArray ? symb.typeSymbol : unknownType,
+			symb: symb.isArray ? symb.subTypeSymbol : unknownType,
 			value: $1 + '[' + $3.value + ']'
 		}
 	}
@@ -1678,7 +1702,7 @@ array_access
 		$$ = {
 			// type: symb.subtype, // || 'مجهول'
 			//yy.symbolScopes.getSymbByName(symb.subType),
-			symb: symb.isArray ? symb.typeSymbol : unknownType, 
+			symb: symb.isArray ? symb.subTypeSymbol : unknownType, 
 			value: $1.value + '[' + $3.value + ']'
 		}
 	}
@@ -1784,15 +1808,20 @@ array_elements
 ////
 type_decl
 	: IDENTIFIER {
+		var symb = yy.symbolScopes.getSymbByName($1);
 		$$ = {
-			type: $1,
+			symb: symb,
+			subTypeSymbol: null,
 			isArray: false
 		}
 	}
 	| IDENTIFIER '[' ']' {
+		var symb = yy.symbolScopes.getSymbByName('مصفوفة');
+		var subTypeSymb = yy.symbolScopes.getSymbByName($1);
 		$$ = {
-			type: $1,
-			isArray: true
+			symb: symb,
+			subTypeSymbol: subTypeSymb,
+			isArray: true,
 		}
 	}
 	;
@@ -1838,11 +1867,12 @@ in_expression
 type_casting
 	: AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
-		var symb = yy.symbolScopes.getSymbByName($2.type);
+		var symb = $2.symb;	//yy.symbolScopes.getSymbByName($2.type);
 		// $2.isArray
 		$$ = {
 			symb: symb,
-			isArray: $2.isArray
+			isArray: $2.isArray,
+			subTypeSymbol: $2.subTypeSymb
 		}
 	}
 	;
