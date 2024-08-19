@@ -1,8 +1,10 @@
-const createParser = require('./jparser');
-const ErrorManager = require('./ErrorManager');
-
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
+const util = require('util');
+
+const createParser = require('./jparser');
+const ErrorManager = require('./ErrorManager');
 
 if (process.argv.length < 3) {
   console.error('يرجا ئعطائ ملف جني');
@@ -11,7 +13,7 @@ if (process.argv.length < 3) {
 
 var mainFilePath = path.resolve(process.argv[2]);
 var is_nowarning = process.argv.includes('nowarning');
-var is_run = process.argv.includes('run');
+var is_web = process.argv.includes('web');
 
 ErrorManager.showWarnings = !is_nowarning;
 
@@ -68,17 +70,37 @@ if (ErrorManager.isBlocking) {
 }
 
 // read from template.html
-try {
-	const data = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8');
-	code = data;
-} catch (error) {
-	console.error('فشلت قرائة الملف: ', error);
-}
+if (is_web) {
+	try {
+		const data = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8');
+		code = data;
+	} catch (error) {
+		console.error('فشلت قرائة الملف: ', error);
+	}
 
-// create index.html
-try {
-	code = code.replace('%ئسملف%', fileName);
-	fs.writeFileSync(path.join(projectPath, 'index.html'), code, { flag: 'w+' });
-} catch (error) {
-	console.error('فشلت الكتابة في الملف: ', error);
+	// create index.html
+	try {
+		code = code.replace('%ئسملف%', fileName);
+		fs.writeFileSync(path.join(projectPath, 'index.html'), code, { flag: 'w+' });
+	} catch (error) {
+		console.error('فشلت الكتابة في الملف: ', error);
+	}
+} else {
+	// run
+	// promisify exec
+	const execPromise = util.promisify(exec);
+
+	async function runScript() {
+		try {
+			const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', 'مدخل.mjs'));
+			if (stderr) {
+				console.error(stderr);
+			}
+			console.log(stdout);
+		} catch (error) {
+			console.error(error.message);
+		}
+	}
+
+	runScript();
 }
