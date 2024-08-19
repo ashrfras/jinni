@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
@@ -11,9 +13,26 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-var mainFilePath = path.resolve(process.argv[2]);
-var is_nowarning = process.argv.includes('nowarning');
-var is_web = process.argv.includes('web');
+var mainFilePath = null;
+var jinniParams = [];
+var userParams = [];
+
+var processArgs = process.argv.slice(2);
+
+// parse parameters
+processArgs.forEach(arg => {
+	if (arg.startsWith('--') && !mainFilePath) {
+		jinniParams.push(arg);
+	} else if (!arg.startsWith('--') && !mainFilePath) {
+		mainFilePath = path.resolve(arg);
+	} else {
+		userParams.push(arg);
+	}
+});
+
+//var mainFilePath = path.resolve(process.argv[2]);
+var is_nowarning = jinniParams.includes('--nowarnings') || jinniParams.includes('--nowarning');
+var is_web = jinniParams.includes('--web');
 
 ErrorManager.showWarnings = !is_nowarning;
 
@@ -92,7 +111,7 @@ if (is_web) {
 
 	async function runScript() {
 		try {
-			const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', 'مدخل.mjs'));
+			const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', 'مدخل.mjs ') + userParams.join(' '));
 			if (stderr) {
 				console.error(stderr);
 			}
