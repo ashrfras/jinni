@@ -86,6 +86,7 @@ ErrorManager.printAll(false);
 
 if (ErrorManager.isBlocking) {
 	console.error('خطئين فادحين، ترجا المراجعة');
+	process.exit();
 }
 
 // read from template.html

@@ -132,6 +132,15 @@ class Symbol {
 			return false;
 		}
 		
+		// dala
+		if (assignTo.typeIs('دالة') && assignFrom.typeIs('دالة')) {
+			if (!assignFrom.subTypeSymbol.canBeAssignedTo(assignTo.subTypeSymbol)) {
+				ErrorManager.error("يتوقع دالة ترد " + assignTo.subTypeSymbol.toString() + " وجد دالة ترد " + assignFrom.subTypeSymbol.toString());
+				return false;
+			}
+			return true;
+		}
+		
 		// if we assign literal struct (from) to structType (to), check members
 		// all members in the literal struct (from) chould exist and affects to (to) members
 		// it is ok to have some missing members in the (from) struct

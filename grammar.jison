@@ -631,7 +631,7 @@ function_def
 		}
 		
 		if (function_decl.funcname == 'مدخل') { // self exec main function
-			$$ = '(function ' + function_decl.funcname + function_decl.params + body_block + ')()'; 
+			$$ = '(async function ' + function_decl.funcname + function_decl.params + body_block + ')()'; 
 		} else if (funcSymb.isShortcut()) { // this is a shortcut
 			$$ = function_decl.exportStr + 'const ' + function_decl.funcname + '=' + funcSymb.myShortcut + ';'
 				/* + function_decl.funcname + '.prototype || (' + function_decl.funcname + '.prototype = {});' */
@@ -794,10 +794,10 @@ param
 		});
 		$$ = $1.value;
 	}
-	| DALA IDENTIFIER is_param_opt dala_params function_ret  {
+	| DALA IDENTIFIER is_param_opt dala_params AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		var symb = yy.symbolScopes.declareSymbol($2, 'دالة');
+		var symb = yy.symbolScopes.declareSymbol($2, 'دالة', false, $6.symb.name);
 		funcSymb.args.push({
 			symb: symb,
 			init: $3
@@ -1551,8 +1551,9 @@ func_arg
 lambda_expr
 	: declare_dala function_decl_params ':' expression {
 		yy.symbolScopes.exit();
+		var symb = yy.symbolScopes.createSymbol('', 'دالة', false, $4.symb.typeSymbol.name);
 		$$ = {
-			symb: $4.symb,
+			symb: symb,
 			value: $2 + "=>" + $4.value
 		}
 	}
@@ -1981,7 +1982,7 @@ expression
 	| '[' array_elements ']' {
 		ErrorManager.setContext(@1, context.filePath);
 		var elemTypeSymb = $2.symb.typeSymbol;
-		var symb = yy.symbolScopes.createSymbol('', elemTypeSymb.name, true /*isArray*/);
+		var symb = yy.symbolScopes.createSymbol('', 'مصفوفة', true /*isArray*/, elemTypeSymb.name);
 		$$ = {
 			symb: symb,
 			value: '[' + $2.value.join(', ') + ']'
@@ -1990,7 +1991,7 @@ expression
 	| '[' array_elements ']' type_casting {
 		ErrorManager.setContext(@1, context.filePath);
 		var elemTypeSymb = $2.symb.typeSymbol;
-		var symb = yy.symbolScopes.createSymbol('', $4.symb.name, true /*isArray*/);
+		var symb = yy.symbolScopes.createSymbol('', 'مصفوفة', true /*isArray*/, $4.symb.name);
 		$$ = {
 			symb: symb,
 			value: '[' + $2.value.join(', ') + ']'
