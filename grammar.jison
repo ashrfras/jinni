@@ -786,6 +786,7 @@ param_list
 	;
 param
 	: param_def {
+		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
 		funcSymb.args.push({
 			symb: $1.symb,
@@ -794,26 +795,12 @@ param
 		$$ = $1.value;
 	}
 	| DALA IDENTIFIER is_param_opt dala_params function_ret  {
+		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
 		var symb = yy.symbolScopes.declareSymbol($2, 'دالة');
 		funcSymb.args.push({
 			symb: symb,
 			init: $3
-		});
-		$$ = $2;
-	}
-	| STRUCT IDENTIFIER is_param_opt '{' has_list '}' {
-		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		var symb = yy.symbolScopes.declareSymbol($2, null, false, false);
-		symb.isStruct = true; // bad but legacy
-		funcSymb.args.push({
-			symb: symb,
-			init: $3
-		});
-		// $5 has_list is an array of symbols
-		var symbols = $5;
-		symbols.forEach((s) => {
-			symb.addMember(s);
 		});
 		$$ = $2;
 	}
@@ -1046,6 +1033,21 @@ param_decl
 		var symb = yy.symbolScopes.declareSymbol($2, 'نوعتعداد');
 		symb.isEnum = true; // bad but legacy
 		symb.allowed = $5;
+		$$ = {
+			symb: symb,
+			value: $2,
+			init: $3
+		}
+	}
+	| STRUCT IDENTIFIER is_param_opt '{' has_list '}' {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.declareSymbol($2, null, false, false);
+		symb.isStruct = true; // bad but legacy
+		// $5 has_list is an array of symbols
+		var symbols = $5;
+		symbols.forEach((s) => {
+			symb.addMember(s);
+		});
 		$$ = {
 			symb: symb,
 			value: $2,
@@ -1493,18 +1495,6 @@ function_call
 			value: $1.value + '(' + $3.map(item => item.value).join(', ') + ')'
 		}
 	}
-	| '(' expression ')' '.' IDENTIFIER '(' arg_list ')' {
-		ErrorManager.setContext(@1, context.filePath);
-		var symb = $2.symb.typeSymbol.checkMember($5);
-		// check args
-		var paramValues = symb.checkArgs($7);
-		// check if class or function
-		// var newStr = symb.isClass ? 'new ' : '';
-		$$ = {
-			symb: symb,
-			value: '(' + $2.value + ').' + $5 + '(' + paramValues.join(', ') + ')'
-		}
-	}
     ;
 arg_list
 	: /* empty */ { $$ = []; }
@@ -1645,6 +1635,14 @@ member_access
 		$$ = {
 			symb,
 			value: 'this.' + $3
+		}
+	}
+	| '(' expression ')' '.' IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = $2.symb.typeSymbol.checkMember($5);
+		$$ = {
+			symb,
+			value: '(' + $2.value + ').' + $5
 		}
 	}
 	;
