@@ -655,6 +655,11 @@ function_def
 		var body_block = $3;
 		
 		var funcSymb = yy.funcStack.pop();
+		var selfSymb = yy.selfStack[yy.selfStack.length-1];
+		
+		// subfunction, means self is a class
+		selfSymb.isClass = true;
+		selfSymb.typeSymbol = selfSymb;
 		
 		// dealing with setters and getters (DISABLED FOR NOW)
 		/*
@@ -676,7 +681,7 @@ function_def
 			$$ = result;
 		} else {
 			var asyncStr = funcSymb.isAwait ? 'async ' : '';
-			$$ = function_decl.objname + '.prototype.' + function_decl.funcname + '=' + function_decl.objname + '.' + function_decl.funcname + '=' + asyncStr + 'function' + function_decl.value + body_block;
+			$$ = function_decl.objname + '.prototype.' + function_decl.funcname + '=' /*+ function_decl.objname + '.' + function_decl.funcname + '='*/ + asyncStr + 'function' + function_decl.value + body_block;
 		}
 	}
 	;
@@ -938,6 +943,9 @@ has_statement
 				var getterCode = `return this.${name}`;
 				var setterCode = `this.${name} = value;`;
 				result += `Object.defineProperty(${selfSymb.name}.prototype, '${symb.name}', {get: function() {${getterCode}}, set: function(value) {${setterCode}} });`;
+			}
+			if (symb.isStruct) {
+				result += 'this.' + symb.name + ' = {};';
 			}
 		});
 		$$ = result;
@@ -1589,6 +1597,10 @@ member_access
     : IDENTIFIER '.' IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.symbolScopes.getSymbByName($1);
+		if (!symb.typeIs('نصية') && !symb.isStruct && symb.isClass) {
+			// calling a property without instance
+			ErrorManager.error('ولوج عنصر دون منتسخ ' + $1 + '.' + $3);
+		}
 		var memberSymb = symb.checkMember($3);	
 		$$ = {
 			symb: memberSymb,
@@ -1598,6 +1610,10 @@ member_access
     | function_call '.' IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = $1.symb.typeSymbol;
+		if (!symb.typeIs('نصية') && !symb.isStruct && $1.symb.isClass) {
+			// calling a property without instance
+			ErrorManager.error('ولوج عنصر دون منتسخ ' + symb.name + '.' + $3);
+		}
 		var memberSymb = symb.checkMember($3);
 		$$ = {
 			symb: memberSymb,
@@ -1616,6 +1632,10 @@ member_access
 			// for other variables, we take their symb type as member base
 			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
 			var typeSymb = symb.typeSymbol;
+			if (!symb.typeIs('نصية') && !symb.isStruct && symb.isClass) {
+				// calling a property without instance
+				ErrorManager.error('ولوج عنصر دون منتسخ ' + symb.name + '.' + $3);
+			}
 			memberSymb = typeSymb.checkMember($3);
 		}
 		$$ = {
