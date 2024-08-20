@@ -1078,7 +1078,6 @@ enum_members
 	;
 string_list
 	: STRING {
-		console.log($1.val + ':' + $1.value);
 		$$ = [$1.replaceAll('"', '').replaceAll("'", '')];
 	}
 	| string_list '،' STRING {
