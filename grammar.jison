@@ -1036,7 +1036,7 @@ param_decl
 			init: $5
 		}
 	}
-	| ENUM IDENTIFIER is_param_opt '[' identifier_list ']' {
+	| ENUM IDENTIFIER is_param_opt '[' enum_members ']' {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.symbolScopes.declareSymbol($2, 'نوعتعداد');
 		symb.isEnum = true; // bad but legacy
@@ -1066,6 +1066,24 @@ param_decl
 param_init
 	: '=' expression {
 		$$ = $2;
+	}
+	;
+enum_members
+	: string_list {
+		$$ = $1;
+	}
+	| identifier_list {
+		$$ = $1;
+	}
+	;
+string_list
+	: STRING {
+		console.log($1.val + ':' + $1.value);
+		$$ = [$1.replaceAll('"', '').replaceAll("'", '')];
+	}
+	| string_list '،' STRING {
+		$1.push($3.replaceAll('"', '').replaceAll("'", ''));
+		$$ = $1;
 	}
 	;
 identifier_list
@@ -2100,7 +2118,8 @@ expression
 		symb.isLiteral = true;
 		$$ = {
 			symb: symb,
-			value: $1.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('هدا.', 'this.')
+			value: $1.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('هدا.', 'this.'),
+			val: val // string value without delimiters
 		}
 	}
     | SELF {
