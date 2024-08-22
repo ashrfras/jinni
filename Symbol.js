@@ -64,20 +64,25 @@ class Symbol {
 		return smb;
 	}
 	
-	duplicate (typeSymb) {
-		return new Symbol(
+	duplicate (typeSymb, isArray, subTypeSymbol) {
+		var smb = new Symbol(
 			this.name,
 			typeSymb || this.typeSymbol,
-			this.isArray,
-			this.members,
-			this.mySuper,
-			this.myShortcut,
-			this.isAwait,
-			this.superSymbol,
-			this.isStruct,
-			this.isLiteral,
-			this.isEnum
+			isArray,
+			this.isClass
 		);
+		smb.members = this.members;
+		smb.mySuper = this.mySuper;
+		smb.myShortcut = this.myShortcut;
+		smb.isAwait = this.isAwait;
+		smb.superSymbol	= this.superSymbol;
+		smb.isStruct = this.isStruct;
+		smb.isLiteral = this.isLiteral;
+		smb.isEnum = this.isEnum;
+		smb.allowed = this.allowed;
+		smb.args = this.args;
+		smb.subTypeSymbol = subTypeSymbol;
+		return smb;
 	}
 	
 	hasParent () {
@@ -106,6 +111,10 @@ class Symbol {
 	
 	isSystem () {
 		return Symbol.isSystemType(this.typeSymbol.name);
+	}
+	
+	isPrimitive () {
+		return Symbol.AUTOIMPORTS.includes(this.typeSymbol.name);
 	}
 	
 	isAny () {
@@ -369,7 +378,7 @@ class Symbol {
 	
 	toString () {
 		if (this.isClass || Symbol.isSystemType(this.name) || this.isLiteral) {
-			return "'" + this.name + "'";
+			return "'" + this.name + "'";	
 		} else {
 			return ("'" + 
 				(this.name != '' ? this.name + ' ك ' : '') + 

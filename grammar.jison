@@ -310,6 +310,7 @@ declstatement
 	: import_statement semic_or_nl { $$ = $1; }
 	| function_def { $$ = $1; }
 	| var_def semic_or_nl { $$ = $1; }
+	| variable_def semic_or_nl { $$ = $1; }
 	| struct_def { $$ = $1; }
 	| expression semic_or_nl { $$ = $1.value; }
 	;
@@ -377,13 +378,16 @@ import_statement
 					yy.symbolScopes.declareSymbol(add, 'مجهول');
 				});
 			} else {
+				var i = 0;
 				importSpecifier.find.forEach((find) => {
 					var symb = scope.getSymbolByName(find);
 					if (!symb) {
 						ErrorManager.error("الئسم " + find + " غير معروف في الوحدة '" + $4 + "'");
 					}
 					// TODO REVIEW symb.name = sym.add
+					symb.name = importSpecifier.add[i];
 					yy.symbolScopes.addSymbol(symb);
+					i++;
 				});
 			}
 		}
@@ -424,7 +428,7 @@ import_statement
 			}
 			// TODO REVIEW symb.name = sym.add
 			yy.symbolScopes.addSymbol(symb);
-			var imp = './' + impName + '.mjs';
+			var imp = './' + scope.getImportName() + '.mjs';
 			var exp = impName;
 			var sep = result == '' ? '' : ';';
 			result += sep + 'import {' + impName + '} from "' + imp + '";export {' + exp + '}';
@@ -484,12 +488,40 @@ import_path
 
 
 ////
+variable_def
+	: DECL IDENTIFIER AS type_decl {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.isArray, $4.subTypeSymbol);
+		yy.symbolScopes.declareSymbolS(mySymb);
+		$$ = ($2.startsWith('_') ? '' : 'export ') + 'let ' + $2 + ' = null';
+	}
+	| DECL IDENTIFIER AS type_decl '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.isArray, $4.subTypeSymbol);
+		yy.symbolScopes.declareSymbolS(mySymb);
+		if (! $6.symb.canBeAssignedTo(mySymb) ) {
+			// type mismatch
+			ErrorManager.error("محاولة ئسناد " + $6.symb.toString() + " ئلا " + mySymb.toTypeString());
+		}
+		$$ = ($2.startsWith('_') ? '' : 'export ') + 'let ' + $2 + ' = ' + $6.value;
+	}
+	| DECL IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.symb.isArray, $4.symb.subTypeSymbol);
+		yy.symbolScopes.declareSymbolS(mySymb);
+		$$ = ($2.startsWith('_') ? '' : 'export ') + 'let ' + $2 + ' = ' + $4.value;
+	}
+	;
+////
+
+
+////
 var_def
 	: DECL IDENTIFIER '.' IDENTIFIER AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
 		var mySymb = yy.symbolScopes.getSymbByName($2);
 		//var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
-		var mySymb2 = yy.symbolScope.createSymbolS($4, $6.symb, $6.isArray, $6.subTypeSymbol);
+		var mySymb2 = yy.symbolScopes.createSymbolS($4, $6.symb, $6.isArray, $6.subTypeSymbol);
 		mySymb.addMember(mySymb2);
 		$$ = $2 + '.' + $4 + ' = null';
 	}
@@ -1614,9 +1646,9 @@ member_access
     : IDENTIFIER '.' IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.symbolScopes.getSymbByName($1);
-		if (!symb.typeIs('نصية') && !symb.isStruct && symb.isClass) {
+		if (!symb.isPrimitive() && !symb.isStruct && symb.isClass) {
 			// calling a property without instance
-			ErrorManager.error('ولوج عنصر دون منتسخ ' + $1 + '.' + $3);
+			ErrorManager.error('ولوج صنف دون منتسخ ' + $1 + '.' + $3);
 		}
 		var memberSymb = symb.checkMember($3);	
 		$$ = {
@@ -1627,9 +1659,9 @@ member_access
     | function_call '.' IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = $1.symb.typeSymbol;
-		if (!symb.typeIs('نصية') && !symb.isStruct && $1.symb.isClass) {
+		if (!symb.isPrimitive() && !symb.isStruct && $1.symb.isClass) {
 			// calling a property without instance
-			ErrorManager.error('ولوج عنصر دون منتسخ ' + symb.name + '.' + $3);
+			ErrorManager.error('ولوج صنف دون منتسخ ' + symb.name + '.' + $3);
 		}
 		var memberSymb = symb.checkMember($3);
 		$$ = {
@@ -1649,9 +1681,9 @@ member_access
 			// for other variables, we take their symb type as member base
 			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
 			var typeSymb = symb.typeSymbol;
-			if (!symb.typeIs('نصية') && !symb.isStruct && symb.isClass) {
+			if (!symb.isPrimitive() && !symb.isStruct && symb.isClass) {
 				// calling a property without instance
-				ErrorManager.error('ولوج عنصر دون منتسخ ' + symb.name + '.' + $3);
+				ErrorManager.error('ولوج صنف دون منتسخ ' + symb.name + '.' + $3);
 			}
 			memberSymb = typeSymb.checkMember($3);
 		}
@@ -1791,6 +1823,8 @@ property
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.symbolScopes.createSymbol($1);
 		symb.typeSymbol = $3.symb.typeSymbol;
+		symb.isArray = $3.symb.isArray;
+		symb.subTypeSymbol = $3.symb.subTypeSymbol;
 		$$ = {
 			symb: symb,
 			value: $1 + ': ' + $3.value
@@ -1800,6 +1834,8 @@ property
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.symbolScopes.createSymbol($1);
 		symb.typeSymbol = $3.symb.typeSymbol;
+		symb.isArray = $3.symb.isArray;
+		symb.subTypeSymbol = $3.symb.subTypeSymbol;
 		$$ = {
 			symb: symb,
 			value: $1 + ': ' + $3.value
@@ -1904,11 +1940,10 @@ type_casting
 	: AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = $2.symb;	//yy.symbolScopes.getSymbByName($2.type);
-		// $2.isArray
 		$$ = {
 			symb: symb,
 			isArray: $2.isArray,
-			subTypeSymbol: $2.subTypeSymb
+			subTypeSymbol: $2.subTypeSymbol
 		}
 	}
 	;
@@ -1961,8 +1996,7 @@ expression
 	}
 	| function_call type_casting {
 		// function_call
-		var symb = $1.symb.duplicate($2.symb);
-		symb.isArray = $2.isArray;
+		var symb = $1.symb.duplicate($2.symb, $2.isArray, $2.subTypeSymbol);
 		$$ = {
 			symb: symb,
 			value: $1.value
@@ -1983,8 +2017,7 @@ expression
 	}
 	| member_access type_casting {
 		// member_access
-		var symb = $1.symb.duplicate($2.symb);
-		symb.isArray = $2.isArray;
+		var symb = $1.symb.duplicate($2.symb, $2.isArray, $2.subTypeSymbol);
 		$$ = {
 			symb: symb,
 			value: $1.value
@@ -1997,8 +2030,7 @@ expression
 		} 
 	}
 	| array_access type_casting {
-		var symb = $1.symb.duplicate($2.symb);
-		symb.isArray = $2.isArray;
+		var symb = $1.symb.duplicate($2.symb, $2.isArray, $2.subTypeSymbol);
 		$$ = {
 			symb: symb,
 			value: $1.value
@@ -2047,7 +2079,7 @@ expression
 		};
 	}
 	| '(' expression ')' type_casting {
-		var symb = $2.symb.duplicate($4.symb);
+		var symb = $2.symb.duplicate($4.symb, $4.isArray, $4.subTypeSymbol);
 		symb.isArray = $4.isArray;
 		$$ = {
 			symb: symb,
@@ -2069,7 +2101,7 @@ expression
 	}
 	| IDENTIFIER type_casting {
 		var symb = yy.symbolScopes.getSymbByName($1);
-		var mySymb = symb.duplicate($2.symb);
+		var mySymb = symb.duplicate($2.symb, $2.isArray, $2.subTypeSymbol);
 		mySymb.isArray = $2.isArray;
 		$$ = {
 			symb: mySymb,
@@ -2131,7 +2163,7 @@ expression
 	| SELF type_casting {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.selfStack[yy.selfStack.length-1];
-		var mySymb = symb.duplicate($2.symb);
+		var mySymb = symb.duplicate($2.symb, $2.isArray, $2.subTypeSymbol);
 		mySymb.isArray = $2.isArray;
 		$$ = {
 			symb: mySymb,

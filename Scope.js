@@ -2,7 +2,8 @@ const Symbol = require('./Symbol');
 
 class Scope {
 	symbols;
-	sourceFile;
+	sourceFile; // source filename like bar
+	importName; // full import name like foor.bar
 	
 	constructor (smbs) {
 		this.symbols = smbs || [];
@@ -14,6 +15,10 @@ class Scope {
 	
 	getSourceFile() {
 		return this.sourceFile;
+	}
+	
+	getImportName() {
+		return this.importName;
 	}
 	
 	// check if scope contains symb

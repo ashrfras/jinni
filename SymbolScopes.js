@@ -67,6 +67,7 @@ class SymbolScopes {
 		mySymb.members = typeSymbol.members;
 		mySymb.isArray = isArray;
 		mySymb.typeSymbol = typeSymbol;
+		return mySymb;
 	}
 	
 	declareSymbol (name, type, isArray = false, subType = null) {
@@ -80,6 +81,14 @@ class SymbolScopes {
 		}
 		var mySymb = this.createSymbol(name, type, isArray, subType);
 		return scope.add(mySymb);
+	}
+	
+	declareSymbolS (smb) {
+		var scope = this.getCurrent();
+		if (scope.containsByName(smb.name)) {
+			ErrorManager.error("الئسم '" + name + "' معرف مسبقا في هدا المجال");
+		}
+		return scope.add(smb);
 	}
 	
 	// Adds a symbol to the current scope

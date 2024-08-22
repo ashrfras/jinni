@@ -91,6 +91,7 @@ class ImportManager {
 					name: imp,
 					scope: ImportManager.processImport(myFileImp.path, fromFilePath)
 				}
+				scope.scope.importName = myFileImp.importName;
 				// don't add this file to importedScopes if marked to reparse
 				// bc files with circular dependancy are to be reparsed again
 				//var toreparse = ImportManager.toReparse.find((elem => elem.reparse == fromFilePath));
@@ -165,14 +166,16 @@ class ImportManager {
 		// ئساسية.عنصر becomes ئساسية/عنصر
 		var myImport = impPath.replaceAll('.', '/');
 		
-		// try to find like /projectPath/ئساسية.جني
+		// try to find like /projectPath/مستورد.جني
 		var filePath1 = Path.join(basePath, myImport + '.جني');
-		// or find like /projectPath/ئساسية/ئساسية.جني
+		// or find like /projectPath/مستورد/مستورد.جني
 		var filePath2 = Path.join(basePath, myImport, name + '.جني');
+		// or find like /projectPath/ئساسية/مستورد.جني
+		var filePath3 = Path.join(basePath, 'ئساسية', name + '.جني');
 		// or if findName find like /projectPath/ئساسية/جيزن.جني
-		var filePath3 = null;
+		var filePath4 = null;
 		if (findName) {
-			filePath3 = Path.join(basePath, myImport, findName + '.جني');
+			filePath4 = Path.join(basePath, myImport, findName + '.جني');
 		}
 		
 		try {
@@ -180,7 +183,8 @@ class ImportManager {
 			return {
 				exists: true,
 				path: filePath1,
-				relativePath: '.' + filePath1.replace(basePath, '')
+				relativePath: '.' + filePath1.replace(basePath, ''),
+				importName: impPath
 			}
 		} catch (err) {}
 		
@@ -189,17 +193,29 @@ class ImportManager {
 			return {
 				exists: true,
 				path: filePath2,
-				relativePath: '.' + filePath2.replace(basePath, '')
+				relativePath: '.' + filePath2.replace(basePath, ''),
+				importName: impPath + '.' + name
 			}
 		} catch (err) {}
 		
-		if (filePath3) {
+		try {
+			fs.statSync(filePath3);
+			return {
+				exists: true,
+				path: filePath3,
+				relativePath: '.' + filePath3.replace(basePath, ''),
+				importName: 'ئساسية.' + name
+			}
+		} catch (err) {}
+		
+		if (filePath4) {
 			try {
 				fs.statSync(filePath3);
 				return {
 					exists: true,
-					path: filePath3,
-					relativePath: '.' + filePath3.replace(basePath, '')
+					path: filePath4,
+					relativePath: '.' + filePath4.replace(basePath, ''),
+					importName: impPath + '.' + findName
 				}
 			} catch (err) {}
 		}
