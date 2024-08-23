@@ -4,19 +4,30 @@
 
 #download jinni tarball
 #download jiss tarball
-wget https://raw.githubusercontent.com/ashrfras/jinni/main/jinni.tar.gz
-#wget https://raw.githubusercontent.com/ashrfras/jiss/main/jiss.tar.gz
+rm -rf ~/.jinni
+mkdir ~/.jinni
+mkdir ~/.jinni/jiss
+wget -P ~/.jinni https://github.com/ashrfras/jinni/raw/main/jinni.tar.gz
+wget -P ~/.jinni/jiss https://github.com/ashrfras/JiSS/raw/master/jiss.tar.gz
 
 #extract jinni tarball
 #extract jiss tarball
-mkdir /opt/jinni
-tar -xzvf jinni.tar.gz -C /opt/jinni
-#tar -xzvf jiss.tar.gz -C /opt/jinni/jiss
+tar -xzf ~/.jinni/jinni.tar.gz -C ~/.jinni
+tar -xzf ~/.jinni/jiss/jiss.tar.gz -C ~/.jinni/jiss
 
-#create simlink of jinni and jiss to /bin folder
-sudo ln -s /opt/jinni/jinni /usr/bin/jinni
-#sudo ln -s /opt/jinni/jiss/jiss /usr/bin/jiss
+#compile jiss
+jinni --nowarning --norun ~/.jinni/jiss
+#/home/ashras/jinni/jinni --nowarning --norun ~/.jinni/jiss
 
-#make it executable
-sudo chmod +x /usr/bin/jinni
-#sudo chmod +x /ust/bin/jiss
+mkdir ~/.jinni/bin
+ln -s ~/.jinni/jinni ~/.jinni/bin/jinni
+chmod +x ~/.jinni/bin/jinni
+
+#add to PATH
+line='export PATH="~/.jinni/bin:$PATH"'
+
+# Check if the line is already present in .bashrc
+if ! grep -q "$line" ~/.bashrc; then
+    echo "$line" >> ~/.bashrc
+	source ~/.bashrc
+fi

@@ -8,6 +8,9 @@ const util = require('util');
 const createParser = require('./jparser');
 const ErrorManager = require('./ErrorManager');
 
+// promisify exec
+const execPromise = util.promisify(exec);
+
 if (process.argv.length < 3) {
   console.error('يرجا ئعطائ ملف جني');
   process.exit(1);
@@ -33,6 +36,8 @@ processArgs.forEach(arg => {
 //var mainFilePath = path.resolve(process.argv[2]);
 var is_nowarning = jinniParams.includes('--nowarnings') || jinniParams.includes('--nowarning');
 var is_web = jinniParams.includes('--web');
+var is_norun = jinniParams.includes('--norun');
+var is_nocompile = jinniParams.includes('--nocompile');
 
 ErrorManager.showWarnings = !is_nowarning;
 
@@ -50,7 +55,9 @@ const projectPath = path.resolve(path.dirname(mainFilePath));
 const fileName = path.basename(mainFilePath, '.جني');
 const outPath = path.join(projectPath, '__خام__');
 
-// remove bin folder
+if (is_nocompile) {
+	return runScript();
+}
 
 
 // remove then create bin folder
@@ -105,14 +112,11 @@ if (is_web) {
 	} catch (error) {
 		console.error('فشلت الكتابة في الملف: ', error);
 	}
-} else {
-	// run
-	// promisify exec
-	const execPromise = util.promisify(exec);
-
-	async function runScript() {
+	
+	// run jiss
+	async function runJiss() {
 		try {
-			const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', 'مدخل.mjs ') + userParams.join(' '));
+			const { stdout, stderr } = await execPromise('jinni --nowarnings --nocompile /opt/jinni/jiss ' + path.join(projectPath));
 			if (stderr) {
 				console.error(stderr);
 			}
@@ -121,6 +125,24 @@ if (is_web) {
 			console.error(error.message);
 		}
 	}
+	
+	runJiss();
+	
+} else {
+	// run
+	if (!is_norun) {
+		runScript();
+	}
+}
 
-	runScript();
+async function runScript() {
+	try {
+		const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', 'مدخل.mjs ') + userParams.join(' '));
+		if (stderr) {
+			console.error(stderr);
+		}
+		console.log(stdout);
+	} catch (error) {
+		console.error(error.message);
+	}
 }
