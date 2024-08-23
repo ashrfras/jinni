@@ -15,10 +15,6 @@ wget -P ~/.jinni/jiss https://github.com/ashrfras/JiSS/raw/master/jiss.tar.gz
 tar -xzf ~/.jinni/jinni.tar.gz -C ~/.jinni
 tar -xzf ~/.jinni/jiss/jiss.tar.gz -C ~/.jinni/jiss
 
-#compile jiss
-jinni --nowarning --norun ~/.jinni/jiss
-#/home/ashras/jinni/jinni --nowarning --norun ~/.jinni/jiss
-
 mkdir ~/.jinni/bin
 ln -s ~/.jinni/jinni ~/.jinni/bin/jinni
 chmod +x ~/.jinni/bin/jinni
@@ -31,3 +27,7 @@ if ! grep -q "$line" ~/.bashrc; then
     echo "$line" >> ~/.bashrc
 	source ~/.bashrc
 fi
+
+#compile jiss
+jinni --nowarning --norun ~/.jinni/jiss
+#/home/ashras/jinni/jinni --nowarning --norun ~/.jinni/jiss
