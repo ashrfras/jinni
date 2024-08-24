@@ -96,15 +96,10 @@
 		
 		// .env file's path
 		var mainFilePath = path.resolve(process.argv[2]);
-
-		// given path can be a file named مدخل.جني
-		// or a folder in which case we add file مدخل.جني
-		if (!mainFilePath.endsWith('مدخل.جني')) {
-			if (mainFilePath.endsWith('.جني')) {
-				console.error('قم بتحديد ملف بئسم مدخل.جني');
-				process.exit();
-			}
-			mainFilePath = path.join(mainFilePath, 'مدخل.جني');
+		
+		if (!mainFilePath.endsWith('.جني')) {
+			console.error('يرجا ئعطائ ملف جني');
+			process.exit();
 		}
 		
 		const projectPath = path.dirname(mainFilePath);
