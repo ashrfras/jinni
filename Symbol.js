@@ -228,7 +228,12 @@ class Symbol {
 			// generic types are not member checked
 			return new Symbol(memberName, Symbol.SYSTEMTYPES['مجهول']);
 		}
-		let memberSymb = this.getMemberName(memberName);
+		let memberSymb;
+		if (this.isStruct || this.typeIs('نوعبنية')) {
+			memberSymb = this.getMemberName(memberName);
+		} else {
+			memberSymb = this.typeSymbol.getMemberName(memberName);
+		}
 		if (!memberSymb) {
 			ErrorManager.error("الئسم '" + memberName + "' غير معروف في الكائن " + this.toString());
 		}

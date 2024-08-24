@@ -3,3 +3,16 @@
 ئعلن حدت ():
 	يختصر Event؛
 تم
+
+ئعلن ردئسمحدت (نصية ئسم) ك نصية:
+	دع قموس = {
+		خروجمئشر:'mouseleave'، لاتركيز:'blur'، تركيز:'focus'، تغيير:'change'،
+		نقر:'click'، قائسياق:'contextmenu'، نقرتان:'dblclick'، ئغلاق:'close'،
+		سحب:'drag'، نهايتسحب:'dragend'، دخولسحب:'dragenter'، خروجسحب:'dragleave'،
+		سحبفوق:'dragover'، بدايتسحب:'dragstart'، ئفلات:'drop'، ئدخال:'input'،
+		ضغطمفتاح:'keydown'، تركمفتاح:'keyup'، تحميل:'load'، نهايتحميل:'loadend'،
+		بدتحميل:'loadstart'، دخولمئشر:'mouseenter'، عجلة:'wheel'، تمرير:'scroll'،
+		تحجيم:'resize'، نهايتلمس:'touchend'، ئرسال:'submit'، بدايتلمس:'touchstart'، تحريكمئشر:'mousemove'
+	}؛
+	ئرجع قموس[ئسم] ك نصية؛
+تم

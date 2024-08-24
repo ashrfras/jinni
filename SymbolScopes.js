@@ -51,6 +51,9 @@ class SymbolScopes {
 			// this is a variable
 			// check it's type symbol
 			var smb = this.getSymbByName(type);
+			if (!smb.isClass && !smb.isStruct && !smb.isSystem()) {
+				ErrorManager.error("الئسم " + type + " ليس نوعا");
+			}
 			// variables get there type's members
 			mySymb.members = smb.members;
 			mySymb.typeSymbol = smb;
@@ -63,7 +66,11 @@ class SymbolScopes {
 	createSymbolS (name, typeSymbol, isArray, subTypeSymbol = null) {
 		var mySymb = new Symbol(name);
 		mySymb.subTypeSymbol = subTypeSymbol;
-
+		
+		if (!typeSymbol.isClass && !typeSymbol.isStruct && !smb.isSystem()) {
+			ErrorManager.error("الئسم " + typeSymbol.name + " ليس نوعا");
+		}
+		
 		mySymb.members = typeSymbol.members;
 		mySymb.isArray = isArray;
 		mySymb.typeSymbol = typeSymbol;

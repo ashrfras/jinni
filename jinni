@@ -116,7 +116,7 @@ if (is_web) {
 	// run jiss
 	async function runJiss() {
 		try {
-			const { stdout, stderr } = await execPromise('jinni --nowarnings --nocompile /opt/jinni/jiss ' + path.join(projectPath));
+			const { stdout, stderr } = await execPromise('jinni --nowarnings --nocompile ~/.jinni/jiss ' + path.join(projectPath));
 			if (stderr) {
 				console.error(stderr);
 			}

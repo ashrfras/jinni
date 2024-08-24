@@ -16,7 +16,7 @@
 
 "ئدا"												return 'IF'
 "وئلا"												return 'ELSE'
-"تم"												return 'END'
+"تم"[ \t\v\f\r\n\%$]								return 'END'
 "صحيح"												return 'TRUE'
 "خطئ"												return 'FALSE'
 "عدم"												return 'NULL'
@@ -507,7 +507,7 @@ variable_def
 	}
 	| DECL IDENTIFIER '=' expression {
 		ErrorManager.setContext(@1, context.filePath);
-		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.symb.isArray, $4.symb.subTypeSymbol);
+		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb.typeSymbol, $4.symb.isArray, $4.symb.subTypeSymbol);
 		yy.symbolScopes.declareSymbolS(mySymb);
 		$$ = ($2.startsWith('_') ? '' : 'export ') + 'let ' + $2 + ' = ' + $4.value;
 	}
@@ -515,7 +515,8 @@ variable_def
 ////
 
 
-////
+//// DISABLED: Will be removed
+/*
 var_def
 	: DECL IDENTIFIER '.' IDENTIFIER AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
@@ -545,6 +546,7 @@ var_def
 		$$ = $2 + '.' + $4 + ' = ' + $8.value;
 	}
 	;
+*/
 ////
 
 
