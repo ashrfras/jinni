@@ -94,17 +94,6 @@
 	function createParser (yy) {
 		const parser = new Parser();
 		
-		// .env file's path
-		var mainFilePath = path.resolve(process.argv[2]);
-		
-		if (!mainFilePath.endsWith('.جني')) {
-			console.error('يرجا ئعطائ ملف جني');
-			process.exit();
-		}
-		
-		const projectPath = path.dirname(mainFilePath);
-		//const envpath = path.join(projectPath, "/.سياق");
-		
 		// Either pass symbolScopes object (for inline parsing)
 		// Or make a new one
 		const symbolScopes = yy ? yy.symbolScopes : new SymbolScopes(); //envpath);

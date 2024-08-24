@@ -2123,22 +2123,6 @@ _handle_error:
 	function createParser (yy) {
 		const parser = new Parser();
 		
-		// .env file's path
-		var mainFilePath = path.resolve(process.argv[2]);
-
-		// given path can be a file named مدخل.جني
-		// or a folder in which case we add file مدخل.جني
-		if (!mainFilePath.endsWith('مدخل.جني')) {
-			if (mainFilePath.endsWith('.جني')) {
-				console.error('قم بتحديد ملف بئسم مدخل.جني');
-				process.exit();
-			}
-			mainFilePath = path.join(mainFilePath, 'مدخل.جني');
-		}
-		
-		const projectPath = path.dirname(mainFilePath);
-		//const envpath = path.join(projectPath, "/.سياق");
-		
 		// Either pass symbolScopes object (for inline parsing)
 		// Or make a new one
 		const symbolScopes = yy ? yy.symbolScopes : new SymbolScopes(); //envpath);

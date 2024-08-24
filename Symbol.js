@@ -190,8 +190,21 @@ class Symbol {
 			}
 		}
 		
-		//if (this.typeIs('_بنية') && symb.typeSymbol.isStruct) return true;
-		return (assignFrom.typeSymbol.name == assignTo.typeSymbol.name);
+		var can = (assignFrom.typeSymbol.name == assignTo.typeSymbol.name);
+		
+		// check inheritage cycle
+		if (!can) {
+			var superSymb = assignTo.typeSymbol.superSymbol;
+			while (superSymb) {
+				if (superSymb.typeSymbol.name === assignFrom.typeSymbol.name) {
+					can = true;
+					break;
+				}
+				superSymb = superSymb.superSymbol || superSymb.typeSymbol.superSymbol;
+			}
+		}
+		
+		return can;
 	}
 	
 	getTypeName () {
