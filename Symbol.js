@@ -118,7 +118,7 @@ class Symbol {
 	}
 	
 	isAny () {
-		return this.typeSymbol.name == 'منوع';
+		return this.typeSymbol.name == 'منوع' || this.typeSymbol.name == 'مجهول';
 	}
 	
 	// sameTypeAs
@@ -172,6 +172,11 @@ class Symbol {
 				}
 			});
 			return canbe;
+		}
+		
+		// structType is a generic type for all Structs
+		if (assignTo.typeIs('نوعبنية') && assignFrom.typeSymbol.isStruct) {
+			return true;
 		}
 		
 		// enumType et = "value"
