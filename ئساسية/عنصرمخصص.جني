@@ -1,4 +1,6 @@
 ئورد customElements، CustomElementRegistry من "//"؛
+ئورد منطق من ئساسية.منطق؛
+ئورد نصية من ئساسية.نصية؛
 
 ئعلن مسجلعنصرمخصص ():
 	يختصر CustomElementRegistry؛

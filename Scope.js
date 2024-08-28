@@ -48,6 +48,7 @@ class Scope {
 		this.symbols.forEach ((s) => {
 			symb.addMember(s);
 		});
+		symb.isImport = true;
 	}
 	
 }

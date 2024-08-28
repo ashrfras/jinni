@@ -10,8 +10,8 @@ class SymbolScopes {
 	
 	// this takes a fileName, an returns an autoimport code to add to it
 	static autoImportText(fileName) {
-		if (!Symbol.isAutoImport(fileName) && fileName != 'بدائي') {
-			return "ئورد " + Symbol.AUTOIMPORTS.join('، ') + " من ئساسية.بدائي؛";
+		if (!fileName.includes('ئساسية')) { //!Symbol.isAutoImport(fileName)) {
+			return "ئورد " + Symbol.AUTOIMPORTS.join('، ') + '؛';
 		} else {
 			return "";
 		}

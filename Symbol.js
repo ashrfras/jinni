@@ -2,7 +2,7 @@ const ErrorManager = require('./ErrorManager');
 
 class Symbol {
 	// Automatically import these types in every source
-	static AUTOIMPORTS = ['عدد', 'منطق', 'مصفوفة', 'نصية', 'نوعبنية', 'نوعتعداد'];
+	static AUTOIMPORTS = ['عدد', 'منطق', 'مصفوفة', 'نصية', 'نوعبنية', 'نوعتعداد', 'تاريخ'];
 	
 	// system types known by the compiler
 	static SYSTEMTYPES = {
@@ -35,6 +35,7 @@ class Symbol {
 	args = []; // func argument symbols
 	allowed = []; // allowed values for enums
 	isLiteral = false; // is this a literal value
+	isImport = false; // is this an import symbol
 	
 	
 	constructor (name, typeSymbol = null, isArray = false, isClass = false) {
@@ -98,7 +99,7 @@ class Symbol {
 	}
 	
 	isIterable () {
-		return ['مصفوفة', 'منوع', 'نوعبنية', 'نوعتعداد', 'مجهول'].includes(this.typeSymbol.name) || this.isArray;
+		return ['مصفوفة', 'منوع', 'نوعبنية', 'نوعتعداد', 'مجهول'].includes(this.typeSymbol.name) || this.isArray || this.typeSymbol.isStruct;
 	}
 	
 	isNull () {
@@ -153,7 +154,7 @@ class Symbol {
 		// if we assign literal struct (from) to structType (to), check members
 		// all members in the literal struct (from) chould exist and affects to (to) members
 		// it is ok to have some missing members in the (from) struct
-		if (assignTo.typeSymbol.isStruct && assignFrom.typeIs('نوعبنية')) {
+		if (assignTo.typeSymbol.isStruct && (assignFrom.typeIs('نوعبنية') && assignFrom.isLiteral)) {
 			var canbe = true;
 			// نوعبنية نب = {}
 			// structType st (assignTo) = { ... } (assignFrom)
@@ -176,6 +177,10 @@ class Symbol {
 		
 		// structType is a generic type for all Structs
 		if (assignTo.typeIs('نوعبنية') && assignFrom.typeSymbol.isStruct) {
+			return true;
+		}
+		// allowed to assign structtype to a struct
+		if (assignTo.typeSymbol.isStruct && assignFrom.typeIs('نوعبنية')) {
 			return true;
 		}
 		

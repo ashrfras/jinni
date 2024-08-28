@@ -29,7 +29,6 @@ class ImportManager {
 		var impname = imp.split('.');
 		impname = impname[impname.length-1];
 		var isAutoImport = imp == 'ئساسية.بدائي' || (imp.includes('ئساسية') && Symbol.AUTOIMPORTS.includes(impname))
-			
 		var openScope = ImportManager.openScopes.find((s) => s.name == imp);
 		if (openScope) {
 			ErrorManager.warning("ئيراد دائري ل '" + imp + "' من '" + fromFilePath + "'");
@@ -46,6 +45,8 @@ class ImportManager {
 			if (!isAutoImport) {
 				ImportManager.openScopes.pop();
 			}
+			var info = ImportManager.getImportInfo(imp);
+			scope.importName = '/' + info.importName + '.mjs';
 			return scope;
 		}
 		
@@ -82,16 +83,19 @@ class ImportManager {
 			if (myFileImp.exists) {
 				if (myFileImp.path == fromFilePath) {
 					ErrorManager.warning('تم تجاهل ئيراد لنفس الملف الحالي');
+					var myScope;
 					if (!isAutoImport) {
-						ImportManager.openScopes.pop();
+						myScope = ImportManager.openScopes.pop();
+					} else {
+						myScope = ImportManager.openScopes[ImportManager.openScopes.length-1];
 					}
-					return
+					return myScope;
 				}
 				var scope = {
 					name: imp,
 					scope: ImportManager.processImport(myFileImp.path, fromFilePath)
 				}
-				scope.scope.importName = myFileImp.importName;
+				//scope.scope.importName = myFileImp.importName;
 				// don't add this file to importedScopes if marked to reparse
 				// bc files with circular dependancy are to be reparsed again
 				//var toreparse = ImportManager.toReparse.find((elem => elem.reparse == fromFilePath));
@@ -125,7 +129,7 @@ class ImportManager {
 						name: imp,
 						scope: ImportManager.processImport(myFileImp.path, fromFilePath)
 					}
-
+					//scope.scope.importName = myFileImp.importName;
 					if (! ImportManager.toReparse.includes(fromFilePath)) {
 						ImportManager.importedScopes.push(scope);
 					}
@@ -236,7 +240,7 @@ class ImportManager {
 		return scope;
 	}
 	
-	// read and parse and imported file
+	// read and parse an imported file
 	static readAndParseFile(filePath) {
 		filePath = Path.resolve(filePath);
 		var fileContent;

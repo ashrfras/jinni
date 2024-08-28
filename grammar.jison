@@ -16,9 +16,9 @@
 
 "ئدا"												return 'IF'
 "وئلا"												return 'ELSE'
-"تم"[ \t\v\f\r\n\%$]								return 'END'
-"صحيح"												return 'TRUE'
-"خطئ"												return 'FALSE'
+"تم"([^a-zA-Z0-9_\u0621-\u0669])					return 'END'
+"صحيح"(?![a-zA-Z0-9_\u0621-\u0669])					return 'TRUE'
+"خطئ"(?![a-zA-Z0-9_\u0621-\u0669])					return 'FALSE'
 "عدم"												return 'NULL'
 "دع"												return 'DEF'
 "ئعلن"												return 'DECL'
@@ -32,8 +32,8 @@
 ">="												return 'GTE'
 "<"													return 'LT'
 ">"													return 'GT'
-"وو "												return 'AND'
-"ئو "												return 'OR'
+"وو"([^a-zA-Z0-9_\u0621-\u0669])					return 'AND'
+"ئو"([^a-zA-Z0-9_\u0621-\u0669])					return 'OR'
 "+"													return '+'
 "->"												return 'RETURNS'
 "-"													return '-'
@@ -53,7 +53,7 @@
 "."													return '.'
 "="													return '='
 "؟"													return '؟'
-"ئرجع "												return 'RETURN'
+"ئرجع"(?![a-zA-Z0-9_\u0621-\u0669])					return 'RETURN'
 "هدا"												return 'SELF'
 "يمدد "												return 'SUPER'
 "يختصر "											return 'SHORTCUTS'
@@ -68,7 +68,9 @@
 "من "												return 'FROM'
 "الكل "												return 'ALL'
 "ريتما "											return 'AWAIT'
-"ليس "       										return 'NOT'
+"ليس"([^a-zA-Z0-9_\u0621-\u0669])       			return 'NOT'
+"حاول"([^a-zA-Z0-9_\u0621-\u0669])					return 'TRY'
+"ئستدرك"											return 'EXCEPT'
 
 \"(?:[^"\\]|\\[\s\S])*\"							return 'STRING' // Double quoted string
 \'[^'\n]*\'											return 'STRING' // Single quoted string
@@ -110,7 +112,7 @@
 			// here we add global imports to the input source code
 			// do not add global imports on inlineparses
 			var fileName = path.basename(ctx.filePath, '.جني');
-			input = ( ctx.inlineParse ? '' : SymbolScopes.autoImportText(fileName) ) + input;
+			input = ( ctx.inlineParse ? '' : SymbolScopes.autoImportText(ctx.filePath) ) + input;
 			try {
 				var result = parser.originalParse(input, ctx);
 				// result is the parsed file's global scope;
@@ -278,6 +280,9 @@ program
 		});	
 		// get global scope
 		var glob = yy.symbolScopes.exit();
+		// remove import symbols from the scope
+		glob.symbols = glob.symbols.filter(smb => !smb.isImport);
+		glob.importName = fileName;
 		return glob; // return global scope
     }
 	| EOF /* empty */
@@ -316,6 +321,7 @@ statement
 	| while_statement { $$ = $1; }
     | for_in_statement { $$ = $1; }
 	| if_statement { $$ = $1; }
+	| try_statement { $$ = $1; }
 	| assignment semic_or_nl { $$ = $1.value; }
 	| expression semic_or_nl { $$ = $1.value; }
     | error { $$ = ''; }
@@ -369,8 +375,10 @@ import_statement
 						ErrorManager.error("الئسم " + find + " غير معروف في الوحدة '" + $4 + "'");
 					}
 					// TODO REVIEW symb.name = sym.add
-					symb.name = importSpecifier.add[i];
-					yy.symbolScopes.addSymbol(symb);
+					var mySymb = symb.duplicate();
+					mySymb.name = importSpecifier.add[i];
+					mySymb.isImport = true;
+					yy.symbolScopes.addSymbol(mySymb);
 					i++;
 				});
 			}
@@ -389,14 +397,14 @@ import_statement
 				// nonfunctional import just for the parser
 				$$ = "";
 			} else {
-				$$ = 'import ' + $2.value + ' from "' + imp + '";export ' + exp; 
+				$$ = 'import ' + $2.value + ' from "' + imp + '";' //export ' + exp; 
 			}
 		} else {
-			var imp = './' + $4 + '.mjs';
-			if (scope.getSourceFile() && (!$4.endsWith(scope.getSourceFile()))) {
-				imp = './' + $4 + '.' + scope.getSourceFile() + '.mjs';
-			}
-			$$ = 'import ' + $2.value + ' from "' + imp + '";export ' + exp;
+			var imp = '.' + scope.getImportName();
+			//if (scope.getSourceFile() && (!$4.endsWith(scope.getSourceFile()))) {
+			//	imp = './' + $4 + '.' + scope.getSourceFile() + '.mjs';
+			//}
+			$$ = 'import ' + $2.value + ' from "' + imp + '";'// + '; export ' + exp;
 		}
 	}
 	| IMPORT import_list {
@@ -411,11 +419,12 @@ import_statement
 				ErrorManager.error("الئسم " + impName + " غير معروف في الوحدة '" + impName + "'");
 			}
 			// TODO REVIEW symb.name = sym.add
+			symb.isImport = true;
 			yy.symbolScopes.addSymbol(symb);
-			var imp = './' + scope.getImportName() + '.mjs';
+			var imp = '.' + scope.getImportName();
 			var exp = impName;
 			var sep = result == '' ? '' : ';';
-			result += sep + 'import {' + impName + '} from "' + imp + '";export {' + exp + '}';
+			result += sep + 'import {' + impName + '} from "' + imp + '";'// + '; export {' + exp + '}';
 		});
 		$$ = result;
 	}
@@ -1332,6 +1341,25 @@ else_head
 ////
 
 
+////
+try_statement
+	: try_head noend_block exept_head body_block {
+		$$ = 'try ' + $2 + 'catch (فشل) ' + $4;
+	}
+	;
+try_head
+	: TRY {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.enter();
+	}
+	;
+exept_head
+	: EXCEPT {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.enter();
+	}
+	;
+
 //// expressions ////
 
 ////
@@ -1339,6 +1367,10 @@ assignment
     : IDENTIFIER '=' expression {
 		ErrorManager.setContext(@1, context.filePath);
 		var mySymb = yy.symbolScopes.getSymbByName($1);
+		// imported symbols can't be directly changed
+		if (mySymb.isImport) {
+			ErrorManager.error("يتعدر تغيير قيمة متغير الئيراد " + mySymb.toString());
+		}
 		if (!$3.symb.canBeAssignedTo(mySymb)) {
 			// type mismatch
 			ErrorManager.error("محاولة ئسناد " + $3.symb.toString() + " ئلا " + mySymb.toString());
@@ -1770,7 +1802,7 @@ object_literal
 		ErrorManager.setContext(@1, context.filePath);
 		var symbs = $2.symb; // these are symbols of object properties
 		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
-
+		symb.isLiteral = true;
 		symbs.forEach((sy) => {
 			symb.addMember(sy);
 		});
@@ -1783,6 +1815,7 @@ object_literal
 	| '{' /* empty */ '}' {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = new Symbol('');
+		symb.isLiteral = true;
 		symb.typeSymbol = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
 		$$ = {
 			symb: symb,
