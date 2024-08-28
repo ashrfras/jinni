@@ -1272,7 +1272,8 @@ for_in_head
 	: FOR IDENTIFIER IN expression {
 		ErrorManager.setContext(@1, context.filePath);
 		yy.symbolScopes.enter();
-		yy.symbolScopes.declareSymbol($2, $4.symb.subTypeSymbol ? $4.symb.subTypeSymbol.name : $4.symb.typeSymbol.name);
+		var smb = yy.symbolScopes.declareSymbol($2, $4.symb.subTypeSymbol ? $4.symb.subTypeSymbol.name : $4.symb.typeSymbol.name);
+		smb.isReadOnly = true;
 		// TOREVIEW
 		//if ($4.type == 'مصفوفة') {
 			$$ = 'for (var ' + $2 + ' of ' + $4.value + ')';
@@ -1370,6 +1371,10 @@ assignment
 		// imported symbols can't be directly changed
 		if (mySymb.isImport) {
 			ErrorManager.error("يتعدر تغيير قيمة متغير الئيراد " + mySymb.toString());
+		}
+		// read only symbols can't be assigned
+		if (mySymb.isReadOnly) {
+			ErrorManager.error("يتعدر تغيير قيمة متغير للقرائة فقط " + mySymb.toString());
 		}
 		if (!$3.symb.canBeAssignedTo(mySymb)) {
 			// type mismatch

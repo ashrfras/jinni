@@ -994,7 +994,8 @@ case 109:
 
 		ErrorManager.setContext(_$[$0-3], context.filePath);
 		yy.symbolScopes.enter();
-		yy.symbolScopes.declareSymbol($$[$0-2], $$[$0].symb.subTypeSymbol ? $$[$0].symb.subTypeSymbol.name : $$[$0].symb.typeSymbol.name);
+		var smb = yy.symbolScopes.declareSymbol($$[$0-2], $$[$0].symb.subTypeSymbol ? $$[$0].symb.subTypeSymbol.name : $$[$0].symb.typeSymbol.name);
+		smb.isReadOnly = true;
 		// TOREVIEW
 		//if ($$[$0].type == 'مصفوفة') {
 			this.$ = 'for (var ' + $$[$0-2] + ' of ' + $$[$0].value + ')';
@@ -1065,6 +1066,10 @@ case 124:
 		// imported symbols can't be directly changed
 		if (mySymb.isImport) {
 			ErrorManager.error("يتعدر تغيير قيمة متغير الئيراد " + mySymb.toString());
+		}
+		// read only symbols can't be assigned
+		if (mySymb.isReadOnly) {
+			ErrorManager.error("يتعدر تغيير قيمة متغير للقرائة فقط " + mySymb.toString());
 		}
 		if (!$$[$0].symb.canBeAssignedTo(mySymb)) {
 			// type mismatch

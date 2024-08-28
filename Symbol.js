@@ -36,6 +36,7 @@ class Symbol {
 	allowed = []; // allowed values for enums
 	isLiteral = false; // is this a literal value
 	isImport = false; // is this an import symbol
+	isReadOnly = false;
 	
 	
 	constructor (name, typeSymbol = null, isArray = false, isClass = false) {
