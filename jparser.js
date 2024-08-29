@@ -623,7 +623,16 @@ case 71:
 
 		ErrorManager.setContext(_$[$0-2], context.filePath);
 		yy.symbolScopes.exit();
-		this.$ = '{' + $$[$0-1].filter(Boolean).join(';') + '}';
+		var result = $$[$0-1].filter(Boolean).join(';');
+		
+		//we set proper 'this' name in every start of a block
+		//if block contains super, then it should come after it
+		if (result.includes('super()')) {
+			result = result.replace('super();', 'super();const هدا=this;');
+		} else {
+			result = 'const هدا=this;' + result;
+		}
+		this.$ = '{' + result + '}';
 	
 break;
 case 72:
@@ -1495,9 +1504,8 @@ break;
 case 163:
 
 		ErrorManager.setContext(_$[$0-1], context.filePath);
-		var symb = new Symbol('');
+		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
 		symb.isLiteral = true;
-		symb.typeSymbol = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
 		this.$ = {
 			symb: symb,
 			value: '{}'
@@ -2220,6 +2228,9 @@ _handle_error:
 		.replaceAll(":", '":"').replaceAll(',', '","');
 		
 	function processJNX(src, context, yy) {
+		// validate it first
+		validateJNX(src);
+		
 		// tags
 		var tags = JSON.parse('{"' + htmtags + '"}');
 		for (var tag in tags) {
@@ -2257,6 +2268,45 @@ _handle_error:
 				}).replace(rgElse, "`$2` +")
 		)) {}
 		return '`' + s + '`';
+	}
+	
+	function validateJNX (inputString) {
+		const tagRegex = /<[^>]+>/g;
+		const tags = inputString.match(tagRegex) || [];
+		if (tags.length <= 1) {
+			// no validation if there is only 1 tag or none
+			return;
+		}
+		const stack = [];
+		for (const tag of tags) {
+			var myTag = tag;
+			if (myTag.includes(' ')) {
+				myTag = tag.split(' ')[0] + '>';
+			}
+			if (myTag.startsWith('</')) {
+				// Closing tag
+				const openingTag = stack.pop();
+				if (!openingTag || !myTag.endsWith(openingTag.slice(1))) {
+					// Mismatched closing tag
+					if (openingTag) {
+						ErrorManager.error("الئمارة " + openingTag + " غير متوازنة الفتح والئغلاق");
+					} else {
+						ErrorManager.error("الئمارة " + myTag.replace('/', '') + " غير متوازنة الفتح والئغلاق");
+					}
+					stack.pop();
+				}
+			} else if (myTag.endsWith('/>')) {
+				// Self-closing tag
+				continue;
+			} else {
+				// Opening tag
+				stack.push(myTag);
+			}
+		}
+		
+		stack.forEach(badtag => {
+			ErrorManager.error("الئمارة " + badtag + " غير متوازنة الفتح والئغلاق");
+		});
 	}
 
 	// Utils

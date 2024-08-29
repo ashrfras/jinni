@@ -168,6 +168,9 @@
 		.replaceAll(":", '":"').replaceAll(',', '","');
 		
 	function processJNX(src, context, yy) {
+		// validate it first
+		validateJNX(src);
+		
 		// tags
 		var tags = JSON.parse('{"' + htmtags + '"}');
 		for (var tag in tags) {
@@ -205,6 +208,45 @@
 				}).replace(rgElse, "`$2` +")
 		)) {}
 		return '`' + s + '`';
+	}
+	
+	function validateJNX (inputString) {
+		const tagRegex = /<[^>]+>/g;
+		const tags = inputString.match(tagRegex) || [];
+		if (tags.length <= 1) {
+			// no validation if there is only 1 tag or none
+			return;
+		}
+		const stack = [];
+		for (const tag of tags) {
+			var myTag = tag;
+			if (myTag.includes(' ')) {
+				myTag = tag.split(' ')[0] + '>';
+			}
+			if (myTag.startsWith('</')) {
+				// Closing tag
+				const openingTag = stack.pop();
+				if (!openingTag || !myTag.endsWith(openingTag.slice(1))) {
+					// Mismatched closing tag
+					if (openingTag) {
+						ErrorManager.error("الئمارة " + openingTag + " غير متوازنة الفتح والئغلاق");
+					} else {
+						ErrorManager.error("الئمارة " + myTag.replace('/', '') + " غير متوازنة الفتح والئغلاق");
+					}
+					stack.pop();
+				}
+			} else if (myTag.endsWith('/>')) {
+				// Self-closing tag
+				continue;
+			} else {
+				// Opening tag
+				stack.push(myTag);
+			}
+		}
+		
+		stack.forEach(badtag => {
+			ErrorManager.error("الئمارة " + badtag + " غير متوازنة الفتح والئغلاق");
+		});
 	}
 %}
 
@@ -872,7 +914,16 @@ body_block
 	: ':' statement_list END {
 		ErrorManager.setContext(@1, context.filePath);
 		yy.symbolScopes.exit();
-		$$ = '{' + $2.filter(Boolean).join(';') + '}';
+		var result = $2.filter(Boolean).join(';');
+		
+		//we set proper 'this' name in every start of a block
+		//if block contains super, then it should come after it
+		if (result.includes('super()')) {
+			result = result.replace('super();', 'super();const هدا=this;');
+		} else {
+			result = 'const هدا=this;' + result;
+		}
+		$$ = '{' + result + '}';
 	}
 	| ':' /* empty */ END {
 		ErrorManager.setContext(@1, context.filePath);
@@ -1819,9 +1870,8 @@ object_literal
 	}
 	| '{' /* empty */ '}' {
 		ErrorManager.setContext(@1, context.filePath);
-		var symb = new Symbol('');
+		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
 		symb.isLiteral = true;
-		symb.typeSymbol = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
 		$$ = {
 			symb: symb,
 			value: '{}'
