@@ -1915,6 +1915,18 @@ property
 			value: $1 + ': ' + $3.value
 		}
 	}
+	| IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		var symb = yy.symbolScopes.getSymbByName($1);
+		var mySymb = yy.symbolScopes.createSymbol($1);
+		mySymb.typeSymbol = symb.typeSymbol;
+		mySymb.isArray = symb.isArray;
+		mySymb.subTypeSymbol = symb.subTypeSymbol;
+		$$ = {
+			symb: mySymb,
+			value: $1
+		}
+	}
     ;
 ////
 
