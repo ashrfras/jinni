@@ -14,26 +14,26 @@
 
 \([\n\r\s]*\<(?:[^)\\]|\\[\s\S])*\>[\n\r\s]*\)		return 'JNX'
 
-"ئدا"												return 'IF'
-"وئلا"												return 'ELSE'
-"تم"([^a-zA-Z0-9_\u0621-\u0669])					return 'END'
+"ئدا"(?![a-zA-Z0-9_\u0621-\u0669])					return 'IF'
+"وئلا"(?![a-zA-Z0-9_\u0621-\u0669])					return 'ELSE'
+"تم"(?![a-zA-Z0-9_\u0621-\u0669])					return 'END'
 "صحيح"(?![a-zA-Z0-9_\u0621-\u0669])					return 'TRUE'
 "خطئ"(?![a-zA-Z0-9_\u0621-\u0669])					return 'FALSE'
-"عدم"												return 'NULL'
-"دع"												return 'DEF'
-"ئعلن"												return 'DECL'
-"دالة"												return 'DALA'
-"وعد"												return 'PROMISE'
-"بنية"												return 'STRUCT'
-"تعداد"												return 'ENUM'
+"عدم"(?![a-zA-Z0-9_\u0621-\u0669])					return 'NULL'
+"دع"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DEF'
+"ئعلن"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DECL'
+"دالة"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DALA'
+"وعد"(?![a-zA-Z0-9_\u0621-\u0669])					return 'PROMISE'
+"بنية"(?![a-zA-Z0-9_\u0621-\u0669])					return 'STRUCT'
+"تعداد"(?![a-zA-Z0-9_\u0621-\u0669])				return 'ENUM'
 "=="												return 'EQ'
 "لا="												return 'NEQ'
 "<="												return 'LTE'
 ">="												return 'GTE'
 "<"													return 'LT'
 ">"													return 'GT'
-"وو"([^a-zA-Z0-9_\u0621-\u0669])					return 'AND'
-"ئو"([^a-zA-Z0-9_\u0621-\u0669])					return 'OR'
+"وو"(?![a-zA-Z0-9_\u0621-\u0669])					return 'AND'
+"ئو"(?![a-zA-Z0-9_\u0621-\u0669])					return 'OR'
 "+"													return '+'
 "->"												return 'RETURNS'
 "-"													return '-'
@@ -55,22 +55,23 @@
 "؟"													return '؟'
 "ئرجع"(?![a-zA-Z0-9_\u0621-\u0669])					return 'RETURN'
 "هدا"												return 'SELF'
-"يمدد "												return 'SUPER'
-"يختصر "											return 'SHORTCUTS'
-"يملك "												return 'HAS'
-"لكل "												return 'FOR'
-"في "												return 'IN'
-"طالما "											return 'WHILE'
-"قل "												return 'SAY'
-"ئورد "												return 'IMPORT'
-"ك "												return 'AS'
-"ئنشئ "												return 'NEW'
-"من "												return 'FROM'
-"الكل "												return 'ALL'
-"ريتما "											return 'AWAIT'
-"ليس"([^a-zA-Z0-9_\u0621-\u0669])       			return 'NOT'
-"حاول"([^a-zA-Z0-9_\u0621-\u0669])					return 'TRY'
-"ئستدرك"											return 'EXCEPT'
+"يمدد"(?![a-zA-Z0-9_\u0621-\u0669])					return 'SUPER'
+"يختصر"(?![a-zA-Z0-9_\u0621-\u0669])				return 'SHORTCUTS'
+"يملك"(?![a-zA-Z0-9_\u0621-\u0669])					return 'HAS'
+"لكل"(?![a-zA-Z0-9_\u0621-\u0669])					return 'FOR'
+"في"(?![a-zA-Z0-9_\u0621-\u0669])					return 'IN'
+"طالما"(?![a-zA-Z0-9_\u0621-\u0669])				return 'WHILE'
+"قل"(?![a-zA-Z0-9_\u0621-\u0669])					return 'SAY'
+"ئشطب"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DELETE'
+"ئورد"(?![a-zA-Z0-9_\u0621-\u0669])					return 'IMPORT'
+"ك"(?![a-zA-Z0-9_\u0621-\u0669])					return 'AS'
+"ئنشئ"(?![a-zA-Z0-9_\u0621-\u0669])					return 'NEW'
+"من"(?![a-zA-Z0-9_\u0621-\u0669])					return 'FROM'
+"الكل"(?![a-zA-Z0-9_\u0621-\u0669])					return 'ALL'
+"ريتما"(?![a-zA-Z0-9_\u0621-\u0669])				return 'AWAIT'
+"ليس"(?![a-zA-Z0-9_\u0621-\u0669])       			return 'NOT'
+"حاول"(?![a-zA-Z0-9_\u0621-\u0669])					return 'TRY'
+"ئستدرك"(?![a-zA-Z0-9_\u0621-\u0669])				return 'EXCEPT'
 
 \"(?:[^"\\]|\\[\s\S])*\"							return 'STRING' // Double quoted string
 \'[^'\n]*\'											return 'STRING' // Single quoted string
@@ -359,6 +360,7 @@ statement
 	| has_statement semic_or_nl { $$ = $1; }
 	| var_declaration semic_or_nl { $$ = $1; }
 	| say_statement semic_or_nl { $$ = $1; }
+	| del_statement semic_or_nl { $$ = $1; }
 	| return_statement semic_or_nl { $$ = $1; }
 	| while_statement { $$ = $1; }
     | for_in_statement { $$ = $1; }
@@ -1248,6 +1250,15 @@ say_statement
 		$$ = 'console.log(' + $2.value + ')';
     }
     ;
+////
+
+
+////
+del_statement
+	: DELETE expression {
+		$$ = 'delete ' + $2.value;
+	}
+	;
 ////
 
 
