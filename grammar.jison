@@ -786,6 +786,14 @@ function_ret
 			symb: funcSymb//.typeSymbol
 		}
 	}
+	| AS PROMISE {
+		ErrorManager.setContext(@1, context.filePath);
+		var funcSymb = yy.funcStack[yy.funcStack.length-1];
+		funcSymb.isAwait = true;
+		$$ = {
+			symb: Symbol.SYSTEMTYPES['فارغ']
+		}
+	}
 	| /* empty */ {
 		$$ = {
 			symb: Symbol.SYSTEMTYPES['فارغ']

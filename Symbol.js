@@ -100,7 +100,7 @@ class Symbol {
 	}
 	
 	isIterable () {
-		return ['مصفوفة', 'منوع', 'نوعبنية', 'نوعتعداد', 'مجهول'].includes(this.typeSymbol.name) || this.isArray || this.typeSymbol.isStruct;
+		return ['مصفوفة', 'منوع', 'نوعبنية', 'نوعتعداد', 'مجهول', 'نصية'].includes(this.typeSymbol.name) || this.isArray || this.typeSymbol.isStruct;
 	}
 	
 	isNull () {
