@@ -163,7 +163,7 @@
 %{
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
 		.replaceAll(":", '":"').replaceAll(',', '","');
@@ -722,6 +722,7 @@ function_def
 		ErrorManager.setContext(@1, context.filePath);
 		
 		var function_decl = $1;
+		var function_ret = $2;
 		var function_ret = $2;
 		var body_block = $3;
 		
@@ -1701,7 +1702,9 @@ func_arg
 lambda_expr
 	: declare_dala function_decl_params ':' expression {
 		yy.symbolScopes.exit();
-		var symb = yy.symbolScopes.createSymbol('', 'دالة', false, $4.symb.typeSymbol.name);
+		yy.funcStack.pop();
+		var symb = $1.symb;
+		symb.subTypeSymbol = $4.symb.typeSymbol;
 		$$ = {
 			symb: symb,
 			value: $2 + "=>" + $4.value
@@ -1711,6 +1714,11 @@ lambda_expr
 declare_dala
 	: DALA {
 		yy.symbolScopes.enter();
+		var symb = yy.symbolScopes.createSymbol('', 'دالة', false);
+		yy.funcStack.push(symb);
+		$$ = {
+			symb: symb
+		}
 	}
 	;
 ////

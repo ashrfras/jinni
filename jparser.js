@@ -434,6 +434,7 @@ case 52:
 		
 		var function_decl = $$[$0-2];
 		var function_ret = $$[$0-1];
+		var function_ret = $$[$0-1];
 		var body_block = $$[$0];
 		
 		var funcSymb = yy.funcStack.pop();
@@ -1351,7 +1352,9 @@ break;
 case 153:
 
 		yy.symbolScopes.exit();
-		var symb = yy.symbolScopes.createSymbol('', 'دالة', false, $$[$0].symb.typeSymbol.name);
+		yy.funcStack.pop();
+		var symb = $$[$0-3].symb;
+		symb.subTypeSymbol = $$[$0].symb.typeSymbol;
 		this.$ = {
 			symb: symb,
 			value: $$[$0-2] + "=>" + $$[$0].value
@@ -1361,6 +1364,11 @@ break;
 case 154:
 
 		yy.symbolScopes.enter();
+		var symb = yy.symbolScopes.createSymbol('', 'دالة', false);
+		yy.funcStack.push(symb);
+		this.$ = {
+			symb: symb
+		}
 	
 break;
 case 155:
@@ -2251,7 +2259,7 @@ _handle_error:
 
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
 		.replaceAll(":", '":"').replaceAll(',', '","');
