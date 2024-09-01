@@ -1887,7 +1887,13 @@ object_literal
 		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
 		symb.isLiteral = true;
 		symbs.forEach((sy) => {
-			symb.addMember(sy);
+			if (sy.isSpread) {
+				sy.members.forEach((memb) => {
+					symb.addMember(memb);
+				});
+			} else {
+				symb.addMember(sy);
+			}
 		});
 		
 		$$ = {
@@ -1952,6 +1958,14 @@ property
 		$$ = {
 			symb: mySymb,
 			value: $1
+		}
+	}
+	| SPREAD expression {
+		var symb = $2.symb.duplicate();
+		symb.isSpread = true;
+		$$ = {
+			symb: symb,
+			value: '...' + $2.value
 		}
 	}
     ;
