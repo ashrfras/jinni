@@ -132,7 +132,7 @@ if (is_web) {
 
 async function runScript() {
 	try {
-		const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', 'مدخل.mjs ') + userParams.join(' '));
+		const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', fileName + '.mjs ') + userParams.join(' '));
 		if (stderr) {
 			console.error(stderr);
 		}

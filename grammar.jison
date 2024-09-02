@@ -12,7 +12,10 @@
 "#"[^\n]*											/* skip comments */
 
 
-\([\n\r\s]*\<(?:[^)\\]|\\[\s\S])*\>[\n\r\s]*\)		return 'JNX'
+//\([\n\r\s]*\<(?:[^)\\]|\\[\s\S])*\>[\n\r\s]*\)	return 'JNX'
+// new version support escaped parenthesis
+\([\n\r\s]*\<(?:[^)\\]|\\.|\\[\s\S])*\>[\n\r\s]*\)	return 'JNX'
+
 
 "ئدا"(?![a-zA-Z0-9_\u0621-\u0669])					return 'IF'
 "وئلا"(?![a-zA-Z0-9_\u0621-\u0669])					return 'ELSE'
@@ -163,7 +166,7 @@
 %{
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea,مائل:i"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
 		.replaceAll(":", '":"').replaceAll(',', '","');
@@ -171,6 +174,9 @@
 	function processJNX(src, context, yy) {
 		// validate it first
 		validateJNX(src);
+		
+		// unescape parenthesis
+		src = src.replaceAll('\\(', '(').replaceAll('\\)', ')');
 		
 		// tags
 		var tags = JSON.parse('{"' + htmtags + '"}');
@@ -188,6 +194,7 @@
 		}
 		src = processJNXControl(src, context, yy);
 		src = src.replaceAll('_{', '${');
+		src = src.replaceAll('%{', '${');
 		return src;
 	}
 	
@@ -1381,7 +1388,7 @@ if_head
 	
 elif_clauses
 	: elif_head noend_block { $$ = $1 + $2 }
-	| elif_clauses elif_head noend_block { $$ = $2 + $3 }
+	| elif_clauses elif_head noend_block { $$ = $1 + $2 + $3 }
 	;
 	
 elif_head
