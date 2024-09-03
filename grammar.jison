@@ -168,7 +168,7 @@
 	
 	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea,مائل:i"
 		.replaceAll(":", '":"').replaceAll(',', '","');
-	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width"
+	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width,سمة:style"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 		
 	function processJNX(src, context, yy) {
@@ -2306,7 +2306,7 @@ expression
 	}
     | JNX {
 		ErrorManager.setContext(@1, context.filePath);
-		var result = $1.replace('(', '').replace(')', '') // تعويض القوسين بعلامات ئقتباس
+		var result = $1.slice(1, -1) // تعويض القوسين بعلامات ئقتباس
 					.replaceAll('\t','') // حدف الفراغين
 					.replace(/(\r\n|\n|\r)/gm,''); // حدف رجعات السطر
 					//.replaceAll('{', '${'); // تعويض متغيرين القالب
