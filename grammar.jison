@@ -38,8 +38,8 @@
 "وو"(?![a-zA-Z0-9_\u0621-\u0669])					return 'AND'
 "ئو"(?![a-zA-Z0-9_\u0621-\u0669])					return 'OR'
 "+"													return '+'
-"->"												return 'RETURNS'
 "-"													return '-'
+"->"												return 'RETURNS'
 "×"													return '×'
 "÷"													return '÷'
 "%"													return '%'
@@ -2269,7 +2269,8 @@ expression
     | STRING {
 		ErrorManager.setContext(@1, context.filePath);
 		//inlineParse($2.replace('<x-', '<'), context, yy)
-		const regex = /_{(.*?)}/g;
+		// we still support templates like _{} for compatibility
+		const regex = /[_%]{(.*?)}/g;
 		var match;
 		
 		while ((match = regex.exec($1)) !== null) {
@@ -2283,7 +2284,7 @@ expression
 		symb.isLiteral = true;
 		$$ = {
 			symb: symb,
-			value: $1.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('هدا.', 'this.'),
+			value: $1.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('%{', '${').replaceAll('هدا.', 'this.'),
 			val: val // string value without delimiters
 		}
 	}
@@ -2310,6 +2311,18 @@ expression
 					.replaceAll('\t','') // حدف الفراغين
 					.replace(/(\r\n|\n|\r)/gm,''); // حدف رجعات السطر
 					//.replaceAll('{', '${'); // تعويض متغيرين القالب
+					
+		// we still support templates like _{} for compatibility
+		var regexx = /[_%]{(.*?)}/g;
+		var match;
+		
+		while ((match = regexx.exec(result)) !== null) {
+			let s = match[1];
+			if (s != '') {
+				inlineParse(s.replaceAll('\\(', '(').replaceAll('\\)', ')'), context, yy);
+			}
+		}
+					
 		result = processJNX(result, context, yy);
 		$$ = {
 			symb: yy.symbolScopes.getSymbByName('نصية'),
