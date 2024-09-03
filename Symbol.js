@@ -321,7 +321,7 @@ class Symbol {
 	checkArgs (symbs) {
 		var requiredParams = this.args.filter(a => !a.init);
 		
-		if (this.isGeneric()) return symbs.map(s => s.value);
+		if (this.typeIs('مجهول')) return symbs.map(s => s.value);
 		
 		// given params should be same length or bigger then of required params
 		if (requiredParams.length > symbs.length) {
