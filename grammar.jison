@@ -2273,18 +2273,32 @@ expression
 		const regex = /[_%]{(.*?)}/g;
 		var match;
 		
+		var origins = [];
+		var replace = [];
 		while ((match = regex.exec($1)) !== null) {
 			let s = match[1];
 			if (s != '') {
-				inlineParse(s, context, yy);
+				var mys = s.replaceAll('\\(', '(').replaceAll('\\)', ')');
+				var res = inlineParse(mys, context, yy);
+				origins.push(mys);
+				replace.push(res);
 			}
 		}
+		
+		var result = $1;
+		
 		var val = $1.replaceAll('"', '').replaceAll("'", "");
 		var symb = yy.symbolScopes.createSymbol(val, 'نصية');
+		
+		for (var i=0; i<origins.length; i++) {
+			result = result.replace(origins[i], replace[i]);
+		}
+		result = result.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('%{', '${').replaceAll('هدا.', 'this.')
+		
 		symb.isLiteral = true;
 		$$ = {
 			symb: symb,
-			value: $1.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('%{', '${').replaceAll('هدا.', 'this.'),
+			value: result,
 			val: val // string value without delimiters
 		}
 	}
@@ -2316,14 +2330,23 @@ expression
 		var regexx = /[_%]{(.*?)}/g;
 		var match;
 		
+		var origins = [];
+		var replace = [];
 		while ((match = regexx.exec(result)) !== null) {
 			let s = match[1];
 			if (s != '') {
-				inlineParse(s.replaceAll('\\(', '(').replaceAll('\\)', ')'), context, yy);
+				var mys = s.replaceAll('\\(', '(').replaceAll('\\)', ')');
+				var res = inlineParse(mys, context, yy);
+				origins.push(mys);
+				replace.push(res);
 			}
 		}
-					
+		
 		result = processJNX(result, context, yy);
+		
+		for (var i=0; i<origins.length; i++) {
+			result = result.replace(origins[i], replace[i]);
+		}	
 		$$ = {
 			symb: yy.symbolScopes.getSymbByName('نصية'),
 			value: result

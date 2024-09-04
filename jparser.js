@@ -1902,18 +1902,32 @@ case 208:
 		const regex = /[_%]{(.*?)}/g;
 		var match;
 		
+		var origins = [];
+		var replace = [];
 		while ((match = regex.exec($$[$0])) !== null) {
 			let s = match[1];
 			if (s != '') {
-				inlineParse(s, context, yy);
+				var mys = s.replaceAll('\\(', '(').replaceAll('\\)', ')');
+				var res = inlineParse(mys, context, yy);
+				origins.push(mys);
+				replace.push(res);
 			}
 		}
+		
+		var result = $$[$0];
+		
 		var val = $$[$0].replaceAll('"', '').replaceAll("'", "");
 		var symb = yy.symbolScopes.createSymbol(val, 'نصية');
+		
+		for (var i=0; i<origins.length; i++) {
+			result = result.replace(origins[i], replace[i]);
+		}
+		result = result.replaceAll('"', '`').replaceAll('_{', '${').replaceAll('%{', '${').replaceAll('هدا.', 'this.')
+		
 		symb.isLiteral = true;
 		this.$ = {
 			symb: symb,
-			value: $$[$0].replaceAll('"', '`').replaceAll('_{', '${').replaceAll('%{', '${').replaceAll('هدا.', 'this.'),
+			value: result,
 			val: val // string value without delimiters
 		}
 	
@@ -1951,14 +1965,23 @@ case 211:
 		var regexx = /[_%]{(.*?)}/g;
 		var match;
 		
+		var origins = [];
+		var replace = [];
 		while ((match = regexx.exec(result)) !== null) {
 			let s = match[1];
 			if (s != '') {
-				inlineParse(s.replaceAll('\\(', '(').replaceAll('\\)', ')'), context, yy);
+				var mys = s.replaceAll('\\(', '(').replaceAll('\\)', ')');
+				var res = inlineParse(mys, context, yy);
+				origins.push(mys);
+				replace.push(res);
 			}
 		}
-					
+		
 		result = processJNX(result, context, yy);
+		
+		for (var i=0; i<origins.length; i++) {
+			result = result.replace(origins[i], replace[i]);
+		}	
 		this.$ = {
 			symb: yy.symbolScopes.getSymbByName('نصية'),
 			value: result
