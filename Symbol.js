@@ -152,6 +152,10 @@ class Symbol {
 			return true;
 		}
 		
+		// DALA and Function are interchangeable
+		if (assignTo.typeIs('دالة') && assignFrom.typeIs('وضيفة')) return true;
+		if (assignTo.typeIs('وضيفة') && assignFrom.typeIs('دالة')) return true;
+		
 		// if we assign literal struct (from) to structType (to), check members
 		// all members in the literal struct (from) chould exist and affects to (to) members
 		// it is ok to have some missing members in the (from) struct
