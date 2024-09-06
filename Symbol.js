@@ -203,17 +203,19 @@ class Symbol {
 		
 		var can = (assignFrom.typeSymbol.name == assignTo.typeSymbol.name);
 		
-		// check inheritage cycle
-		if (!can) {
-			var superSymb = assignTo.typeSymbol.superSymbol;
-			while (superSymb) {
-				if (superSymb.typeSymbol.name === assignFrom.typeSymbol.name) {
-					can = true;
-					break;
+		// check inheritage cycle on both sides
+		[{to: assignTo, from: assignFrom}, {to: assignFrom, from: assignTo}].forEach(elem => {
+			if (!can) {
+				var superSymb = elem.to.typeSymbol.superSymbol;
+				while (superSymb) {
+					if (superSymb.typeSymbol.name === elem.from.typeSymbol.name) {
+						can = true;
+						break;
+					}
+					superSymb = superSymb.superSymbol || superSymb.typeSymbol.superSymbol;
 				}
-				superSymb = superSymb.superSymbol || superSymb.typeSymbol.superSymbol;
 			}
-		}
+		});
 		
 		return can;
 	}
