@@ -730,7 +730,6 @@ function_def
 		
 		var function_decl = $1;
 		var function_ret = $2;
-		var function_ret = $2;
 		var body_block = $3;
 		
 		var funcSymb = yy.funcStack.pop();
@@ -1350,7 +1349,19 @@ for_in_head
 	: FOR IDENTIFIER IN expression {
 		ErrorManager.setContext(@1, context.filePath);
 		yy.symbolScopes.enter();
-		var smb = yy.symbolScopes.declareSymbol($2, $4.symb.subTypeSymbol ? $4.symb.subTypeSymbol.name : $4.symb.typeSymbol.name);
+		if (!$4.symb.isIterable()) {
+			ErrorManager.error("محاولة ئستطواف نوع غير مستطوف " + $4.symb.toString());
+		}
+		// except unknown types, we can't apply FOR to a type without subTypeSymbol
+		var subTypeSymbol = $4.symb.subTypeSymbol;
+		if ($4.symb.typeIs('مجهول')) {
+			subTypeSymbol = $4.symb.typeSymbol; // مجهول
+		}
+		if (!subTypeSymbol) {
+			console.log(subTypeSymbol);
+			throw new Error("FOR IN without subTypeSymbol " + $4.symb);
+		}		
+		var smb = yy.symbolScopes.declareSymbol($2, subTypeSymbol.name);
 		smb.isReadOnly = true;
 		// TOREVIEW
 		//if ($4.type == 'مصفوفة') {

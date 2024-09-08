@@ -70,7 +70,7 @@ class Symbol {
 		var smb = new Symbol(
 			this.name,
 			typeSymb || this.typeSymbol,
-			isArray,
+			(isArray != undefined) ? isArray : this.isArray,
 			this.isClass
 		);
 		smb.members = this.members;
@@ -83,7 +83,7 @@ class Symbol {
 		smb.isEnum = this.isEnum;
 		smb.allowed = this.allowed;
 		smb.args = this.args;
-		smb.subTypeSymbol = subTypeSymbol;
+		smb.subTypeSymbol = subTypeSymbol || this.subTypeSymbol;
 		return smb;
 	}
 	

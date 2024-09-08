@@ -434,7 +434,6 @@ case 52:
 		
 		var function_decl = $$[$0-2];
 		var function_ret = $$[$0-1];
-		var function_ret = $$[$0-1];
 		var body_block = $$[$0];
 		
 		var funcSymb = yy.funcStack.pop();
@@ -1019,7 +1018,19 @@ case 112:
 
 		ErrorManager.setContext(_$[$0-3], context.filePath);
 		yy.symbolScopes.enter();
-		var smb = yy.symbolScopes.declareSymbol($$[$0-2], $$[$0].symb.subTypeSymbol ? $$[$0].symb.subTypeSymbol.name : $$[$0].symb.typeSymbol.name);
+		if (!$$[$0].symb.isIterable()) {
+			ErrorManager.error("محاولة ئستطواف نوع غير مستطوف " + $$[$0].symb.toString());
+		}
+		// except unknown types, we can't apply FOR to a type withtout subTypeSymbol
+		var subTypeSymbol = $$[$0].symb.subTypeSymbol;
+		if ($$[$0].symb.typeIs('مجهول')) {
+			subTypeSymbol = $$[$0].symb.typeSymbol; // مجهول
+		}
+		if (!subTypeSymbol) {
+			console.log(subTypeSymbol);
+			throw new Error("FOR IN without subTypeSymbol " + $$[$0].symb);
+		}		
+		var smb = yy.symbolScopes.declareSymbol($$[$0-2], subTypeSymbol.name);
 		smb.isReadOnly = true;
 		// TOREVIEW
 		//if ($$[$0].type == 'مصفوفة') {
