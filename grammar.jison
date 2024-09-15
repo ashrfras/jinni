@@ -410,6 +410,17 @@ import_statement
 			if (!scope) { // string import
 				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add, 'مجهول');
 			} else {
+				var name = importSpecifier.add;
+				if (name == '??') { // like in import * from foo => without specifing add name
+					name = scope.getImportName();
+					name = name.replaceAll('/', '');
+					name = name.replace('.mjs', '');
+					if (name.includes('.')) {
+						var splitted = name.split('.');
+						name = splitted[splitted.length - 1];
+					}
+				}
+				importSpecifier.add = name;
 				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add);
 				scope.copyToSymbol(mySymb);
 			}
@@ -433,6 +444,11 @@ import_statement
 					i++;
 				});
 			}
+		}
+		
+		if ($2.value.includes('??')) {
+			// like in import * from foo => without specifing add name
+			$2.value = $2.value.replace('??', importSpecifier.add);
 		}
 		
 		var exp = $2.value;
@@ -497,15 +513,14 @@ import_specifier
 			value: '{' + $1.replace('مفترض', 'default') + ' as ' + $3 + '}'
 		}
 	}
-/* TODO: support AS in imports
 	| ALL {
+		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
 			find: 'all',
-			add: 'العام',
-			value: '* as العام' 
+			add: '??',
+			value: '* as ??' 
 		}
 	}
-*/
     | ALL AS IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		$$ = {
