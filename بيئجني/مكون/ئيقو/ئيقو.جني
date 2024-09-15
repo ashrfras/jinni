@@ -124,8 +124,13 @@
   "مجلد-ناقص": "iconoir-folder-minus"،
   "مجلد-زائد": "iconoir-folder-plus"،
   "مربع-قوس-كود": "iconoir-code-brackets-square"،
+  "قوس-كود": "iconoir-code-brackets"،
   "مربع-مساعدة": "iconoir-help-square"،
-  "تسجيل-خروج": "iconoir-log-out"
+  "تسجيل-خروج": "iconoir-log-out"،
+  "نسخ": "iconoir-copy"،
+  "حادي-يمين": "iconoir-align-right"،
+  "جيت-طلب-سحب": "iconoir-git-pull-request"،
+  "ئنترنت": "iconoir-internet"
 }؛
 
 ئعلن ئيقو.صيير ():

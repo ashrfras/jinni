@@ -477,6 +477,7 @@ case 53:
 		funcSymb.isArray = $$[$0].isArray;
 		if ($$[$0].isArray && !$$[$0].subTypeSymbol) {	
 			console.error($$[$0]);
+			ErrorManager.error("مصفوفة دون نوع فرعي " + $$[$0].symb.toString());
 			throw new Error ('مصفوفة دون نوع فرعي');
 		}
 		funcSymb.subTypeSymbol = $$[$0].subTypeSymbol;
@@ -1021,13 +1022,14 @@ case 112:
 		if (!$$[$0].symb.isIterable()) {
 			ErrorManager.error("محاولة ئستطواف نوع غير مستطوف " + $$[$0].symb.toString());
 		}
-		// except unknown types, we can't apply FOR to a type withtout subTypeSymbol
+		// except unknown types, we can't apply FOR to a type without subTypeSymbol
 		var subTypeSymbol = $$[$0].symb.subTypeSymbol;
 		if ($$[$0].symb.typeIs('مجهول')) {
 			subTypeSymbol = $$[$0].symb.typeSymbol; // مجهول
 		}
 		if (!subTypeSymbol) {
 			console.log(subTypeSymbol);
+			ErrorManager.error("محاولة ئستطواف نوع غير مستطوف " + $$[$0].symb.toString());
 			throw new Error("FOR IN without subTypeSymbol " + $$[$0].symb);
 		}		
 		var smb = yy.symbolScopes.declareSymbol($$[$0-2], subTypeSymbol.name);

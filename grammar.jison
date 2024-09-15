@@ -774,6 +774,7 @@ function_ret
 		funcSymb.isArray = $2.isArray;
 		if ($2.isArray && !$2.subTypeSymbol) {	
 			console.error($2);
+			ErrorManager.error("مصفوفة دون نوع فرعي " + $2.symb.toString());
 			throw new Error ('مصفوفة دون نوع فرعي');
 		}
 		funcSymb.subTypeSymbol = $2.subTypeSymbol;
@@ -1359,6 +1360,7 @@ for_in_head
 		}
 		if (!subTypeSymbol) {
 			console.log(subTypeSymbol);
+			ErrorManager.error("محاولة ئستطواف نوع غير مستطوف " + $4.symb.toString());
 			throw new Error("FOR IN without subTypeSymbol " + $4.symb);
 		}		
 		var smb = yy.symbolScopes.declareSymbol($2, subTypeSymbol.name);
