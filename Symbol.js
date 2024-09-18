@@ -73,6 +73,7 @@ class Symbol {
 			(isArray != undefined) ? isArray : this.isArray,
 			this.isClass
 		);
+		smb.isClass= this.isClass;
 		smb.members = this.members;
 		smb.mySuper = this.mySuper;
 		smb.myShortcut = this.myShortcut;

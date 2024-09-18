@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsp = require('fs').promises;
 const Path = require('path');
 const ErrorManager = require('./ErrorManager');
 const Scope = require('./Scope');
@@ -15,6 +16,25 @@ class ImportManager {
 	static setContext (ctx) {
 		ImportManager.projectPath = ctx.projectPath;
 		ImportManager.outputPath = ctx.outPath;
+	}
+	
+	static async addStringImport (imp, fromFilePath) {
+		if (imp.startsWith('//')) {
+			// nothing to do here, but import is correct
+		} else if (imp.startsWith('/')) {
+			// this is a local file, copy it to the project out
+			var source = Path.join(Path.dirname(fromFilePath), imp);
+			try {
+				await fsp.access(source);
+			} catch (err) {
+				console.log(err);
+				ErrorManager.error("ملف الئيراد غير موجود: " + imp);
+			}
+			var destination = Path.join(ImportManager.outputPath, imp);
+			await fsp.copyFile(source, destination);
+		} else {
+			ErrorManager.error("تبدئ الئيرادات النصية ب // ئو /");
+		}
 	}
 	
 	// imp is import path

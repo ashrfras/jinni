@@ -159,6 +159,7 @@ case 28:
 		if (importSpecifier.find == 'all') {
 			var mySymb;
 			if (!scope) { // string import
+				ImportManager.addStringImport($$[$0].replaceAll("'", "").replaceAll('"', ''), context.filePath);
 				mySymb = yy.symbolScopes.declareSymbol(importSpecifier.add, 'مجهول');
 			} else {
 				var name = importSpecifier.add;
@@ -177,6 +178,7 @@ case 28:
 			}
 		} else {
 			if (!scope) { // string import
+				ImportManager.addStringImport($$[$0].replaceAll("'", "").replaceAll('"', ''), context.filePath);
 				importSpecifier.add.forEach((add) => {
 					yy.symbolScopes.declareSymbol(add, 'مجهول');
 				});
@@ -184,6 +186,7 @@ case 28:
 				var i = 0;
 				importSpecifier.find.forEach((find) => {
 					var symb = scope.getSymbolByName(find);
+					if (symb.name == 'مشهدوحدات') console.log(symb);
 					if (!symb) {
 						ErrorManager.error("الئسم " + find + " غير معروف في الوحدة '" + $$[$0] + "'");
 					}
@@ -214,6 +217,10 @@ case 28:
 			if (imp == '//') {
 				// nonfunctional import just for the parser
 				this.$ = "";
+			} else if ( !imp.startsWith('//') && imp.startsWith('/') ) {
+				// local file import
+				// we add ./ the dot to always go from current script path
+				this.$ = 'import ' + $$[$0-2].value + ' from ".' + imp + '";'
 			} else {
 				this.$ = 'import ' + $$[$0-2].value + ' from "' + imp + '";' //export ' + exp; 
 			}
@@ -664,11 +671,16 @@ case 74:
 		
 		//we set proper 'this' name in every start of a block
 		//if block contains super, then it should come after it
+		if (!result.includes('super(')) {
+			result = 'const هدا=this;' + result;
+		}
+		/*
 		if (result.includes('super()')) {
 			result = result.replace('super();', 'super();const هدا=this;');
 		} else {
 			result = 'const هدا=this;' + result;
 		}
+		*/
 		this.$ = '{' + result + '}';
 	
 break;
@@ -699,7 +711,7 @@ case 76:
 		if (selfSymb.isShortcut()) {
 			this.$ = '';
 		} else {
-			this.$ = 'super(' + $$[$0-1] + ')';
+			this.$ = 'super(' + paramValues.join(', ') + ')';
 		}
     
 break;
@@ -2353,7 +2365,7 @@ _handle_error:
 
 	// JNX logic
 	
-	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea,مائل:i,فجوة:slot,منسق:pre"
+	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea,مائل:i,فجوة:slot,منسق:pre,ئفريم:iframe"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width,سمة:style"
 		.replaceAll(":", '":"').replaceAll(',', '","');
