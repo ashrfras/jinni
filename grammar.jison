@@ -1536,6 +1536,9 @@ assignment
 		}
 	}
     | array_access '=' expression {
+		if (!$3.symb.canBeAssignedTo($1.symb)) {
+			ErrorManager.error("محاولة ئدراج " + $3.symb.toString() + " ضمن '" + $1.symb.name + "[]'");
+		}
 		$$ = {
 			symb: $3.symb,
 			value: $1.value + '=' + $3.value
@@ -1683,6 +1686,13 @@ function_call
     | member_access '(' arg_list ')' {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = $1.symb;
+		var parentSymb = symb.memberOf;
+		var cond1 = parentSymb && parentSymb.typeIs('مصفوفة');
+		var cond2 = $1.precedent && $1.precedent.isArray;
+		// check array homogeneity
+		if (cond1 && cond2) {
+			symb.checkArrayHomogeny($3, $1.precedent.subTypeSymbol); //symb is an array function
+		}
 		// check args
 		var paramValues = symb.checkArgs($3);
 		$$ = {
@@ -1806,7 +1816,8 @@ member_access
 		var memberSymb = symb.checkMember($3);	
 		$$ = {
 			symb: memberSymb,
-			value: $1 + '.' + $3 
+			value: $1 + '.' + $3,
+			precedent: symb
 		}
 	}
     | function_call '.' IDENTIFIER {
@@ -1819,7 +1830,8 @@ member_access
 		var memberSymb = symb.checkMember($3);
 		$$ = {
 			symb: memberSymb,
-			value: $1.value + '.' + $3 
+			value: $1.value + '.' + $3,
+			precedent: symb
 		}; 
 	}
     | member_access '.' IDENTIFIER {
@@ -1842,13 +1854,15 @@ member_access
 		}
 		$$ = {
 			symb: memberSymb,
-			value: $1.value + '.' + $3 
+			value: $1.value + '.' + $3,
+			precedent: symb
 		};
 	}
 	| array_access '.' IDENTIFIER {
 		$$ = {
 			symb: $1.symb,
-			value: $1.value + '.' + $3
+			value: $1.value + '.' + $3,
+			precedent: $1.symb
 		};
 	}
     | SELF '.' IDENTIFIER {
@@ -1856,39 +1870,21 @@ member_access
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
 		var symb = selfSymb.checkMember($3);
 		$$ = {
-			symb,
-			value: 'this.' + $3
+			symb: symb,
+			value: 'this.' + $3,
+			precedent: selfSymb
 		}
 	}
 	| '(' expression ')' '.' IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = $2.symb.typeSymbol.checkMember($5);
 		$$ = {
-			symb,
-			value: '(' + $2.value + ').' + $5
+			symb: symb,
+			value: '(' + $2.value + ').' + $5,
+			precedent: $2.symb
 		}
 	}
 	;
-/*
-	| '(' expression ')' '.' IDENTIFIER {
-		ErrorManager.setContext(@1, context.filePath);
-		var symb = $2.symb;
-		var memberSymb;
-		if (symb.typeIs('نوعبنية')) {
-			// for object literals, we take symb name as member base
-			memberSymb = symb.checkMember($5);
-		} else {
-			// for other variables, we take their symb type as member base
-			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
-			var typeSymb = symb.typeSymbol;
-			memberSymb = typeSymb.checkMember($5);
-		}
-		$$ = {
-			symb: memberSymb,
-			value: $2.value + '.' + $5 
-		};
-	}
-*/
 ////
 	
 	

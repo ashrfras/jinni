@@ -1196,6 +1196,9 @@ case 129:
 break;
 case 130:
 
+		if (!$$[$0].symb.canBeAssignedTo($$[$0-2].symb)) {
+			ErrorManager.error("محاولة ئدراج " + $$[$0].symb.toString() + " ضمن '" + $$[$0-2].symb.name + "[]'");
+		}
 		this.$ = {
 			symb: $$[$0].symb,
 			value: $$[$0-2].value + '=' + $$[$0].value
@@ -1341,6 +1344,13 @@ case 145:
 
 		ErrorManager.setContext(_$[$0-3], context.filePath);
 		var symb = $$[$0-3].symb;
+		var parentSymb = symb.memberOf;
+		var cond1 = parentSymb && parentSymb.typeIs('مصفوفة');
+		var cond2 = $$[$0-3].precedent && $$[$0-3].precedent.isArray;
+		// check array homogeneity
+		if (cond1 && cond2) {
+			symb.checkArrayHomogeny($$[$0-1], $$[$0-3].precedent.subTypeSymbol); //symb is an array function
+		}
 		// check args
 		var paramValues = symb.checkArgs($$[$0-1]);
 		this.$ = {
@@ -1455,7 +1465,8 @@ case 157:
 		var memberSymb = symb.checkMember($$[$0]);	
 		this.$ = {
 			symb: memberSymb,
-			value: $$[$0-2] + '.' + $$[$0] 
+			value: $$[$0-2] + '.' + $$[$0],
+			precedent: symb
 		}
 	
 break;
@@ -1470,7 +1481,8 @@ case 158:
 		var memberSymb = symb.checkMember($$[$0]);
 		this.$ = {
 			symb: memberSymb,
-			value: $$[$0-2].value + '.' + $$[$0] 
+			value: $$[$0-2].value + '.' + $$[$0],
+			precedent: symb
 		}; 
 	
 break;
@@ -1495,7 +1507,8 @@ case 159:
 		}
 		this.$ = {
 			symb: memberSymb,
-			value: $$[$0-2].value + '.' + $$[$0] 
+			value: $$[$0-2].value + '.' + $$[$0],
+			precedent: symb
 		};
 	
 break;
@@ -1503,7 +1516,8 @@ case 160:
 
 		this.$ = {
 			symb: $$[$0-2].symb,
-			value: $$[$0-2].value + '.' + $$[$0]
+			value: $$[$0-2].value + '.' + $$[$0],
+			precedent: $$[$0-2].symb
 		};
 	
 break;
@@ -1513,8 +1527,9 @@ case 161:
 		var selfSymb = yy.selfStack[yy.selfStack.length-1];
 		var symb = selfSymb.checkMember($$[$0]);
 		this.$ = {
-			symb,
-			value: 'this.' + $$[$0]
+			symb: symb,
+			value: 'this.' + $$[$0],
+			precedent: selfSymb
 		}
 	
 break;
@@ -1523,8 +1538,9 @@ case 162:
 		ErrorManager.setContext(_$[$0-4], context.filePath);
 		var symb = $$[$0-3].symb.typeSymbol.checkMember($$[$0]);
 		this.$ = {
-			symb,
-			value: '(' + $$[$0-3].value + ').' + $$[$0]
+			symb: symb,
+			value: '(' + $$[$0-3].value + ').' + $$[$0],
+			precedent: $$[$0-3].symb
 		}
 	
 break;

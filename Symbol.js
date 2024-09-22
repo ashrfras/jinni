@@ -37,6 +37,7 @@ class Symbol {
 	isLiteral = false; // is this a literal value
 	isImport = false; // is this an import symbol
 	isReadOnly = false;
+	memberOf = null; // this symb is a member of another symb?
 	
 	
 	constructor (name, typeSymbol = null, isArray = false, isClass = false) {
@@ -85,6 +86,7 @@ class Symbol {
 		smb.allowed = this.allowed;
 		smb.args = this.args;
 		smb.subTypeSymbol = subTypeSymbol || this.subTypeSymbol;
+		smb.memberOf = this.memberOf;
 		return smb;
 	}
 	
@@ -252,6 +254,7 @@ class Symbol {
 		}
 		if (!memb.symb) {
 			this.members.push(memberSymb);
+			memberSymb.memberOf = this;
 		}
 		return memberSymb;
 	}
@@ -325,6 +328,24 @@ class Symbol {
 	
 	getMember (symb) {
 		return this.getMemberName(symb.name);
+	}
+	
+	// array params should be homegeneous
+	checkArrayHomogeny (symbs, subType) {
+		var args = this.args; // this is a function of array like push()
+		//console.log(this);
+		for (var i=0; i<args.length; i++) {
+			var mySymb = args[i].symb;
+			var thatArg = symbs[i] ? symbs[i].symb : null;
+			// when a param in Array function is majhoul, means it needs to be homogeneousity verified
+			if (mySymb.typeIs('مجهول')) {
+				// this arg requires homogeneity
+				if (!thatArg.canBeAssignedTo(subType, false)) { // false don't print error
+					// well print it here customized
+					ErrorManager.error(thatArg.toString() + " ليس من نوع المصفوفة '" + subType.name + "[]'");
+				}
+			}
+		}
 	}
 	
 	// check function arguments against a given list of symbols
