@@ -219,8 +219,13 @@ case 28:
 				this.$ = "";
 			} else if ( !imp.startsWith('//') && imp.startsWith('/') ) {
 				// local file import
-				// we add ./ the dot to always go from current script path
-				this.$ = 'import ' + $$[$0-2].value + ' from ".' + imp + '";'
+				if (imp.endsWith('.js') || imp.endsWith('.mjs')) {
+					// we add ./ the dot to always go from current script path
+					this.$ = 'import ' + $$[$0-2].value + ' from ".' + imp + '";'
+				}else {
+					// nonfunctional import, just for file copy
+					this.$ = "";
+				}
 			} else {
 				this.$ = 'import ' + $$[$0-2].value + ' from "' + imp + '";' //export ' + exp; 
 			}

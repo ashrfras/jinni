@@ -33,7 +33,9 @@ class ImportManager {
 			var destination = Path.join(ImportManager.outputPath, imp);
 			await fsp.copyFile(source, destination);
 		} else {
-			ErrorManager.error("تبدئ الئيرادات النصية ب // ئو /");
+			// also nothing to do here, this is not an error anymore
+			// I'm keeping these if else for clarity reasons
+			//ErrorManager.error("تبدئ الئيرادات النصية ب // ئو /");
 		}
 	}
 	

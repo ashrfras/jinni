@@ -468,8 +468,13 @@ import_statement
 				$$ = "";
 			} else if ( !imp.startsWith('//') && imp.startsWith('/') ) {
 				// local file import
-				// we add ./ the dot to always go from current script path
-				$$ = 'import ' + $2.value + ' from ".' + imp + '";'
+				if (imp.endsWith('.js') || imp.endsWith('.mjs')) {
+					// we add ./ the dot to always go from current script path
+					$$ = 'import ' + $2.value + ' from ".' + imp + '";'
+				}else {
+					// nonfunctional import, just for file copy
+					$$ = "";
+				}
 			} else {
 				$$ = 'import ' + $2.value + ' from "' + imp + '";' //export ' + exp; 
 			}

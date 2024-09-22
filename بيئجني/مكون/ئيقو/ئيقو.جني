@@ -9,7 +9,7 @@
 	
 	هدا.ئسم = هدا.ردخاصية('ئسم')؛
 	هدا.هلمعكوس = هدا.لهخاصية('معكوس')؛
-	هدا.رابط = 'https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css'؛
+	هدا.رابط = '/مكون/ئيقو/iconoir.css'؛
 تم
 
 ئعلن قاموس ك نوعبنية = {
@@ -130,7 +130,8 @@
   "نسخ": "iconoir-copy"،
   "حادي-يمين": "iconoir-align-right"،
   "جيت-طلب-سحب": "iconoir-git-pull-request"،
-  "ئنترنت": "iconoir-internet"
+  "ئنترنت": "iconoir-internet"،
+  "علامة-ئكس": "iconoir-xmark"
 }؛
 
 ئعلن ئيقو.صيير ():
