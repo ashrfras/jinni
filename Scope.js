@@ -43,6 +43,10 @@ class Scope {
 		return symb;
 	}
 	
+	clear () {
+		this.symbols = [];
+	}
+	
 	// Copy this scope content to symbol
 	copyToSymbol (symb) {
 		this.symbols.forEach ((s) => {

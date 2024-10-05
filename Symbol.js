@@ -2,7 +2,7 @@ const ErrorManager = require('./ErrorManager');
 
 class Symbol {
 	// Automatically import these types in every source
-	static AUTOIMPORTS = ['عدد', 'منطق', 'مصفوفة', 'نصية', 'نوعبنية', 'نوعتعداد', 'تاريخ'];
+	static AUTOIMPORTS = ['عدد', 'منطق', 'مصفوفة', 'نصية', 'نوعبنية', 'نوعمركب', 'نوعتعداد', 'تاريخ'];
 	
 	// system types known by the compiler
 	static SYSTEMTYPES = {
@@ -25,6 +25,7 @@ class Symbol {
 	subTypeSymbol; // type of arrays	
 	isClass; // bad but legacy
 	isStruct; // bad but legacy
+	isComposite; // bad but legacy
 	isEnum; // bad but legacy
 	mySuper; // if this is an inheriting class
 	myShortcut; // if this is a shortcut symbol
@@ -38,6 +39,7 @@ class Symbol {
 	isImport = false; // is this an import symbol
 	isReadOnly = false;
 	memberOf = null; // this symb is a member of another symb?
+	hasUnknownComposite = false; // a composite with ... is marked with this as true
 	
 	
 	constructor (name, typeSymbol = null, isArray = false, isClass = false) {
@@ -81,12 +83,14 @@ class Symbol {
 		smb.isAwait = this.isAwait;
 		smb.superSymbol	= this.superSymbol;
 		smb.isStruct = this.isStruct;
+		smb.isComposite = this.isComposite;
 		smb.isLiteral = this.isLiteral;
 		smb.isEnum = this.isEnum;
 		smb.allowed = this.allowed;
 		smb.args = this.args;
 		smb.subTypeSymbol = subTypeSymbol || this.subTypeSymbol;
 		smb.memberOf = this.memberOf;
+		smb.hasUnknownComposite = this.hasUnknownComposite;
 		return smb;
 	}
 	
@@ -103,7 +107,7 @@ class Symbol {
 	}
 	
 	isIterable () {
-		return ['مصفوفة', 'منوع', 'نوعبنية', 'نوعتعداد', 'مجهول', 'نصية'].includes(this.typeSymbol.name)
+		return ['مصفوفة', 'منوع', 'نوعبنية', 'نوعمركب', 'نوعتعداد', 'مجهول', 'نصية'].includes(this.typeSymbol.name)
 			|| this.isArray
 			|| this.typeSymbol.isStruct
 			|| (this.typeSymbol.superSymbol && this.typeSymbol.superSymbol.typeIs('مصفوفة'));
@@ -149,9 +153,17 @@ class Symbol {
 			return false;
 		}
 		
+		if (assignFrom.isArray && assignTo.isArray) {
+			if (assignFrom.subTypeSymbol.name == assignTo.subTypeSymbol.name) {
+				return true;
+			} else {
+				return assignFrom.subTypeSymbol.canBeAssignedTo(assignTo.subTypeSymbol);
+			}
+		}
+		
 		// dala
 		if (assignTo.typeIs('دالة') && assignFrom.typeIs('دالة')) {
-			if (!assignFrom.subTypeSymbol.canBeAssignedTo(assignTo.subTypeSymbol)) {
+			if (!assignFrom.subTypeSymbol.canBeAssignedTo(assignTo.subTypeSymbol, false)) {
 				ErrorManager.error("يتوقع دالة ترد " + assignTo.subTypeSymbol.toString() + " وجد دالة ترد " + assignFrom.subTypeSymbol.toString());
 				return false;
 			}
@@ -162,6 +174,35 @@ class Symbol {
 		if (assignTo.typeIs('دالة') && assignFrom.typeIs('وضيفة')) return true;
 		if (assignTo.typeIs('وضيفة') && assignFrom.typeIs('دالة')) return true;
 		
+		// if both are compositeType (aka stuctType), all members in "from" should exist in "to"
+		if (assignTo.isStructType() && assignFrom.isStructType()) {
+			var canbe = true;
+			// if one side is declared as "نوعمركب" we'll consider it as generic composite
+			// no member checking for such generic composites (aka generic structs)
+			if (assignFrom.isGenericStructType() || assignTo.isGenericStructType()) {
+				//return true; TODO disabled for now
+			}
+			// if assign to has ... meaning has unknown composites
+			// then skip member checking
+			// bc assignto accepts any memeber name
+			if (assignTo.hasUnknownComposite || assignTo.typeSymbol.hasUnknownComposite) {
+				return true;
+			}
+			assignFrom.members.forEach((fromMemb) => {
+				var toMemb = assignTo.checkMember(fromMemb.name, false); // false don't print error
+				if (!toMemb || !fromMemb.canBeAssignedTo(toMemb, false)) {
+					if (printerror) {
+						ErrorManager.error("المركب " + assignFrom.toString() + " غير متجانس مع المركب " + assignTo.toString() + " [" + fromMemb.name + "]");
+						return false;
+						//ErrorManager.error("محاولة ئسناد " + fromMemb.toString() + " ئلا " + toMemb.toString());
+					}
+					canbe = false;
+				}
+			});
+			return canbe;
+		}
+		
+		// THIS MAY BE ORPHAN, KEEPING EYE ON IT
 		// if we assign literal struct (from) to structType (to), check members
 		// all members in the literal struct (from) chould exist and affects to (to) members
 		// it is ok to have some missing members in the (from) struct
@@ -176,7 +217,7 @@ class Symbol {
 				// fromMemb is the one in the right hand side: {}
 				var toMemb = assignTo.typeSymbol.checkMember(fromMemb.name);
 				// check if the assigned (fromMember) exist and assignable to toMemb
-				if (!fromMemb.canBeAssignedTo(toMemb)) {
+				if (!fromMemb.canBeAssignedTo(toMemb, false)) {
 					if (printerror) {
 						ErrorManager.error("محاولة ئسناد " + fromMemb.toString() + " ئلا " + toMemb.toString());
 					}
@@ -185,7 +226,6 @@ class Symbol {
 			});
 			return canbe;
 		}
-		
 		// structType is a generic type for all Structs
 		if (assignTo.typeIs('نوعبنية') && assignFrom.typeSymbol.isStruct) {
 			return true;
@@ -194,6 +234,7 @@ class Symbol {
 		if (assignTo.typeSymbol.isStruct && assignFrom.typeIs('نوعبنية')) {
 			return true;
 		}
+		// ORPHAN END
 		
 		// enumType et = "value"
 		if (assignTo.isEnum && assignFrom.typeIs('نصية')) {
@@ -213,7 +254,7 @@ class Symbol {
 		
 		var can = (assignFrom.typeSymbol.name == assignTo.typeSymbol.name);
 		
-		// check inheritage cycle on both sides
+		// check inheritance cycle on both sides
 		[{to: assignTo, from: assignFrom}, {to: assignFrom, from: assignTo}].forEach(elem => {
 			if (!can) {
 				var superSymb = elem.to.typeSymbol.superSymbol;
@@ -228,6 +269,15 @@ class Symbol {
 		});
 		
 		return can;
+	}
+	
+	isStructType () {
+		return (this.typeIs('نوعمركب') || this.typeSymbol.isStruct);
+	}
+	
+	// generic struct (or generic composite) is a variable declared with "نوعمركب"
+	isGenericStructType () {
+		return (this.typeIs('نوعمركب') && !this.typeSymbol.isComposite);
 	}
 	
 	getTypeName () {
@@ -248,7 +298,14 @@ class Symbol {
 		if (memb.symb && !memb.isInherited) {
 			ErrorManager.error("الئسم '" + memberSymb.name + "' معرف مسبقا في الكائن " + this.toString());
 		}
-		if (memb.symb && memb.isInherited) {
+		this.members.push(memberSymb);
+		memberSymb.memberOf = this;
+		return memberSymb;
+		
+		// can't understand this code anymore
+		// leave it as dead code just in case
+		// TODO will be removed
+		if (memb.symb && memb.isInherited) {		
 			var i = this.members.indexOf(memb.symb);
 			this.members[i] = memberSymb;
 		}
@@ -260,18 +317,18 @@ class Symbol {
 	}
 	
 	// we may pass member funcArgs array to allow function overloading
-	checkMember (memberName) {
+	checkMember (memberName, printerror = true) {
 		if (Symbol.isGenericType(this.typeSymbol.name)) {
 			// generic types are not member checked
 			return new Symbol(memberName, Symbol.SYSTEMTYPES['مجهول']);
 		}
 		let memberSymb;
-		if (this.isStruct || this.typeIs('نوعبنية')) {
+		if (this.isStruct || this.isComposite || this.typeIs('نوعبنية') || this.typeIs('نوعمركب')) {
 			memberSymb = this.getMemberName(memberName);
 		} else {
 			memberSymb = this.typeSymbol.getMemberName(memberName);
 		}
-		if (!memberSymb) {
+		if (!memberSymb && printerror) {
 			ErrorManager.error("الئسم '" + memberName + "' غير معروف في الكائن " + this.toString());
 		}
 		return memberSymb;
@@ -437,7 +494,10 @@ class Symbol {
 	}
 	
 	toString () {
-		if (this.isClass || Symbol.isSystemType(this.name) || this.isLiteral) {
+		if (this.isLiteral || this.isComposite) {
+			var name = this.name ? this.name + ' ' : '';
+			return "'" + name + "{" + this.members.map(e => e.name) + "}'";
+		} else if (this.isClass || Symbol.isSystemType(this.name)) {
 			return "'" + this.name + "'";	
 		} else {
 			return ("'" + 

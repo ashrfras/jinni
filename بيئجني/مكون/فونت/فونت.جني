@@ -13,14 +13,14 @@
 ئعلن فونت.صيير ():
 	دع سيسس = "
 		@font-face { 
-			font-family: '_{هدا.ئسم}'; 
-			src: url('_{هدا.عنونت}'); format('ttf');
+			font-family: '%{هدا.ئسم}'; 
+			src: url('%{هدا.عنونت}'); format('ttf');
 		}
-		body, body * {font-family: '_{هدا.ئسم}';}
+		body, body * {font-family: '%{هدا.ئسم}';}
 	"؛
 	ئرجع (
 		<سمة>
-			_{سيسس}
+			%{سيسس}
 		</سمة>
 	)؛
 تم

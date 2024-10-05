@@ -27,7 +27,8 @@
 "ئعلن"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DECL'
 "دالة"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DALA'
 "وعد"(?![a-zA-Z0-9_\u0621-\u0669])					return 'PROMISE'
-"بنية"(?![a-zA-Z0-9_\u0621-\u0669])					return 'STRUCT'
+"بنية"(?![a-zA-Z0-9_\u0621-\u0669])					return 'COMPOSITE'
+"مركب"(?![a-zA-Z0-9_\u0621-\u0669])					return 'COMPOSITE'
 "تعداد"(?![a-zA-Z0-9_\u0621-\u0669])				return 'ENUM'
 "=="												return 'EQ'
 "لا="												return 'NEQ'
@@ -168,7 +169,7 @@
 	
 	let htmtags = "رئس:head,جسم:body,قسم:div,ميطا:meta,عنوان:title,حيز:span,رابط:a,تدييل:footer,ترويس:header,صورة:img,ئدخال:input,سمة:style,مربعنص:textarea,مائل:i,فجوة:slot,منسق:pre,ئفريم:iframe"
 		.replaceAll(":", '":"').replaceAll(',', '","');
-	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width,سمة:style"
+	let htmatts = "مصدر:src,ئصل:rel,عنونت:href,لئجل:for,معرف:id,ستنب:placeholder,معطل:disabled,مطلوب:required,مختار:checked,محدد:selected,ئسم:name,قيمة:value,محتوا:content,صنف:class,طول:height,عرض:width,سمة:style,قابلتعديل:contenteditable"
 		.replaceAll(":", '":"').replaceAll(',', '","');
 		
 	function processJNX(src, context, yy) {
@@ -562,18 +563,33 @@ import_path
 variable_def
 	: DECL IDENTIFIER AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
-		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.isArray, $4.subTypeSymbol);
-		yy.symbolScopes.declareSymbolS(mySymb);
+		var mySymb;
+		if ($4.isComposite) {
+			mySymb = yy.symbolScopes.declareCompositeSymbol(
+				{isArray: $4.isArray},
+				$4.symbols,
+				$2
+			);
+		} else {
+			mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.isArray, $4.subTypeSymbol);
+			yy.symbolScopes.declareSymbolS(mySymb);
+		}
 		$$ = ($2.startsWith('_') ? '' : 'export ') + 'let ' + $2 + ' = null';
 	}
 	| DECL IDENTIFIER AS type_decl '=' expression {
 		ErrorManager.setContext(@1, context.filePath);
-		var mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.isArray, $4.subTypeSymbol);
-		yy.symbolScopes.declareSymbolS(mySymb);
-		if (! $6.symb.canBeAssignedTo(mySymb) ) {
-			// type mismatch
-			ErrorManager.error("محاولة ئسناد " + $6.symb.toString() + " ئلا " + mySymb.toTypeString());
-		}
+		var mySymb;
+		if ($4.isComposite) {
+			mySymb = yy.symbolScopes.declareCompositeSymbol(
+				{isArray: $4.isArray},
+				$4.symbols,
+				$2
+			);
+		} else {
+			mySymb = yy.symbolScopes.createSymbolS($2, $4.symb, $4.isArray, $4.subTypeSymbol);
+			yy.symbolScopes.declareSymbolS(mySymb);
+		}	
+		$6.symb.canBeAssignedTo(mySymb)
 		$$ = ($2.startsWith('_') ? '' : 'export ') + 'let ' + $2 + ' = ' + $6.value;
 	}
 	| DECL IDENTIFIER '=' expression {
@@ -586,41 +602,6 @@ variable_def
 ////
 
 
-//// DISABLED: Will be removed
-/*
-var_def
-	: DECL IDENTIFIER '.' IDENTIFIER AS type_decl {
-		ErrorManager.setContext(@1, context.filePath);
-		var mySymb = yy.symbolScopes.getSymbByName($2);
-		//var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
-		var mySymb2 = yy.symbolScopes.createSymbolS($4, $6.symb, $6.isArray, $6.subTypeSymbol);
-		mySymb.addMember(mySymb2);
-		$$ = $2 + '.' + $4 + ' = null';
-	}
-	| DECL IDENTIFIER '.' IDENTIFIER '=' expression {
-		ErrorManager.setContext(@1, context.filePath);
-		var mySymb = yy.symbolScopes.getSymbByName($2);
-		var mySymb2 = yy.symbolScopes.createSymbol($4, 'منوع', $6.symb.isArray);
-		mySymb.addMember(mySymb2);
-		$$ = $2 + '.' + $4 + ' = ' + $6.value;
-	}
-	| DECL IDENTIFIER '.' IDENTIFIER AS type_decl '=' expression {
-		ErrorManager.setContext(@1, context.filePath);
-		var mySymb = yy.symbolScopes.getSymbByName($2);
-		//var mySymb2 = yy.symbolScopes.createSymbol($4, $6.type, $6.isArray);
-		var mySymb2 = yy.symbolScopes.createSymbol($4, $6.symb, $6.isArray, $6.subTypeSymbol);
-		if (! $8.symb.canBeAssignedTo(mySymb2) ) {
-			// type mismatch
-			ErrorManager.error("محاولة ئسناد " + $8.symb.toString() + " ئلا " + mySymb2.toTypeString());
-		}
-		mySymb.addMember(mySymb2);
-		$$ = $2 + '.' + $4 + ' = ' + $8.value;
-	}
-	;
-*/
-////
-
-
 ////
 struct_def
 	: DECL struct_decl struct_body {
@@ -630,7 +611,7 @@ struct_def
 	}
 	;
 struct_decl
-	: STRUCT IDENTIFIER {
+	: COMPOSITE IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
 		var mySymb = yy.symbolScopes.declareSymbol($2, null, false, false);
 		mySymb.isStruct = true; // bad but legacy
@@ -643,9 +624,13 @@ struct_body
 	: ':' has_list END {
 		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1]; // current struct symbol
-		var symbols = $2; // $2 has_list is an array of symbols
-		symbols.forEach((symb) => {
-			funcSymb.addMember(symb);
+		var symbols = $2; // $2 has_list is an array of {symb, init, value}
+		symbols.forEach((elem) => {
+			if (elem.isSpread) {
+				funcSymb.hasUnknownComposite = true;
+			} else {
+				funcSymb.addMember(elem.symb);
+			}
 		});
 	}
 	;
@@ -794,17 +779,16 @@ function_def
 function_ret
 	: AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
-		// $2 = { type, subtype }
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		//funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($2.type);
-		funcSymb.typeSymbol = $2.symb;
-		funcSymb.isArray = $2.isArray;
-		if ($2.isArray && !$2.subTypeSymbol) {	
-			console.error($2);
-			ErrorManager.error("مصفوفة دون نوع فرعي " + $2.symb.toString());
-			throw new Error ('مصفوفة دون نوع فرعي');
+
+		if ($2.isComposite) {
+			yy.symbolScopes.makeCompositeSymbol(funcSymb, $2.isArray, $2.symbols);
+		} else {
+			funcSymb.typeSymbol = $2.symb;
+			funcSymb.isArray = $2.isArray;
+			funcSymb.subTypeSymbol = $2.subTypeSymbol;
 		}
-		funcSymb.subTypeSymbol = $2.subTypeSymbol;
+		
 		$$ = {
 			symb: funcSymb//.typeSymbol
 		}
@@ -812,11 +796,16 @@ function_ret
 	| AS PROMISE type_decl {
 		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1];
-		//funcSymb.typeSymbol = yy.symbolScopes.getSymbByName($3.type);
-		funcSymb.typeSymbol = $3.symb;
-		funcSymb.isArray = $3.isArray;
-		funcSymb.subTypeSymbol = $3.subTypeSymbol;
 		funcSymb.isAwait = true;
+		
+		if ($3.isComposite) {
+			yy.symbolScopes.makeCompositeSymbol(funcSymb, $3.isArray, $3.symbols);
+		} else {
+			funcSymb.typeSymbol = $3.symb;
+			funcSymb.isArray = $3.isArray;
+			funcSymb.subTypeSymbol = $3.subTypeSymbol;
+		}
+		
 		$$ = {
 			symb: funcSymb//.typeSymbol
 		}
@@ -1061,9 +1050,10 @@ has_statement
 		}
 		var result = ''; // will contain setter, getter output for the property
 		
-		// $2 has_list is an array of symbols
+		// $2 has_list is an array of {symb, value, init}
 		var symbols = $2;
-		symbols.forEach((symb) => {
+		symbols.forEach((elem) => {
+			var symb = elem.symb;
 			selfSymb.addMember(symb);
 			if (symb.isShortcut()) {
 				// declare setters & getters
@@ -1071,9 +1061,12 @@ has_statement
 				var getterCode = `return this.${name}`;
 				var setterCode = `this.${name} = value;`;
 				result += `Object.defineProperty(${selfSymb.name}.prototype, '${symb.name}', {get: function() {${getterCode}}, set: function(value) {${setterCode}} });`;
-			}
-			if (symb.isStruct) {
-				result += 'this.' + symb.name + ' = {};';
+			} else {
+				if (elem.init) {
+					result += 'this.' + elem.value + ';';
+				} else {
+					result += 'this.' + symb.name + ' = null;';
+				}
 			}
 		});
 		$$ = result;
@@ -1097,8 +1090,8 @@ has_list_elements
 	}
 	;
 has_list_element
-	: param_decl {
-		$$ = $1.symb
+	: param_def {
+		$$ = $1;
 	}
 	| param_decl SHORTCUTS IDENTIFIER {
 		ErrorManager.setContext(@1, context.filePath);
@@ -1112,7 +1105,12 @@ has_list_element
 			superSymb.checkMember($3);
 		}
 		$1.symb.myShortcut = $3;
-		$$ = $1.symb;
+		$$ = $1;
+	}
+	| SPREAD { // this is for composits (structs)
+		$$ = {
+			isSpread: true
+		}
 	}
 	;
 
@@ -1164,7 +1162,7 @@ param_decl
 			init: $5
 		}
 	}
-	| ENUM IDENTIFIER is_param_opt '[' enum_members ']' {
+	| ENUM IDENTIFIER is_param_opt '[' enum_members ']' { // legacy
 		ErrorManager.setContext(@1, context.filePath);
 		var symb = yy.symbolScopes.declareSymbol($2, 'نوعتعداد');
 		symb.isEnum = true; // bad but legacy
@@ -1175,19 +1173,35 @@ param_decl
 			init: $3
 		}
 	}
-	| STRUCT IDENTIFIER is_param_opt '{' has_list '}' {
+	| ENUM '[' enum_members ']' IDENTIFIER is_param_opt {
 		ErrorManager.setContext(@1, context.filePath);
-		var symb = yy.symbolScopes.declareSymbol($2, null, false, false);
-		symb.isStruct = true; // bad but legacy
-		// $5 has_list is an array of symbols
-		var symbols = $5;
-		symbols.forEach((s) => {
-			symb.addMember(s);
-		});
+		var symb = yy.symbolScopes.declareSymbol($5, 'نوعتعداد');
+		symb.isEnum = true; // bad but legacy
+		symb.allowed = $3;
 		$$ = {
 			symb: symb,
-			value: $2,
-			init: $3
+			value: $5,
+			init: $6
+		}
+	}
+	| composite_header '{' has_list '}' IDENTIFIER is_param_opt {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear(); // scope opened by composite_header
+		var symb = yy.symbolScopes.declareCompositeSymbol($1, $3, $5);
+		$$ = {
+			symb: symb,
+			value: $5 + ' = {}',
+			init: true
+		}
+	}
+	| composite_header IDENTIFIER is_param_opt {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear(); // scope opened by composite_header
+		var symb = yy.symbolScopes.declareCompositeSymbol($1, null, $2);
+		$$ = {
+			symb: symb,
+			value: $2 + ' = {}',
+			init: true
 		}
 	}
 	;
@@ -1237,8 +1251,8 @@ var_declaration
 		ErrorManager.setContext(@1, context.filePath);
 		// دع ب = 4
 		var mySymb = yy.symbolScopes.declareSymbol($2, 'منوع', $4.symb.isArray);
-		if ($4.symb.typeIs('نوعبنية')) {
-			// mySymb is generic add struct memebers to it
+		if ($4.symb.typeIs('نوعبنية') || $4.symb.typeIs('نوعمركب')) {
+			// mySymb is generic (munawaa) add struct memebers to it
 			mySymb.members = $4.symb.members;
 		}
         $$ = 'let ' + $2 + ' = ' + $4.value;
@@ -1254,7 +1268,7 @@ var_declaration
 		// عدد[] ب
 		symb: yy.symbolScopes.declareSymbol($4, 'مصفوفة', true /*isArray*/, $1/*subtype*/);
 		//yy.symbolScopes.declareSymbol($4, $1, true);
-		$$ = 'let ' + $4;
+		$$ = 'let ' + $4 + ' = []';
 	}
 	| IDENTIFIER IDENTIFIER '=' expression {
 		ErrorManager.setContext(@1, context.filePath);
@@ -1265,7 +1279,7 @@ var_declaration
 			ErrorManager.error("محاولة ئسناد '" + $4.symb.toString() + "' ئلا '" + $1 + "'");
 		}
 		
-		if ($4.symb.typeIs('نوعبنية')) {
+		if ($4.symb.typeIs('نوعبنية') || $4.symb.typeIs('نوعمركب')) {
 			// expression is an object literal
 			if (!mySymb.typeSymbol.isStruct) {
 				// mySymb is generic add struct memebers to it
@@ -1287,7 +1301,51 @@ var_declaration
 		//yy.symbolScopes.declareSymbol($4, $1, true);
 		$$ = 'let ' + $4 + ' = ' + $6.value;
 	}
+	| composite_header '{' has_list '}' IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear();
+		var symb = yy.symbolScopes.declareCompositeSymbol($1, $3, $5);
+		$$ = 'let ' + $5 + ' = ' + ($1.isArray ? '[]' : '{}');
+	}
+	| composite_header '{' has_list '}' IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear();
+		var symb = yy.symbolScopes.declareCompositeSymbol($1, $3, $5);
+		$7.symb.canBeAssignedTo(symb);
+		$$ = 'let ' + $5 + ' = ' + $7.value;
+	}
+	| composite_header IDENTIFIER {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear();
+		var symb = yy.symbolScopes.declareCompositeSymbol($1, null, $2);
+		$$ = 'let ' + $2 + ' = ' + ($1.isArray ? '[]' : '{}');
+	}
+	| composite_header IDENTIFIER '=' expression {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear();
+		var symb = yy.symbolScopes.declareCompositeSymbol($1, null, $2);
+		$4.symb.canBeAssignedTo(symb);
+		$$ = 'let ' + $2 + ' = ' + $4.value;
+	}
     ;
+////
+
+
+//// header for scoping
+composite_header
+	: COMPOSITE {
+		yy.symbolScopes.enter();
+		$$ = {
+			isArray: false
+		}
+	}
+	| COMPOSITE '[' ']' {
+		yy.symbolScopes.enter();
+		$$ = {
+			isArray: true
+		}
+	}
+	;
 ////
 
 
@@ -1336,7 +1394,7 @@ return_statement
 		if (!$2.symb.canBeAssignedTo(funcSymb)) {
 			ErrorManager.error("نوع الئرجاع " + $2.symb.toString() + " غير متوافق مع الوضيفة " + funcSymb.toString());
 		}
-		if ($2.symb.typeIs('نوعبنية')) {
+		if ($2.symb.typeIs('نوعبنية') || $2.symb.typeIs('نوعمركب')) {
 			// expression is an object literal
 			if (!funcSymb.typeSymbol.isStruct) {
 				// funcSymb is generic add struct memebers to it
@@ -1503,7 +1561,7 @@ assignment
 			// type mismatch
 			ErrorManager.error("محاولة ئسناد " + $3.symb.toString() + " ئلا " + mySymb.toString());
 		}
-		if ($3.symb.typeIs('نوعبنية')) {
+		if ($3.symb.typeIs('نوعبنية') || $3.symb.typeIs('نوعمركب')) {
 			// expression is an object literal
 			if (!mySymb.typeSymbol.isStruct) {
 				// mySymb is generic add struct memebers to it
@@ -1522,7 +1580,7 @@ assignment
 			if (!$3.symb.canBeAssignedTo(mySymb)) {
 				ErrorManager.error("محاولة ئسناد " + $3.symb.toString() + " ئلا " + $1.symb.toString());
 			}
-			if ($3.symb.typeIs('نوعبنية')) {
+			if ($3.symb.typeIs('نوعبنية') || $3.symb.typeIs('نوعمركب')) {
 				// expression is an object literal
 				if (!mySymb.typeSymbol.isStruct) {
 					// mySymb is generic add struct memebers to it
@@ -1769,7 +1827,7 @@ lambda_expr
 		symb.subTypeSymbol = $4.symb.typeSymbol;
 		$$ = {
 			symb: symb,
-			value: $2 + "=>" + $4.value
+			value: $2 + "=> (" + $4.value + ")"
 		}
 	}
 	;
@@ -1839,12 +1897,11 @@ member_access
 		//var type = $1.type;
 		var symb = $1.symb;
 		var memberSymb;
-		if (symb.typeIs('نوعبنية')) {
+		if (symb.typeIs('نوعبنية') || symb.typeIs('نوعمركب')) {
 			// for object literals, we take symb name as member base
 			memberSymb = symb.checkMember($3);
 		} else {
-			// for other variables, we take their symb type as member base
-			//var typeSymb = yy.symbolScopes.getSymbByName(symb.type);
+			// for other variables, we take their symbtype as member base
 			var typeSymb = symb.typeSymbol;
 			if (!symb.isPrimitive() && !symb.isStruct && symb.isClass) {
 				// calling a property without instance
@@ -1932,7 +1989,7 @@ object_literal
     : '{' property_list '}' {
 		ErrorManager.setContext(@1, context.filePath);
 		var symbs = $2.symb; // these are symbols of object properties
-		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
+		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعمركب'));
 		symb.isLiteral = true;
 		symbs.forEach((sy) => {
 			if (sy.isSpread) {
@@ -1951,7 +2008,7 @@ object_literal
 	}
 	| '{' /* empty */ '}' {
 		ErrorManager.setContext(@1, context.filePath);
-		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعبنية'));
+		var symb = new Symbol('', yy.symbolScopes.getSymbByName('نوعمركب'));
 		symb.isLiteral = true;
 		$$ = {
 			symb: symb,
@@ -2069,6 +2126,45 @@ type_decl
 			symb: symb,
 			subTypeSymbol: subTypeSymb,
 			isArray: true,
+		}
+	}
+	| composite_header '{' has_list '}' {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear();
+		var symb, subTypeSymb;
+		var symbols = $3; // $3 has_list is an array of {symb, value, init}
+		if ($1.isArray) {
+			symb = yy.symbolScopes.getSymbByName('مصفوفة');
+			subTypeSymb = yy.symbolScopes.getSymbByName('نوعمركب');
+		} else {
+			symb = yy.symbolScopes.getSymbByName('نوعمركب');
+			subTypeSymb = null;
+		}	
+		$$ = {
+			symb: symb,
+			symbols: symbols,
+			subTypeSymbol: subTypeSymb,
+			isArray: subTypeSymb != null,
+			isComposite: true
+		}
+	}
+	| composite_header {
+		ErrorManager.setContext(@1, context.filePath);
+		yy.symbolScopes.exitAndClear();
+		var symb, subTypeSymb;
+		if ($1.isArray) {
+			symb = yy.symbolScopes.getSymbByName('مصفوفة');
+			subTypeSymb = yy.symbolScopes.getSymbByName('نوعمركب');
+		} else {
+			symb = yy.symbolScopes.getSymbByName('نوعمركب');
+			subTypeSymb = null;
+		}	
+		$$ = {
+			symb: symb,
+			symbols: [{isSpread: true}],
+			subTypeSymbol: subTypeSymb,
+			isArray: subTypeSymb != null,
+			isComposite: true
 		}
 	}
 	;

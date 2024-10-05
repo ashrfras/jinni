@@ -20,6 +20,7 @@
 "دالة"(?![a-zA-Z0-9_\u0621-\u0669])					return 'KEYWORD'
 "وعد"(?![a-zA-Z0-9_\u0621-\u0669])					return 'OPERATOR'
 "بنية"(?![a-zA-Z0-9_\u0621-\u0669])					return 'KEYWORD'
+"مركب"(?![a-zA-Z0-9_\u0621-\u0669])					return 'KEYWORD'
 "تعداد"(?![a-zA-Z0-9_\u0621-\u0669])				return 'KEYWORD'
 "=="												return 'SYMBOL'
 "لا="												return 'SYMBOL'
