@@ -436,7 +436,6 @@ import_statement
 				var i = 0;
 				importSpecifier.find.forEach((find) => {
 					var symb = scope.getSymbolByName(find);
-					if (symb.name == 'مشهدوحدات') console.log(symb);
 					if (!symb) {
 						ErrorManager.error("الئسم " + find + " غير معروف في الوحدة '" + $4 + "'");
 					}
@@ -2305,6 +2304,12 @@ expression
 		$$ = {
 			symb: symb,
 			value: $1.value
+		}
+	}
+	| '(' lambda_expr ')' {
+		$$ = {
+			symb: $2.symb, 
+			value: $2.value
 		}
 	}
     | object_literal {

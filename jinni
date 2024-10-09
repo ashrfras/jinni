@@ -63,6 +63,7 @@ try {
 	fs.mkdirSync(outPath);
 }
 
+// compile the given main script file
 let code;
 try {
 	const data = fs.readFileSync(mainFilePath, 'utf8');
@@ -84,6 +85,28 @@ try {
 	console.error(error);
 }
 
+// compile worker module
+var workerFilePath = path.join(projectPath, 'مشتغلات.جني');
+try {
+	code = fs.readFileSync(workerFilePath, 'utf8');
+} catch (error) {
+	code = "";
+}
+
+try {
+	const parser = createParser();
+	const result = parser.parse(code, {
+		filePath: workerFilePath,
+		projectPath: projectPath,
+		outPath: outPath
+	});
+} catch (error) {
+	let projectBasePath = path.dirname(projectPath);
+	console.error("ملف: " + workerFilePath.replace(projectBasePath, ''));
+	console.error(error);
+}
+
+
 ErrorManager.printAll(false);
 
 if (ErrorManager.isBlocking) {
@@ -91,25 +114,35 @@ if (ErrorManager.isBlocking) {
 	process.exit();
 }
 
-// read from template.html
+// generate files
 if (is_web) {
+	// template index.html
+	var indexhtml;
 	try {
-		const data = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8');
-		code = data;
+		indexhtml = fs.readFileSync(path.join(__dirname, './templates/index.html'), 'utf8');
 	} catch (error) {
 		console.error('فشلت قرائة الملف: ', error);
 	}
-
-	// create index.html
+	// template server.mjs
+	var serverjs;
 	try {
-		code = code.replace('%ئسملف%', fileName);
-		fs.writeFileSync(path.join(projectPath, 'index.html'), code, { flag: 'w+' });
+		serverjs = fs.readFileSync(path.join(__dirname, './templates/server.mjs'), 'utf8');
+	} catch (error) {
+		console.error('فشلت قرائة الملف: ', error);
+	}
+	// copy package.json
+	fs.copyFileSync(path.join(__dirname, './templates/package.json'), path.join(projectPath, 'package.json'));
+
+	// process and create index.html
+	indexhtml = indexhtml.replace('%ئسملف%', fileName);
+	try {
+		fs.writeFileSync(path.join(projectPath, 'index.html'), indexhtml, { flag: 'w+' });
 	} catch (error) {
 		console.error('فشلت الكتابة في الملف: ', error);
 	}
 	
 	// run jiss
-	async function runJiss() {
+	(async function runJiss() {
 		try {
 			const { stdout, stderr } = await execPromise('jinni --nowarnings --nocompile ~/.jinni/jiss ' + path.join(projectPath));
 			if (stderr) {
@@ -119,20 +152,26 @@ if (is_web) {
 		} catch (error) {
 			console.error(error.message);
 		}
+	})();
+	
+	// process and create server.mjs
+	try {
+		fs.writeFileSync(path.join(projectPath, 'server.mjs'), serverjs, { flag: 'w+' });
+	} catch (error) {
+		console.error('فشلت الكتابة في الملف: ', error);
 	}
 	
-	runJiss();
-	
+	runScript(path.join(projectPath, 'server.mjs'));
 } else {
 	// run
 	if (!is_norun) {
-		runScript();
+		runScript(path.join(projectPath, '__خام__', fileName + '.mjs ') + userParams.join(' '));
 	}
 }
 
-async function runScript() {
+async function runScript(myscript) {
 	try {
-		const { stdout, stderr } = await execPromise('node ' + path.join(projectPath, '__خام__', fileName + '.mjs ') + userParams.join(' '));
+		const { stdout, stderr } = await execPromise('node ' + myscript);
 		if (stderr) {
 			console.error(stderr);
 		}
