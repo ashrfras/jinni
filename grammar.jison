@@ -68,6 +68,7 @@
 "قل"(?![a-zA-Z0-9_\u0621-\u0669])					return 'SAY'
 "ئشطب"(?![a-zA-Z0-9_\u0621-\u0669])					return 'DELETE'
 "ئورد"(?![a-zA-Z0-9_\u0621-\u0669])					return 'IMPORT'
+"يعتمد"(?![a-zA-Z0-9_\u0621-\u0669])				return 'DEPEND'
 "ك"(?![a-zA-Z0-9_\u0621-\u0669])					return 'AS'
 "ئنشئ"(?![a-zA-Z0-9_\u0621-\u0669])					return 'NEW'
 "من"(?![a-zA-Z0-9_\u0621-\u0669])					return 'FROM'
@@ -348,9 +349,11 @@ declstatement_list
 	;
 declstatement
 	: import_statement semic_or_nl { $$ = $1; }
+	| depend_statement semic_or_nl { $$ = $1; }
 	| function_def { $$ = $1; }
 	| var_def semic_or_nl { $$ = $1; }
 	| variable_def semic_or_nl { $$ = $1; }
+	| enum_def { $$ = $1; }
 	| struct_def { $$ = $1; }
 	| expression semic_or_nl { $$ = $1.value; }
 	;
@@ -559,6 +562,17 @@ import_path
 
 
 ////
+depend_statement
+	: DEPEND STRING {
+		var s = $2.replaceAll('"', '').replaceAll("'", "");
+		ImportManager.dependencies.push(s);
+		$$ = '';
+	}
+	;
+////
+
+
+////
 variable_def
 	: DECL IDENTIFIER AS type_decl {
 		ErrorManager.setContext(@1, context.filePath);
@@ -636,7 +650,8 @@ struct_body
 ////
 
 
-//// support disactivated for now
+////
+//// Enum classes have same name types
 enum_def
 	: DECL enum_decl enum_body {
 		var funcSymb = yy.funcStack.pop(); // exit enum scope
@@ -654,39 +669,11 @@ enum_decl
 	}
 	;
 enum_body
-	: ':' enum_list END {
+	: ':' enum_members END {
 		ErrorManager.setContext(@1, context.filePath);
 		var funcSymb = yy.funcStack[yy.funcStack.length-1]; // current enum symbol
 		var enums = $2; // $2 enum_list is an array of {symb, value}
-		enums.forEach((enu) => {
-			funcSymb.addMember(enu.symb);
-		});
-	}
-	;
-enum_list
-	: enum_elem {
-		$$ = [$1]
-	}
-	| enum_list '،' enum_elem {
-		$1.push($3);
-		if ($3.value == null) {
-			$3.value = $1.length
-		}
-		$$ = $1;
-	}
-	;
-enum_elem
-	: IDENTIFIER {
-		$$ = {
-			symb: yy.symbolScopes.createSymbol($1, 'عدد'),
-			value: null
-		}
-	}
-	| IDENTIFIER '=' expression {
-		$$ = {
-			symb: yy.symbolScopes.createSymbol($1, $3.symb.getTypeName()),
-			value: $3.value
-		}
+		funcSymb.allowed = $2;
 	}
 	;
 ////
@@ -1059,7 +1046,7 @@ has_statement
 				var name = symb.myShortcut;
 				var getterCode = `return this.${name}`;
 				var setterCode = `this.${name} = value;`;
-				result += `Object.defineProperty(${selfSymb.name}.prototype, '${symb.name}', {get: function() {${getterCode}}, set: function(value) {${setterCode}} });`;
+				result += `Object.defineProperty(${selfSymb.name}.prototype || ${selfSymb.name}, '${symb.name}', {get: function() {${getterCode}}, set: function(value) {${setterCode}} });`;
 			} else {
 				if (elem.init) {
 					result += 'this.' + elem.value + ';';
@@ -1090,6 +1077,14 @@ has_list_elements
 	;
 has_list_element
 	: param_def {
+		$$ = $1;
+	}
+	| param_decl SHORTCUTS member_access {
+		ErrorManager.setContext(@1, context.filePath);
+		$1.symb.myShortcut = $3.value;
+		if ($3.value.startsWith('هدا') || $3.value.startsWith('this')) {
+			ErrorManager.error("لا تقم بئدراج 'هدا' في يختصر، لئنها مفترضة");
+		}
 		$$ = $1;
 	}
 	| param_decl SHORTCUTS IDENTIFIER {

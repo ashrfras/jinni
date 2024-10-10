@@ -401,11 +401,19 @@ template {
 
 /*مكون/زر/زر.جني*/
 
+/*مكون/حلقتحميل/حلقتحميل.جني*/
+
 /*مكون/حاويتويب/حاويتويب.جني*/
 
 /*مكون/بتشدبي/بتشدبي.جني*/
 
 /*مكون/ئيقو/ئيقو.جني*/
+
+/*مكون/ئكسبرس/ئكسبجواب.جني*/
+
+/*مكون/ئكسبرس/ئكسبرس.جني*/
+
+/*مكون/ئكسبرس/ئكسبطلب.جني*/
 
 /*قديم/ئتيلات.جني*/
 
@@ -438,7 +446,7 @@ template {
 /*سياق.جني*/
 
 /*صفحتطوير.جني*/
-.مخفي {visibility: hidden;}.مرئي {visibility: visible;}.بلاعرض {display: none;}.فلكس {display: flex;}.ئرصف-وسط {justify-content: center}.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-4 {gap: 1rem;}.ضلصغ {box-shadow: 0 1px 2px 0;}.خلف-ئسود {background-color: rgb(0 0 0);}.حشس-4 {padding-left: 1rem;padding-right: 1rem;}.حشص-2 {padding-top: 0.5rem;padding-bottom: 0.5rem;}.ئطار-رمادي-700 {border-color: rgb(55 65 81);}.ئطارت1 {border-bottom-width: 1px;border-bottom-style:solid}.مخطط-عرضي {display: flex; flex-direction: row;}.ئصفف-وسط {align-items: center}.مئشر-سبابة {cursor: pointer}.نص-رمادي-300 {color: rgb(209 213 219);}.مقوسكب {border-radius: 0.5rem;}.تئشير\:ئطار-ئبيض:hover{border-color: rgb(255 255 255);}.نصكجج {font-size: 1.5rem;line-height: 2rem;}.نفسه-وسط {align-self: center;}.ئصفف-ضمني-وسط {vertical-align: middle;}.ئطاربلا {border-width: 0px}.نص-ئبيض {color: rgb(255 255 255);}.يكبر {flex-grow: 1;}.حشيم-3 {padding-inline-start: 0.75rem;}.حشص-3 {padding-top: 0.75rem;padding-bottom: 0.75rem;}.مخطط {display: flex;}.فجوة-3 {gap: 0.75rem;}.تئشير\:خلف-رمادي-900:hover{background-color: rgb(17 24 39);}.ئطار1 {border-width: 1px;border-style:solid;}.حشس-3 {padding-left: 0.75rem;padding-right: 0.75rem;}.فجوة-1 {gap: 0.25rem;}.موضعمطلق {position: absolute;}.محورض40 {z-index: 40}.خلف-رمادي-900 {background-color: rgb(17 24 39);}.مقوسكج {border-radius: 0.75rem;}.ضلكج {box-shadow: 0 20px 25px -5px , 0 8px 10px -6px ;}.نهاية-4 {inset-inline-end:1rem}.فوق-14 {top: 3.5rem;}.حش-3 {padding: 0.75rem;}.ع-36 {width: 9rem;}.موضعتابت {position: fixed;}.فوق-0 {top: 0px;}.يمين-0 {right: 0px;}.ط-شاشة { height: 100vh; }.ع-شاشة { width: 100vw; }.خلف-شفاف {background-color: transparent;}.محورض30 {z-index: 30}.فجوة-2 {gap: 0.5rem;}.محورض50 {z-index: 50}.تئشير\:خلف-رمادي-700:hover{background-color: rgb(55 65 81);}.خلف-حيادي-900 {background-color: rgb(23 23 23);} /* حيادي-900 */.ع-كامل { width: 100%; }.موضع-مطلق {position: absolute;}.ط-8 { height: 2rem; }.ع-2 { width: 0.5rem; }.مئشر-تحجيم-عرضي {cursor: col-resize}.خلف-ئحمر-700 {background-color: rgb(185 28 28);} /* .ئحمر-700 */.خلف-ئبيض {background-color: rgb(255 255 255);}.ئطارب1 {border-inline-start-width: 1px;border-inline-start-style:solid}.ط-كامل { height: 100%; }
+.مخفي {visibility: hidden;}.مرئي {visibility: visible;}.بلاعرض {display: none;}.فلكس {display: flex;}.ئرصف-وسط {justify-content: center}.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-4 {gap: 1rem;}.ضلصغ {box-shadow: 0 1px 2px 0;}.خلف-ئسود {background-color: rgb(0 0 0);}.حشس-4 {padding-left: 1rem;padding-right: 1rem;}.حشص-2 {padding-top: 0.5rem;padding-bottom: 0.5rem;}.ئطار-رمادي-700 {border-color: rgb(55 65 81);}.ئطارت1 {border-bottom-width: 1px;border-bottom-style:solid}.مخطط-عرضي {display: flex; flex-direction: row;}.ئصفف-وسط {align-items: center}.مئشر-سبابة {cursor: pointer}.نص-رمادي-300 {color: rgb(209 213 219);}.مقوسكب {border-radius: 0.5rem;}.تئشير\:ئطار-ئبيض:hover{border-color: rgb(255 255 255);}.نصكجج {font-size: 1.5rem;line-height: 2rem;}.نفسه-وسط {align-self: center;}.ئصفف-ضمني-وسط {vertical-align: middle;}.ئطاربلا {border-width: 0px}.نص-ئبيض {color: rgb(255 255 255);}.يكبر {flex-grow: 1;}.حشيم-3 {padding-inline-start: 0.75rem;}.حشص-3 {padding-top: 0.75rem;padding-bottom: 0.75rem;}.مخطط {display: flex;}.فجوة-3 {gap: 0.75rem;}.تئشير\:خلف-رمادي-900:hover{background-color: rgb(17 24 39);}.ئطار1 {border-width: 1px;border-style:solid;}.حشس-3 {padding-left: 0.75rem;padding-right: 0.75rem;}.فجوة-1 {gap: 0.25rem;}.موضعمطلق {position: absolute;}.محورض40 {z-index: 40}.خلف-رمادي-900 {background-color: rgb(17 24 39);}.مقوسكج {border-radius: 0.75rem;}.ضلكج {box-shadow: 0 20px 25px -5px , 0 8px 10px -6px ;}.نهاية-4 {inset-inline-end:1rem}.فوق-14 {top: 3.5rem;}.حش-3 {padding: 0.75rem;}.ع-36 {width: 9rem;}.موضعتابت {position: fixed;}.فوق-0 {top: 0px;}.يمين-0 {right: 0px;}.ط-شاشة { height: 100vh; }.ع-شاشة { width: 100vw; }.خلف-شفاف {background-color: transparent;}.محورض30 {z-index: 30}.فجوة-2 {gap: 0.5rem;}.محورض50 {z-index: 50}.تئشير\:خلف-رمادي-700:hover{background-color: rgb(55 65 81);}.خلف-حيادي-900 {background-color: rgb(23 23 23);} /* حيادي-900 */.ع-كامل { width: 100%; }.موضع-مطلق {position: absolute;}.ط-8 { height: 2rem; }.ع-2 { width: 0.5rem; }.مئشر-تحجيم-عرضي {cursor: col-resize}.خلف-ئحمر-700 {background-color: rgb(185 28 28);} /* .ئحمر-700 */.خلف-ئبيض {background-color: rgb(255 255 255);}.ئطارب1 {border-inline-start-width: 1px;border-inline-start-style:solid}.ط-كامل { height: 100%; }.ئحمر-700 {color: rgb(185 28 28);}.ئطار-ئحمر-700 {border-color: rgb(185 28 28);} /* .ئحمر-700 */
 /*صفحمشجديد.جني*/
 .مخطط-طولي {display: flex; flex-direction: column;}.ئصفف-وسط {align-items: center}.ئرصف-وسط {justify-content: center}.فجوة-12 {gap: 3rem;}.ط-كامل { height: 100%; }.ع-شاشة { width: 100vw; }.خلف-ئسود {background-color: rgb(0 0 0);}.مخطط-عرضي {display: flex; flex-direction: row;}.ع-96 {width: 24rem;}.فجوة-4 {gap: 1rem;}.نصوسط {text-align: center;}.نص-ئبيض {color: rgb(255 255 255);}.نصصغ {font-size: 0.875rem;line-height: 1.25rem;}.مقوس {border-radius: 0.25rem;}.خلف-رمادي-700 {background-color: rgb(55 65 81);}.منحيسار { direction: ltr }.حشص-3 {padding-top: 0.75rem;padding-bottom: 0.75rem;}.عنصرات-نهاية {align-items: flex-end}.ئصفف-نهاية {align-items: flex-end}.ئرصف-نهاية {justify-content: flex-end}.خلف-ئحمر-600 {background-color: rgb(220 38 38);} /* .ئحمر-600 */.ئحمر-600 {color: rgb(220 38 38);}.ئطار-ئحمر-600 {border-color: rgb(220 38 38);} /* .ئحمر-600 */.تحتهسطر {text-decoration-line: underline;}.ئرصف-بين {justify-content: space-between}.فجوة-1 {gap: 0.25rem;}.حشيم-1 {padding-inline-start: 0.25rem;}.ع-40 {width: 10rem;}.نصبداية {text-align: start;}.ع-44 {width: 11rem;}.نصعادي {font-size: 1rem;line-height: 1.5rem;}.هشفو-2 {margin-top: 0.5rem;}.موضعمطلق {position: absolute;}.تحت-3 {bottom: 0.75rem;}.شفافية75 { opacity: 0.75 }
 /*عنصربطاقة.جني*/
@@ -450,7 +458,7 @@ template {
 /*مشتغلات.جني*/
 
 /*مشهدئيداع.جني*/
-.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-4 {gap: 1rem;}.فجوة-1 {gap: 0.25rem;}.ئبيض {color: rgb(255 255 255);}.ط-مئتان {height: 200px;}.مقوس {border-radius: 0.25rem;}.خلف-حيادي-600 {background-color: rgb(82 82 82);} /* حيادي-600 */.نص-ئبيض {color: rgb(255 255 255);}.مخطط-عرضي {display: flex; flex-direction: row;}.فجوة-2 {gap: 0.5rem;}.ئصفف-نهاية {align-items: flex-end}.ئرصف-نهاية {justify-content: flex-end}.خلف-ئحمر-600 {background-color: rgb(220 38 38);} /* .ئحمر-600 */.ئحمر-600 {color: rgb(220 38 38);}.ئطار-ئحمر-600 {border-color: rgb(220 38 38);} /* .ئحمر-600 */
+.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-4 {gap: 1rem;}.فجوة-1 {gap: 0.25rem;}.ئبيض {color: rgb(255 255 255);}.ط-مئتان {height: 200px;}.مقوس {border-radius: 0.25rem;}.خلف-حيادي-700 {background-color: rgb(64 64 64);} /* حيادي-700 */.نص-ئبيض {color: rgb(255 255 255);}.مخطط-عرضي {display: flex; flex-direction: row;}.فجوة-2 {gap: 0.5rem;}.ئصفف-نهاية {align-items: flex-end}.ئرصف-نهاية {justify-content: flex-end}.خلف-ئحمر-600 {background-color: rgb(220 38 38);} /* .ئحمر-600 */.ئحمر-600 {color: rgb(220 38 38);}.ئطار-ئحمر-600 {border-color: rgb(220 38 38);} /* .ئحمر-600 */
 /*مشهدبطاقات.جني*/
 .حشس-4 {padding-left: 1rem;padding-right: 1rem;}.فائضس-مخفي {overflow-x: hidden;}.فائضص-تلقا {overflow-y: auto;}.خلف-حيادي-900 {background-color: rgb(23 23 23);} /* حيادي-900 */.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-1 {gap: 0.25rem;}.حشتح-4 {padding-bottom: 1rem;}.مقوسكج {border-radius: 0.75rem;}.ئطار1 {border-width: 1px;border-style:solid;}.حشس-3 {padding-left: 0.75rem;padding-right: 0.75rem;}.ئطار-رمادي-600 {border-color: rgb(75 85 99);}.تئشير\:ضلملتف:hover{ box-shadow: 0px 0px 8px;}.رمادي-500 {color: rgb(107 114 128);}.ط-محتوا {height: fit-content;}
 /*مشهدبطاقة.جني*/
@@ -458,7 +466,7 @@ template {
 /*مشهدمرشحات.جني*/
 .مخطط-عرضي {display: flex; flex-direction: row;}.فجوة-4 {gap: 1rem;}.نص-ئبيض {color: rgb(255 255 255);}.حش-4 {padding: 1rem;}.فائض-مخفي {overflow: hidden;}.مقوسكب {border-radius: 0.5rem;}.نصصغ {font-size: 0.875rem;line-height: 1.25rem;}.مئشر-سبابة {cursor: pointer}.ئطار-رمادي-600 {border-color: rgb(75 85 99);}.تئشير\:خلف-رمادي-700:hover{background-color: rgb(55 65 81);}.ئطار1 {border-width: 1px;border-style:solid;}.حشص-1 {padding-top: 0.25rem;padding-bottom: 0.25rem;}.حشس-2 {padding-left: 0.5rem;padding-right: 0.5rem;}.خلف-رمادي-700 {background-color: rgb(55 65 81);}
 /*مشهدنشر.جني*/
-.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-6 {gap: 1.5rem;}.نصصج {font-size: 0.75rem;line-height: 1rem;}.فجوة-1 {gap: 0.25rem;}.ئبيض {color: rgb(255 255 255);}.مقوس {border-radius: 0.25rem;}.خلف-حيادي-700 {background-color: rgb(64 64 64);} /* حيادي-700 */.نص-ئبيض {color: rgb(255 255 255);}.نصبداية {text-align: start;}.حشص-2 {padding-top: 0.5rem;padding-bottom: 0.5rem;}.مخطط-عرضي {display: flex; flex-direction: row;}.فجوة-4 {gap: 1rem;}.ع-كامل { width: 100%; }.فجوة-2 {gap: 0.5rem;}.هشفو-4 {margin-top: 1rem;}.هشتح-2 {margin-bottom: 0.5rem;}.ئصفف-نهاية {align-items: flex-end}.ئرصف-نهاية {justify-content: flex-end}.خلف-ئحمر-600 {background-color: rgb(220 38 38);} /* .ئحمر-600 */.ئحمر-600 {color: rgb(220 38 38);}.ئطار-ئحمر-600 {border-color: rgb(220 38 38);} /* .ئحمر-600 */
+.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-6 {gap: 1.5rem;}.فجوة-1 {gap: 0.25rem;}.ئبيض {color: rgb(255 255 255);}.مقوس {border-radius: 0.25rem;}.خلف-حيادي-700 {background-color: rgb(64 64 64);} /* حيادي-700 */.نص-ئبيض {color: rgb(255 255 255);}.نصبداية {text-align: start;}.حشص-2 {padding-top: 0.5rem;padding-bottom: 0.5rem;}.مخطط-عرضي {display: flex; flex-direction: row;}.فجوة-4 {gap: 1rem;}.ع-كامل { width: 100%; }.فجوة-2 {gap: 0.5rem;}.هشفو-4 {margin-top: 1rem;}.هشتح-2 {margin-bottom: 0.5rem;}.ئصفف-نهاية {align-items: flex-end}.ئرصف-نهاية {justify-content: flex-end}.خلف-ئحمر-600 {background-color: rgb(220 38 38);} /* .ئحمر-600 */.ئحمر-600 {color: rgb(220 38 38);}.ئطار-ئحمر-600 {border-color: rgb(220 38 38);} /* .ئحمر-600 */
 /*مشهدوحدات.جني*/
 .مئشر-سبابة {cursor: pointer}.حشيم-2 {padding-inline-start: 0.5rem;}.تئشير\:خلف-حيادي-600:hover{background-color: rgb(82 82 82);} /* حيادي-600 */.حشص-3 {padding-top: 0.75rem;padding-bottom: 0.75rem;}.مئشر-فتراضي {cursor: default}.خلف-ئحمر-700 {background-color: rgb(185 28 28);} /* .ئحمر-700 */.مخطط-عرضي {display: flex; flex-direction: row;}.فجوة-2 {gap: 0.5rem;}.ئصفف-وسط {align-items: center}.نصكجج {font-size: 1.5rem;line-height: 2rem;}.نص-ئبيض {color: rgb(255 255 255);}.حشيم-3 {padding-inline-start: 0.75rem;}.بلوك {display: block;}.بلاعرض {display: none;}.مرئي {visibility: visible;}.مخفي {visibility: hidden;}.مخطط-طولي {display: flex; flex-direction: column;}.ط-كامل { height: 100%; }.خلف-حيادي-900 {background-color: rgb(23 23 23);} /* حيادي-900 */.ع-64 {width: 16rem;}.موضعتابت {position: fixed;}.نص-ئسود {color: rgb(0 0 0);}.ضلكب {box-shadow: 0 10px 15px -3px , 0 4px 6px -4px ;}.يكبر {flex-grow: 1;}.ع-كامل { width: 100%; }.فائض-تلقا {overflow: auto;}.حشتح-2 {padding-bottom: 0.5rem;}.حشفو-1 {padding-top: 0.25rem;}.ئطارت1 {border-bottom-width: 1px;border-bottom-style:solid}.ئطار-رمادي-700 {border-color: rgb(55 65 81);}.ئرصف-بين {justify-content: space-between}.نص-رمادي-300 {color: rgb(209 213 219);}.حشس-4 {padding-left: 1rem;padding-right: 1rem;}.فجوة-1 {gap: 0.25rem;}.نصصغ {font-size: 0.875rem;line-height: 1.25rem;}.تئشير\:نص-ئبيض:hover{color: rgb(255 255 255);}.ئحمر-700 {color: rgb(185 28 28);}.ئطار-ئحمر-700 {border-color: rgb(185 28 28);} /* .ئحمر-700 */
 /*مكون/نعملا/نعملا.جني*/
@@ -472,7 +480,7 @@ template {
 /*مكون/غمازة/غمازة.جني*/
 .خلف-ئسود {background-color: rgb(0 0 0);}.نص-ئبيض {color: rgb(255 255 255);}
 /*مكون/طافية/طافية.جني*/
-.ع-ئلاربع { width: 75% }.ئقصط-خمسمئة {max-height: 500px;}.ئدنط-تلاتمئة {min-height: 300px;}.ع-شاشة { width: 100vw; }.ط-شاشة { height: 100vh; }.ع-تسعون { width: 90%; }.موضعتابت {position: fixed;}.فوق-0 {top: 0px;}.يمين-0 {right: 0px;}.خلف-ئسود {background-color: rgb(0 0 0);}.شفافية50 { opacity: 0.5 }.محورض2000 {z-index: 2000}.مخطط {display: flex;}.ئصفف-وسط {align-items: center}.ئرصف-وسط {justify-content: center}.حش-4 {padding: 1rem;}.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-3 {gap: 0.75rem;}.خلف-ئبيض {background-color: rgb(255 255 255);}.ئسود {color: rgb(0 0 0);}.مخطط-عرضي {display: flex; flex-direction: row;}.ئرصف-بين {justify-content: space-between}.نصكج {font-size: 1.25rem;line-height: 1.75rem;}.نصكجج {font-size: 1.5rem;line-height: 2rem;}.مئشر-سبابة {cursor: pointer}
+.ع-ئلاربع { width: 75% }.ئقصط-خمسمئة {max-height: 500px;}.ئدنط-تلاتمئة {min-height: 300px;}.ع-شاشة { width: 100vw; }.ط-شاشة { height: 100vh; }.ع-تسعون { width: 90%; }.موضعتابت {position: fixed;}.فوق-0 {top: 0px;}.يمين-0 {right: 0px;}.خلف-ئسود {background-color: rgb(0 0 0);}.شفافية50 { opacity: 0.5 }.محورض2000 {z-index: 2000}.مخطط {display: flex;}.ئصفف-وسط {align-items: center}.ئرصف-وسط {justify-content: center}.حش-4 {padding: 1rem;}.مخطط-طولي {display: flex; flex-direction: column;}.فجوة-3 {gap: 0.75rem;}.خلف-ئبيض {background-color: rgb(255 255 255);}.ئسود {color: rgb(0 0 0);}.مخطط-عرضي {display: flex; flex-direction: row;}.ئرصف-بين {justify-content: space-between}.حشتح-4 {padding-bottom: 1rem;}.فجوة-2 {gap: 0.5rem;}.نصكج {font-size: 1.25rem;line-height: 1.75rem;}.نصصج {font-size: 0.75rem;line-height: 1rem;}.نصكجج {font-size: 1.5rem;line-height: 2rem;}.مئشر-سبابة {cursor: pointer}
 /*مكون/شريطتمرير/شريطتمرير.جني*/
 
 /*مكون/شريطتقدم/شريطتقدم.جني*/
@@ -480,12 +488,20 @@ template {
 /*مكون/شبكي/شبكي.جني*/
 .طولي {flex-direction: column;}
 /*مكون/زر/زر.جني*/
-.ئسود {color: rgb(0 0 0);}.سبابة {cursor: pointer}.ئبيض {color: rgb(255 255 255);}.تئشير\:ئسود:hover{color: rgb(0 0 0);}.ئطار1 {border-width: 1px;border-style:solid;}.حيادي-900 {color: rgb(23 23 23);}.خلف-ئبيض {background-color: rgb(255 255 255);}.تئشير\:خلف-حيادي-900:hover{background-color: rgb(23 23 23);} /* حيادي-900 */.تئشير\:ئبيض:hover{color: rgb(255 255 255);}.خلف-حيادي-700 {background-color: rgb(64 64 64);} /* حيادي-700 */.خلف-شفاف {background-color: transparent;}.خلف-رمادي-200 {background-color: rgb(229 231 235);}.نص-رمادي-600 {color: rgb(75 85 99);}.شفافية-90 { opacity: 0.9 }.مئشر-مفترض {cursor: default}.ع-محتوا {width: fit-content;}.ط-كامل { height: 100%; }.تئشير\:شفافية-90:hover{ opacity: 0.9 }.مخطط-عرضي {display: flex; flex-direction: row;}.ئرصف-بين {justify-content: space-between}.ئصفف-وسط {align-items: center}.حشس-4 {padding-left: 1rem;padding-right: 1rem;}.حشص-3 {padding-top: 0.75rem;padding-bottom: 0.75rem;}.حشنه-6 {padding-inline-end: 1.5rem;}.خطسميك {font-weight: 700;}
+.ئسود {color: rgb(0 0 0);}.سبابة {cursor: pointer}.ئبيض {color: rgb(255 255 255);}.تئشير\:ئسود:hover{color: rgb(0 0 0);}.ئطار1 {border-width: 1px;border-style:solid;}.حيادي-900 {color: rgb(23 23 23);}.خلف-ئبيض {background-color: rgb(255 255 255);}.تئشير\:خلف-حيادي-900:hover{background-color: rgb(23 23 23);} /* حيادي-900 */.تئشير\:ئبيض:hover{color: rgb(255 255 255);}.خلف-حيادي-700 {background-color: rgb(64 64 64);} /* حيادي-700 */.خلف-شفاف {background-color: transparent;}.خلف-رمادي-200 {background-color: rgb(229 231 235);}.نص-رمادي-600 {color: rgb(75 85 99);}.شفافية-90 { opacity: 0.9 }.مئشر-مفترض {cursor: default}.ع-محتوا {width: fit-content;}.ط-كامل { height: 100%; }.تئشير\:شفافية-90:hover{ opacity: 0.9 }.مخطط-عرضي {display: flex; flex-direction: row;}.ئرصف-بين {justify-content: space-between}.ئصفف-وسط {align-items: center}.حشس-4 {padding-left: 1rem;padding-right: 1rem;}.حشص-3 {padding-top: 0.75rem;padding-bottom: 0.75rem;}.حشنه-7 {padding-inline-end: 1.75rem;}.حشنه-6 {padding-inline-end: 1.5rem;}.خطسميك {font-weight: 700;}
+/*مكون/حلقتحميل/حلقتحميل.جني*/
+
 /*مكون/حاويتويب/حاويتويب.جني*/
 
 /*مكون/بتشدبي/بتشدبي.جني*/
 
 /*مكون/ئيقو/ئيقو.جني*/
+
+/*مكون/ئكسبرس/ئكسبجواب.جني*/
+
+/*مكون/ئكسبرس/ئكسبرس.جني*/
+
+/*مكون/ئكسبرس/ئكسبطلب.جني*/
 
 /*قديم/ئتيلات.جني*/
 
@@ -561,11 +577,19 @@ template {
 
 /*مكون/زر/زر.جني*/
 .داكن .داكن\:حيادي-200 {color: rgb(229 229 229);}.داكن .داكن\:خلف-حيادي-900 {background-color: rgb(23 23 23);} /* حيادي-900 */.داكن .داكن\:تئشير\:خلف-حيادي-600:hover{background-color: rgb(82 82 82);} /* حيادي-600 */.داكن .داكن\:خلف-حيادي-600 {background-color: rgb(82 82 82);} /* حيادي-600 */.داكن .داكن\:خلف-شفاف {background-color: transparent;}
+/*مكون/حلقتحميل/حلقتحميل.جني*/
+
 /*مكون/حاويتويب/حاويتويب.جني*/
 
 /*مكون/بتشدبي/بتشدبي.جني*/
 
 /*مكون/ئيقو/ئيقو.جني*/
+
+/*مكون/ئكسبرس/ئكسبجواب.جني*/
+
+/*مكون/ئكسبرس/ئكسبرس.جني*/
+
+/*مكون/ئكسبرس/ئكسبطلب.جني*/
 
 /*قديم/ئتيلات.جني*/
 

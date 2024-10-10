@@ -57,20 +57,28 @@ class SymbolScopes {
 			// this is a variable
 			// check it's type symbol
 			var smb = this.getSymbByName(type);
-			if (!smb.isClass && !smb.isStruct && !smb.isComposite && !smb.isSystem()) {
+			if (!smb.isClass && !smb.isStruct && !smb.isComposite && !smb.isSystem() && !smb.isEnum) {
 				ErrorManager.error("الئسم " + type + " ليس نوعا");
 			}
-			// normal variables reference there type's members
-			// while composite variables copy there type's member
-			if (type == 'نوعمركب') {
-				smb.members.forEach(m => {
-					mySymb.members.push(m);
-				});
+			// type symbol is an enum
+			if (smb.isEnum) {
+				mySymb.typeSymbol = this.getSymbByName('نوعتعداد');
+				mySymb.isEnum = true;
+				mySymb.isArray = false;
+				mySymb.allowed = smb.allowed;
 			} else {
-				mySymb.members = smb.members;
+				// normal variables reference there type's members
+				// while composite variables copy there type's member
+				if (type == 'نوعمركب') {
+					smb.members.forEach(m => {
+						mySymb.members.push(m);
+					});
+				} else {
+					mySymb.members = smb.members;
+				}
+				mySymb.typeSymbol = smb;
+				mySymb.isArray = isArray;
 			}
-			mySymb.typeSymbol = smb;
-			mySymb.isArray = isArray;
 		}
 		return mySymb;
 	}

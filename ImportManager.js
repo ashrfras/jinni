@@ -10,6 +10,8 @@ class ImportManager {
 	static openScopes = []; // currently open files
 	static toReparse = []; // files with circular dependancy to reparse
 	
+	static dependencies = []; //third party dependencies specified by يعتمد
+	
 	static projectPath;
 	static outputPath;
 	
