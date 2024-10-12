@@ -107,8 +107,6 @@ try {
 	console.error(error);
 }
 
-console.log(ImportManager.dependencies);
-
 ErrorManager.printAll(false);
 
 if (ErrorManager.isBlocking) {
@@ -132,8 +130,15 @@ if (is_web) {
 	} catch (error) {
 		console.error('فشلت قرائة الملف: ', error);
 	}
-	// copy package.json
-	fs.copyFileSync(path.join(__dirname, './templates/package.json'), path.join(projectPath, 'package.json'));
+	
+	
+	// template package.json
+	var packagejson;
+	try {
+		packagejson = fs.readFileSync(path.join(__dirname, './templates/package.json'), 'utf8');
+	} catch (error) {
+		console.error('فشلت قرائة الملف: ', error);
+	}
 
 	// process and create index.html
 	indexhtml = indexhtml.replace('%ئسملف%', fileName);
@@ -163,22 +168,35 @@ if (is_web) {
 		console.error('فشلت الكتابة في الملف: ', error);
 	}
 	
+	// process and create package.json
+	var deps = {};
+	ImportManager.dependencies.forEach(d => {
+		deps[d] = 'latest';
+	});
+	packagejson = packagejson.replace('%ئعتمادين%', JSON.stringify(deps));
+	try {
+		fs.writeFileSync(path.join(projectPath, 'package.json'), packagejson, { flag: 'w+' });
+	} catch (error) {
+		console.error('فشلت الكتابة في الملف: ', error);
+	}
+	
+	// run server
 	runScript(path.join(projectPath, 'server.mjs'));
 } else {
 	// run
-	if (!is_norun) {
-		runScript(path.join(projectPath, '__خام__', fileName + '.mjs ') + userParams.join(' '));
-	}
+	runScript(path.join(projectPath, '__خام__', fileName + '.mjs ') + userParams.join(' '));
 }
 
 async function runScript(myscript) {
-	try {
-		const { stdout, stderr } = await execPromise('node ' + myscript);
-		if (stderr) {
-			console.error(stderr);
+	if (!is_norun) {
+		try {
+			const { stdout, stderr } = await execPromise('node ' + myscript);
+			if (stderr) {
+				console.error(stderr);
+			}
+			console.log(stdout);
+		} catch (error) {
+			console.error(error.message);
 		}
-		console.log(stdout);
-	} catch (error) {
-		console.error(error.message);
 	}
 }
