@@ -1,0 +1,9 @@
+[submodule "jinni-compiler"]
+	path = jinni-compiler
+	url = https://ashrfras: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@github.com/ashrfras/jinni-compiler.git
+[submodule "jiss"]
+	path = jiss
+	url = https://ashrfras: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@github.com/ashrfras/jiss.git
+[submodule "jinni-ide"]
+	path = jinni-ide
+	url = https://ashrfras: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@github.com/ashrfras/jinni-ide.git

@@ -1,7 +1,0 @@
-{
-	"type": "module",
-	"dependencies": %ئعتمادين%,
-	"scripts": {
-		"start": "nodemon --experimental-network-imports --watch './' --ext html,js,mjs,جني index.mjs"
-	}
-}
